@@ -1,0 +1,12 @@
+rm -rf rtl/verilog/pkg/riscv_noc_pkg.sv
+rm -rf rtl/verilog/pkg/riscv_mpsoc_pkg.sv
+
+rm -rf rtl/vhdl/pkg/riscv_noc_pkg.vhd
+rm -rf rtl/vhdl/pkg/riscv_mpsoc_pkg.vhd
+
+
+cp ../rtl/verilog/pkg/riscv_noc_pkg.sv   rtl/verilog/pkg
+cp ../rtl/verilog/pkg/riscv_mpsoc_pkg.sv rtl/verilog/pkg
+
+cp ../rtl/vhdl/pkg/riscv_noc_pkg.vhd  rtl/vhdl/pkg
+cp ../rtl/vhdl/pkg/riscv_mpsoc_pkg.vhd rtl/vhdl/pkg

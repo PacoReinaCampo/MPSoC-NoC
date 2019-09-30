@@ -1,0 +1,4 @@
+rm -rf sim/vhdl/regression/bin/work
+cd sim/vhdl/regression/bin
+export PATH=$PATH:/opt/intelFPGA_pro/19.2/modelsim_ase/linuxaloem/
+make

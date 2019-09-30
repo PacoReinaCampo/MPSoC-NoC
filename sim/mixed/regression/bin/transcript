@@ -1,0 +1,28 @@
+# vsim -c -do "run.do" work.riscv_noc_mesh_testbench 
+# Start time: 07:02:43 on Sep 27,2019
+# Loading sv_std.std
+# Loading work.riscv_noc_mesh_testbench
+# Loading work.riscv_noc_mesh
+# Loading work.riscv_noc_router
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading ieee.math_real(body)
+# Loading work.riscv_mpsoc_pkg
+# Loading work.riscv_noc_pkg
+# Loading work.riscv_noc_channel_mux(rtl)
+# Loading work.riscv_arb_rr(rtl)
+# Loading work.riscv_noc_router_input(rtl)
+# Loading work.riscv_noc_buffer(rtl)
+# Loading work.riscv_noc_router_lookup(rtl)
+# Loading work.riscv_noc_router_lookup_slice(rtl)
+# Loading work.riscv_noc_router_output(rtl)
+# Loading work.riscv_noc_inputs_mux(rtl)
+# Loading work.riscv_noc_vchannel_mux(rtl)
+# Loading work.riscv_noc_demux(rtl)
+# ** Warning: Design size of 26258 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# do run.do
+# End time: 07:02:44 on Sep 27,2019, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1

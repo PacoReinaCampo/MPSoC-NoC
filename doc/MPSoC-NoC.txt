@@ -1,0 +1,107 @@
+Network on Chip (NoC) is a network based communications subsystem on an integrated 
+circuit, between modules in a System on a Chip (SoC). The modules on the IC are IP 
+cores schematizing functions of the system, and are designed to be modular in the 
+sense of network science. A NoC is a router based packet switching network between 
+SoC modules.
+
+
+  -----------------------------------------------------------------------------------
+  Language                         files          blank        comment           code
+  -----------------------------------------------------------------------------------
+  VHDL                                15            465           1007           2192
+  Verilog-SystemVerilog               15            325            957           1504
+  Markdown                             1              4              0             18
+  make                                 3              3              0             16
+  -----------------------------------------------------------------------------------
+  SUM:                                34            797           1964           3730
+  -----------------------------------------------------------------------------------
+
+
+/MPSoC-NoC
+├── bench
+│   ├── verilog
+│   │   └── regression
+│   │       └── riscv_noc_mesh_testbench.sv
+│   └── vhdl
+│       └── regression
+│           └── riscv_noc_mesh_testbench.vhd
+├── doc
+│   └── MPSoC-NoC.txt
+├── rtl
+│   ├── verilog
+│   │   ├── arbiter
+│   │   │   └── riscv_arb_rr.sv
+│   │   ├── blocks
+│   │   │   ├── riscv_noc_buffer.sv
+│   │   │   ├── riscv_noc_channel_mux.sv
+│   │   │   ├── riscv_noc_demux.sv
+│   │   │   ├── riscv_noc_inputs_mux.sv
+│   │   │   └── riscv_noc_vchannel_mux.sv
+│   │   ├── pkg
+│   │   │   ├── riscv_mpsoc_pkg.sv
+│   │   │   └── riscv_noc_pkg.sv
+│   │   ├── router
+│   │   │   ├── riscv_noc_router_input.sv
+│   │   │   ├── riscv_noc_router_lookup_slice.sv
+│   │   │   ├── riscv_noc_router_lookup.sv
+│   │   │   ├── riscv_noc_router_output.sv
+│   │   │   └── riscv_noc_router.sv
+│   │   └── topology
+│   │       └── riscv_noc_mesh.sv
+│   └── vhdl
+│       ├── arbiter
+│       │   └── riscv_arb_rr.vhd
+│       ├── blocks
+│       │   ├── riscv_noc_buffer.vhd
+│       │   ├── riscv_noc_channel_mux.vhd
+│       │   ├── riscv_noc_demux.vhd
+│       │   ├── riscv_noc_inputs_mux.vhd
+│       │   └── riscv_noc_vchannel_mux.vhd
+│       ├── pkg
+│       │   ├── riscv_mpsoc_pkg.vhd
+│       │   └── riscv_noc_pkg.vhd
+│       ├── router
+│       │   ├── riscv_noc_router_input.vhd
+│       │   ├── riscv_noc_router_lookup_slice.vhd
+│       │   ├── riscv_noc_router_lookup.vhd
+│       │   ├── riscv_noc_router_output.vhd
+│       │   └── riscv_noc_router.vhd
+│       └── topology
+│           └── riscv_noc_mesh.vhd
+├── sim
+│   ├── mixed
+│   │   └── regression
+│   │       └── bin
+│   │           ├── Makefile
+│   │           ├── noc_verilog.vc
+│   │           ├── noc_vhdl.vc
+│   │           ├── run.do
+│   │           └── transcript
+│   ├── verilog
+│   │   └── regression
+│   │       └── bin
+│   │           ├── Makefile
+│   │           ├── noc.vc
+│   │           ├── run.do
+│   │           └── transcript
+│   └── vhdl
+│       └── regression
+│           └── bin
+│               ├── Makefile
+│               ├── noc.vc
+│               ├── run.do
+│               └── transcript
+├── README.md
+├── CLEAN-IT
+├── EXECUTE-IT
+├── SIMULATE-MIXED-MS-IT
+├── SIMULATE-VHDL-GHDL-IT
+├── SIMULATE-VHDL-MS-IT
+├── SIMULATE-VLOG-IV-IT
+├── SIMULATE-VLOG-MS-IT
+├── SYNTHESIZE-VLOG-YS-IT
+├── FLOW-VLOG-QF-IT
+├── system.iv
+├── system.qf
+├── system.ys
+└── UPLOAD-IT

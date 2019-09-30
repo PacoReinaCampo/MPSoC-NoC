@@ -1,0 +1,14 @@
+rtl/verilog/arbiter/riscv_arb_rr.sv
+rtl/verilog/blocks/riscv_noc_buffer.sv
+rtl/verilog/blocks/riscv_noc_channel_mux.sv
+rtl/verilog/blocks/riscv_noc_demux.sv
+rtl/verilog/blocks/riscv_noc_inputs_mux.sv
+rtl/verilog/blocks/riscv_noc_vchannel_mux.sv
+rtl/verilog/router/riscv_noc_router_input.sv
+rtl/verilog/router/riscv_noc_router_lookup_slice.sv
+rtl/verilog/router/riscv_noc_router_lookup.sv
+rtl/verilog/router/riscv_noc_router_output.sv
+rtl/verilog/router/riscv_noc_router.sv
+rtl/verilog/topology/riscv_noc_mesh.sv
+
+bench/verilog/regression/riscv_noc_mesh_testbench.sv

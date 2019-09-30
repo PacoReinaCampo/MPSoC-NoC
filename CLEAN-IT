@@ -1,0 +1,9 @@
+rm -rf sim/mixed/regression/bin/work
+rm -rf sim/verilog/regression/bin/work
+rm -rf sim/vhdl/regression/bin/work
+
+rm -rf synthesis
+
+rm -rf work-obj93.cf
+rm -rf system.vvp
+rm -rf riscv_noc_testbench.tree

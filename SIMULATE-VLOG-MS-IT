@@ -1,0 +1,4 @@
+rm -rf sim/verilog/regression/bin/work
+cd sim/verilog/regression/bin
+export PATH=$PATH:/opt/intelFPGA_pro/19.2/modelsim_ase/linuxaloem/
+make

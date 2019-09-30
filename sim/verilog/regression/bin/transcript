@@ -1,0 +1,19 @@
+# vsim -c -do "run.do" work.riscv_noc_mesh_testbench 
+# Start time: 07:03:10 on Sep 27,2019
+# Loading sv_std.std
+# Loading work.riscv_noc_mesh_testbench
+# Loading work.riscv_noc_mesh
+# Loading work.riscv_noc_demux
+# Loading work.riscv_noc_channel_mux
+# Loading work.riscv_arb_rr
+# Loading work.riscv_noc_router
+# Loading work.riscv_noc_router_input
+# Loading work.riscv_noc_router_output
+# Loading work.riscv_noc_buffer
+# Loading work.riscv_noc_router_lookup
+# Loading work.riscv_noc_router_lookup_slice
+# Loading work.riscv_noc_inputs_mux
+# Loading work.riscv_noc_vchannel_mux
+# do run.do
+# End time: 07:03:10 on Sep 27,2019, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
