@@ -1,15 +1,15 @@
-#read_verilog -sv rtl/verilog/modules/riscv_dma_initiator_interface.sv
-read_verilog -sv rtl/verilog/arbiter/riscv_arb_rr.sv
-#read_verilog -sv rtl/verilog/blocks/riscv_noc_buffer.sv
-#read_verilog -sv rtl/verilog/blocks/riscv_noc_channel_mux.sv
-#read_verilog -sv rtl/verilog/blocks/riscv_noc_demux.sv
-#read_verilog -sv rtl/verilog/blocks/riscv_noc_mux.sv
-#read_verilog -sv rtl/verilog/blocks/riscv_noc_vchannel_mux.sv
-#read_verilog -sv rtl/verilog/router/riscv_noc_router_input.sv
-#read_verilog -sv rtl/verilog/router/riscv_noc_router_lookup_slice.sv
-#read_verilog -sv rtl/verilog/router/riscv_noc_router_lookup.sv
-#read_verilog -sv rtl/verilog/router/riscv_noc_router_output.sv
-#read_verilog -sv rtl/verilog/router/riscv_noc_router.sv
-#read_verilog -sv rtl/verilog/topology/riscv_noc_mesh.sv
+#read_verilog -I rtl/verilog/core/mpsoc_noc_arbitrer_rr.sv
+#read_verilog -I rtl/verilog/core/mpsoc_noc_buffer.sv
+#read_verilog -I rtl/verilog/core/mpsoc_noc_demux.sv
+#read_verilog -I rtl/verilog/core/mpsoc_noc_mux.sv
+#read_verilog -I rtl/verilog/core/mpsoc_noc_vchannel_mux.sv
 
-#read_verilog -sv bench/verilog/regression/riscv_noc_mesh_testbench.sv
+#read_verilog -I rtl/verilog/router/mpsoc_noc_router_input.sv
+#read_verilog -I rtl/verilog/router/mpsoc_noc_router_lookup_slice.sv
+#read_verilog -I rtl/verilog/router/mpsoc_noc_router_lookup.sv
+#read_verilog -I rtl/verilog/router/mpsoc_noc_router_output.sv
+#read_verilog -I rtl/verilog/router/mpsoc_noc_router.sv
+
+#read_verilog -I rtl/verilog/topology/mpsoc_noc_mesh.sv
+
+#read_verilog -I bench/verilog/regression/mpsoc_noc_testbench.sv

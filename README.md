@@ -1,9 +1,10 @@
 **Implementation in VHDL & (System)Verilog of a Network on Chip and simulation in GHDL & Icarus Verilog**
 
-Network on Chip (NoC) is a network based communications subsystem on an integrated circuit, between modules in a System on a Chip (SoC). The modules on the IC are IP cores schematizing functions of the system, and are designed to be modular in the sense of network science. A NoC is a router based packet switching network between SoC modules.
+A Network on Chip (NoC) is a network based communications subsystem on an Integrated Circuit (IC), between modules in a System on a Chip (SoC). The modules on the IC are IP cores schematizing functions of the system, and are designed to be modular in the sense of network science. A NoC is a router based packet switching network between SoC modules.
 
 
 **MIT License**
+
 Copyright (c) 2018-2019 by the author(s)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

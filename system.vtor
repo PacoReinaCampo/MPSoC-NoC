@@ -1,0 +1,15 @@
+rtl/verilog/core/mpsoc_noc_arbitrer_rr.sv
+rtl/verilog/core/mpsoc_noc_buffer.sv
+rtl/verilog/core/mpsoc_noc_demux.sv
+rtl/verilog/core/mpsoc_noc_mux.sv
+rtl/verilog/core/mpsoc_noc_vchannel_mux.sv
+
+rtl/verilog/router/mpsoc_noc_router_input.sv
+rtl/verilog/router/mpsoc_noc_router_lookup_slice.sv
+rtl/verilog/router/mpsoc_noc_router_lookup.sv
+rtl/verilog/router/mpsoc_noc_router_output.sv
+rtl/verilog/router/mpsoc_noc_router.sv
+
+rtl/verilog/topology/mpsoc_noc_mesh.sv
+
+bench/verilog/regression/mpsoc_noc_testbench.sv

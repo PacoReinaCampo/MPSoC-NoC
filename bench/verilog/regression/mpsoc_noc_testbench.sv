@@ -41,20 +41,70 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
+module mpsoc_noc_testbench;
 
-../../../../rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_demux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_mux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
+  //////////////////////////////////////////////////////////////////
+  //
+  // Constants
+  //
+  parameter FLIT_WIDTH       = 32;
+  parameter CHANNELS         = 7;
+  parameter OUTPUTS          = 7;
+  parameter ENABLE_VCHANNELS = 1;
+  parameter X                = 2;
+  parameter Y                = 2;
+  parameter Z                = 2;
+  parameter NODES            = 8;
+  parameter BUFFER_SIZE_IN   = 4;
+  parameter BUFFER_SIZE_OUT  = 4;
 
-../../../../rtl/vhdl/router/mpsoc_noc_router_input.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_output.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router.vhd
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+  wire clk;
+  wire rst;
 
-../../../../rtl/vhdl/topology/mpsoc_noc_mesh.vhd
+  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] mpsoc_noc_out_flit;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_last;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_valid;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_ready;
 
-../../../../bench/vhdl/regression/mpsoc_noc_testbench.vhd
+  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] mpsoc_noc_in_flit;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_last;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_valid;
+  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_ready;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Module Body
+  //
+
+  //DUT
+  mpsoc_noc_mesh #(
+    .FLIT_WIDTH       (FLIT_WIDTH),
+    .CHANNELS         (CHANNELS),
+    .OUTPUTS          (OUTPUTS),
+    .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
+    .X                (X),
+    .Y                (Y),
+    .Z                (Z),
+    .NODES            (NODES),
+    .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
+    .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT)
+  )
+  mesh (
+    .rst       ( rst ),
+    .clk       ( clk ),
+
+    .in_flit   ( mpsoc_noc_in_flit  ),
+    .in_last   ( mpsoc_noc_in_last  ),
+    .in_valid  ( mpsoc_noc_in_valid ),
+    .in_ready  ( mpsoc_noc_in_ready ),
+
+    .out_flit  ( mpsoc_noc_out_flit  ),
+    .out_last  ( mpsoc_noc_out_last  ),
+    .out_valid ( mpsoc_noc_out_valid ),
+    .out_ready ( mpsoc_noc_out_ready )
+  );
+endmodule

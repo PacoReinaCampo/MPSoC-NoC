@@ -41,20 +41,112 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
+module mpsoc_noc_router_lookup #(
+  parameter FLIT_WIDTH = 32,
+  parameter NODES      = 8,
+  parameter OUTPUTS    = 7
+)
+  (
+    input clk,
+    input rst,
 
-../../../../rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_demux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_mux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
+    input [NODES-1:0][OUTPUTS-1:0] routes,
 
-../../../../rtl/vhdl/router/mpsoc_noc_router_input.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_output.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router.vhd
+    input               [FLIT_WIDTH-1:0] in_flit,
+    input                                in_last,
+    input                                in_valid,
+    output                               in_ready,
 
-../../../../rtl/vhdl/topology/mpsoc_noc_mesh.vhd
+    output [OUTPUTS-1:0]                 out_valid,
+    output                               out_last,
+    output              [FLIT_WIDTH-1:0] out_flit,
+    input  [OUTPUTS-1:0]                 out_ready
+  );
 
-../../../../bench/vhdl/regression/mpsoc_noc_testbench.vhd
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+
+  // We need to track worms and directly encode the output of the
+  // current worm.
+  reg   [OUTPUTS-1:0] worm;
+  logic [OUTPUTS-1:0] nxt_worm;
+
+  // This is high if we are in a worm
+  logic wormhole;
+
+  // Extract destination from flit
+  logic [OUTPUTS-1:0] dest;
+
+  // This is the selection signal of the slave, one hot so that it
+  // directly serves as flow control valid
+  logic [OUTPUTS-1:0] valid;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Module Body
+  //
+
+  // This is high if we are in a worm
+  assign wormhole = |worm;
+
+  // Extract destination from flit
+  assign dest = in_flit[FLIT_WIDTH-1 -: OUTPUTS];
+
+  // Register slice at the output.
+  mpsoc_noc_router_lookup_slice #(
+    .FLIT_WIDTH (FLIT_WIDTH),
+    .OUTPUTS    (OUTPUTS)
+  )
+  router_lookup_slice (
+   .clk (clk),
+   .rst (rst),
+
+   .in_valid (valid),
+   .in_last  (in_last),
+   .in_flit  (in_flit),
+   .in_ready (in_ready),
+
+   .out_valid (out_valid),
+   .out_last  (out_last),
+   .out_flit  (out_flit),
+   .out_ready (out_ready)
+  );
+
+  always @(*) begin
+    nxt_worm = worm;
+    valid    = 0;
+
+    if (!wormhole) begin
+      // We are waiting for a flit
+      if (in_valid) begin
+        // This is a header. Lookup output
+        valid = routes[dest];
+        if (in_ready & !in_last) begin
+          // If we can push it further and it is not the only
+          // flit, enter a worm and store the output
+          nxt_worm = routes[dest];
+        end
+      end
+    end
+    else begin // if (!wormhole)
+      // We are in a worm
+      // The valid is set on the currently select output
+      valid = worm & {OUTPUTS{in_valid}};
+      if (in_ready & in_last) begin
+        // End of worm
+        nxt_worm = 0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst) begin
+      worm <= 0;
+    end
+    else begin
+      worm <= nxt_worm;
+    end
+  end
+endmodule

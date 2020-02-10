@@ -1,4 +1,3 @@
 rm -rf system.vvp
-iverilog -g2012 -o system.vvp -c system.iv -s riscv_noc_mesh \
--I rtl/verilog/pkg
+iverilog -g2012 -o system.vvp -c system.vtor -s mpsoc_noc_mesh
 vvp system.vvp

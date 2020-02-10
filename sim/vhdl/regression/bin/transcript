@@ -1,53 +1,23 @@
-# vsim -c -do "run.do" work.riscv_noc_mesh_testbench 
-# Start time: 07:02:53 on Sep 27,2019
+# vsim -c -do "run.do" work.mpsoc_noc_mesh 
+# Start time: 18:38:48 on Dec 12,2019
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
 # Loading ieee.numeric_std(body)
+# Loading work.mpsoc_noc_pkg
+# Loading work.mpsoc_noc_mesh(rtl)
+# Loading work.mpsoc_noc_vchannel_mux(rtl)
+# Loading work.mpsoc_noc_arbitrer_rr(rtl)
+# Loading work.mpsoc_noc_router(rtl)
 # Loading ieee.math_real(body)
-# Loading work.riscv_mpsoc_pkg
-# Loading work.riscv_noc_pkg
-# Loading work.riscv_noc_mesh_testbench(rtl)
-# Loading work.riscv_noc_mesh(rtl)
-# Loading work.riscv_noc_router(rtl)
-# Loading work.riscv_noc_router_input(rtl)
-# Loading work.riscv_noc_buffer(rtl)
-# Loading work.riscv_noc_router_lookup(rtl)
-# Loading work.riscv_noc_router_lookup_slice(rtl)
-# Loading work.riscv_noc_router_output(rtl)
-# Loading work.riscv_noc_inputs_mux(rtl)
-# Loading work.riscv_arb_rr(rtl)
-# Loading work.riscv_noc_vchannel_mux(rtl)
-# Loading work.riscv_noc_demux(rtl)
-# ** Warning: Design size of 10410 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Loading work.mpsoc_noc_router_input(rtl)
+# Loading work.mpsoc_noc_buffer(rtl)
+# Loading work.mpsoc_noc_router_lookup(rtl)
+# Loading work.mpsoc_noc_router_lookup_slice(rtl)
+# Loading work.mpsoc_noc_router_output(rtl)
+# Loading work.mpsoc_noc_mux(rtl)
+# ** Warning: Design size of 172850 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/in_ready(3)(1 downto 0) has no driver.
-# This port will contribute value (UU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/in_ready(2)(1 downto 0) has no driver.
-# This port will contribute value (UU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/in_ready(1)(1 downto 0) has no driver.
-# This port will contribute value (UU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/in_ready(0)(1 downto 0) has no driver.
-# This port will contribute value (UU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_flit(3)(1)(63 downto 0) has no driver.
-# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_flit(2)(1)(63 downto 0) has no driver.
-# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_flit(1)(1)(63 downto 0) has no driver.
-# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_flit(0)(1)(63 downto 0) has no driver.
-# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_last(3)(1) has no driver.
-# This port will contribute value (U) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_last(2)(1) has no driver.
-# This port will contribute value (U) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_last(1)(1) has no driver.
-# This port will contribute value (U) to the signal network.
-# ** Warning: (vsim-8683) Uninitialized out port /riscv_noc_mesh_testbench/noc_mesh/out_last(0)(1) has no driver.
-# This port will contribute value (U) to the signal network.
-# ** Warning: (vsim-8684) No drivers exist on out port /riscv_noc_mesh_testbench/noc_demux/out_flit(1)(63 downto 0), and its initial value is not used.
-# Therefore, simulation behavior may occur that is not in compliance with
-# the VHDL standard as the initial values come from the base signal /riscv_noc_mesh_testbench/demux_out_flit(1)(63 downto 0).
 # do run.do
-# End time: 07:02:53 on Sep 27,2019, Elapsed time: 0:00:00
-# Errors: 0, Warnings: 14
+# End time: 18:38:49 on Dec 12,2019, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1

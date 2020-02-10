@@ -1,21 +1,21 @@
-ghdl -i rtl/vhdl/pkg/riscv_mpsoc_pkg.vhd
-ghdl -i rtl/vhdl/pkg/riscv_noc_pkg.vhd
+ghdl -i rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
 
-ghdl -i rtl/vhdl/arbiter/riscv_arb_rr.vhd
-ghdl -i rtl/vhdl/blocks/riscv_noc_buffer.vhd
-ghdl -i rtl/vhdl/blocks/riscv_noc_channel_mux.vhd
-ghdl -i rtl/vhdl/blocks/riscv_noc_demux.vhd
-ghdl -i rtl/vhdl/blocks/riscv_noc_inputs_mux.vhd
-ghdl -i rtl/vhdl/blocks/riscv_noc_vchannel_mux.vhd
-ghdl -i rtl/vhdl/router/riscv_noc_router_input.vhd
-ghdl -i rtl/vhdl/router/riscv_noc_router_lookup_slice.vhd
-ghdl -i rtl/vhdl/router/riscv_noc_router_lookup.vhd
-ghdl -i rtl/vhdl/router/riscv_noc_router_output.vhd
-ghdl -i rtl/vhdl/router/riscv_noc_router.vhd
-ghdl -i rtl/vhdl/topology/riscv_noc_mesh.vhd
+ghdl -i rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
+ghdl -i rtl/vhdl/core/mpsoc_noc_buffer.vhd
+ghdl -i rtl/vhdl/core/mpsoc_noc_demux.vhd
+ghdl -i rtl/vhdl/core/mpsoc_noc_mux.vhd
+ghdl -i rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
 
-ghdl -i bench/vhdl/regression/riscv_noc_mesh_testbench.vhd
+ghdl -i rtl/vhdl/router/mpsoc_noc_router_input.vhd
+ghdl -i rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
+ghdl -i rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
+ghdl -i rtl/vhdl/router/mpsoc_noc_router_output.vhd
+ghdl -i rtl/vhdl/router/mpsoc_noc_router.vhd
 
-ghdl -m riscv_noc_mesh_testbench
+ghdl -i rtl/vhdl/topology/mpsoc_noc_mesh.vhd
 
-ghdl -r riscv_noc_mesh_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > riscv_noc_testbench.tree
+ghdl -i bench/vhdl/regression/mpsoc_noc_testbench.vhd
+
+ghdl -m mpsoc_noc_testbench
+
+ghdl -r mpsoc_noc_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > mpsoc_noc_testbench.tree

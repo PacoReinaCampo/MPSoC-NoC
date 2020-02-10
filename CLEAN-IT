@@ -6,4 +6,5 @@ rm -rf synthesis
 
 rm -rf work-obj93.cf
 rm -rf system.vvp
-rm -rf riscv_noc_testbench.tree
+rm -rf obj_dir
+rm -rf mpsoc_noc_testbench.tree

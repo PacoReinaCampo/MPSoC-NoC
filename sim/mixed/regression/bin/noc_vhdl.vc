@@ -10,12 +10,13 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Network on Chip Makefile                                      //
-//              Mesh Topology                                                 //
+//              Network on Chip                                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
+//              WishBone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-/* Copyright (c) 2019-2020 by the author(s)
+/* Copyright (c) 2018-2019 by the author(s)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,16 +41,15 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/vhdl/pkg/riscv_mpsoc_pkg.vhd
-../../../../rtl/vhdl/pkg/riscv_noc_pkg.vhd
+../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
 
-../../../../rtl/vhdl/arbiter/riscv_arb_rr.vhd
-../../../../rtl/vhdl/blocks/riscv_noc_buffer.vhd
-../../../../rtl/vhdl/blocks/riscv_noc_channel_mux.vhd
-../../../../rtl/vhdl/blocks/riscv_noc_demux.vhd
-../../../../rtl/vhdl/blocks/riscv_noc_inputs_mux.vhd
-../../../../rtl/vhdl/blocks/riscv_noc_vchannel_mux.vhd
-../../../../rtl/vhdl/router/riscv_noc_router_input.vhd
-../../../../rtl/vhdl/router/riscv_noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/riscv_noc_router_output.vhd
-../../../../rtl/vhdl/router/riscv_noc_router_lookup.vhd
+../../../../rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
+../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd
+../../../../rtl/vhdl/core/mpsoc_noc_demux.vhd
+../../../../rtl/vhdl/core/mpsoc_noc_mux.vhd
+../../../../rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
+
+../../../../rtl/vhdl/router/mpsoc_noc_router_input.vhd
+../../../../rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
+../../../../rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
+../../../../rtl/vhdl/router/mpsoc_noc_router_output.vhd

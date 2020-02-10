@@ -41,20 +41,68 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
+module mpsoc_noc_vchannel_mux #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 7
+)
+  (
+    input                                 clk,
+    input                                 rst,
 
-../../../../rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_demux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_mux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
+    input  [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+    input  [CHANNELS-1:0]                 in_last,
+    input  [CHANNELS-1:0]                 in_valid,
+    output [CHANNELS-1:0]                 in_ready,
 
-../../../../rtl/vhdl/router/mpsoc_noc_router_input.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_output.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router.vhd
+    output reg           [FLIT_WIDTH-1:0] out_flit,
+    output reg                            out_last,
+    output [CHANNELS-1:0]                 out_valid,
+    input  [CHANNELS-1:0]                 out_ready
+  );
 
-../../../../rtl/vhdl/topology/mpsoc_noc_mesh.vhd
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+  reg   [CHANNELS-1:0] select;
+  logic [CHANNELS-1:0] nxt_select;
 
-../../../../bench/vhdl/regression/mpsoc_noc_testbench.vhd
+  integer c;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Module Body
+  //
+  assign out_valid = in_valid  & select;
+  assign in_ready  = out_ready & select;
+
+  always @(*) begin
+    out_flit = 'x;
+    out_last = 'x;
+    for (c = 0; c < CHANNELS; c=c+1) begin
+      if (select[c]) begin
+        out_flit = in_flit[c];
+        out_last = in_last[c];
+      end
+    end
+  end
+
+  mpsoc_noc_arbitrer_rr #(
+    .N (CHANNELS)
+  )
+  arbitrer_rr (
+    .req     (in_valid & out_ready),
+    .en      (1'b1),
+    .gnt     (select),
+    .nxt_gnt (nxt_select)
+  );
+
+  always @(posedge clk) begin
+    if (rst) begin
+      select <= {{CHANNELS-1{1'b0}},1'b1};
+    end
+    else begin
+      select <= nxt_select;
+    end
+  end
+endmodule // mpsoc_noc_vchannel_mux

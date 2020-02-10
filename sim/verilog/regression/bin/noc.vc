@@ -10,12 +10,13 @@
 //                                                                            //
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
-//              Network on Chip Makefile                                      //
-//              Mesh Topology                                                 //
+//              Network on Chip                                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
+//              WishBone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-/* Copyright (c) 2019-2020 by the author(s)
+/* Copyright (c) 2018-2019 by the author(s)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,17 +41,18 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/verilog/arbiter/riscv_arb_rr.sv
-../../../../rtl/verilog/blocks/riscv_noc_buffer.sv
-../../../../rtl/verilog/blocks/riscv_noc_channel_mux.sv
-../../../../rtl/verilog/blocks/riscv_noc_demux.sv
-../../../../rtl/verilog/blocks/riscv_noc_inputs_mux.sv
-../../../../rtl/verilog/blocks/riscv_noc_vchannel_mux.sv
-../../../../rtl/verilog/router/riscv_noc_router_input.sv
-../../../../rtl/verilog/router/riscv_noc_router_lookup_slice.sv
-../../../../rtl/verilog/router/riscv_noc_router_lookup.sv
-../../../../rtl/verilog/router/riscv_noc_router_output.sv
-../../../../rtl/verilog/router/riscv_noc_router.sv
-../../../../rtl/verilog/topology/riscv_noc_mesh.sv
+../../../../rtl/verilog/core/mpsoc_noc_arbitrer_rr.sv
+../../../../rtl/verilog/core/mpsoc_noc_buffer.sv
+../../../../rtl/verilog/core/mpsoc_noc_demux.sv
+../../../../rtl/verilog/core/mpsoc_noc_mux.sv
+../../../../rtl/verilog/core/mpsoc_noc_vchannel_mux.sv
 
-../../../../bench/verilog/regression/riscv_noc_mesh_testbench.sv
+../../../../rtl/verilog/router/mpsoc_noc_router_input.sv
+../../../../rtl/verilog/router/mpsoc_noc_router_lookup_slice.sv
+../../../../rtl/verilog/router/mpsoc_noc_router_lookup.sv
+../../../../rtl/verilog/router/mpsoc_noc_router_output.sv
+../../../../rtl/verilog/router/mpsoc_noc_router.sv
+
+../../../../rtl/verilog/topology/mpsoc_noc_mesh.sv
+
+../../../../bench/verilog/regression/mpsoc_noc_testbench.sv

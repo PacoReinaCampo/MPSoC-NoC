@@ -41,20 +41,88 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
+module mpsoc_noc_router_input #(
+  parameter FLIT_WIDTH   = 32,
+  parameter VCHANNELS    = 7,
+  parameter OUTPUTS      = 7,
+  parameter NODES        = 8,
+  parameter BUFFER_DEPTH = 4
+)
+  (
+    input clk,
+    input rst,
 
-../../../../rtl/vhdl/core/mpsoc_noc_arbitrer_rr.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_demux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_mux.vhd
-../../../../rtl/vhdl/core/mpsoc_noc_vchannel_mux.vhd
+    input [NODES-1:0][OUTPUTS-1:0] routes,
 
-../../../../rtl/vhdl/router/mpsoc_noc_router_input.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_lookup.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router_output.vhd
-../../../../rtl/vhdl/router/mpsoc_noc_router.vhd
+    input                              [FLIT_WIDTH-1:0] in_flit,
+    input                                               in_last,
+    input  [VCHANNELS-1:0]                              in_valid,
+    output [VCHANNELS-1:0]                              in_ready,
 
-../../../../rtl/vhdl/topology/mpsoc_noc_mesh.vhd
+    output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
+    output [VCHANNELS-1:0]                              out_last,
+    output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
+    input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
+  );
 
-../../../../bench/vhdl/regression/mpsoc_noc_testbench.vhd
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+  wire [FLIT_WIDTH-1:0] buffer_flit;
+  wire                  buffer_last;
+  wire                  buffer_valid;
+  wire                  buffer_ready;
+
+  genvar                v;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Module Body
+  //
+  generate
+    for (v = 0; v < VCHANNELS; v=v+1) begin : vc
+      mpsoc_noc_buffer #(
+        .FLIT_WIDTH (FLIT_WIDTH),
+        .DEPTH      (BUFFER_DEPTH)
+      )
+      buffer (
+        .clk         (clk),
+        .rst         (rst),
+
+        .in_flit     (in_flit),
+        .in_last     (in_last),
+        .in_valid    (in_valid [v]),
+        .in_ready    (in_ready [v]),
+
+        .out_flit    (buffer_flit),
+        .out_last    (buffer_last),
+        .out_valid   (buffer_valid),
+        .out_ready   (buffer_ready),
+        .packet_size ()
+      );
+
+      mpsoc_noc_router_lookup #(
+        .FLIT_WIDTH (FLIT_WIDTH),
+        .NODES      (NODES),
+        .OUTPUTS    (OUTPUTS)
+      )
+      router_lookup (
+        .clk       (clk),
+        .rst       (rst),
+
+        .routes    (routes),
+
+        .in_flit   (buffer_flit),
+        .in_last   (buffer_last),
+        .in_valid  (buffer_valid),
+        .in_ready  (buffer_ready),
+
+        .out_flit  (out_flit  [v]),
+        .out_last  (out_last  [v]),
+        .out_valid (out_valid [v]),
+        .out_ready (out_ready [v])
+      );
+    end
+  endgenerate
+endmodule // mpsoc_noc_router_input
