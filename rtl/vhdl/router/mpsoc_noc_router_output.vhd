@@ -62,10 +62,10 @@ entity mpsoc_noc_router_output is
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  M_VCHANNELS_CHANNELS_FLIT_WIDTH;
-    in_last  : in  M_VCHANNELS_CHANNELS;
-    in_valid : in  M_VCHANNELS_CHANNELS;
-    in_ready : out M_VCHANNELS_CHANNELS;
+    in_flit  : in  std_logic_3array(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+    in_valid : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+    in_ready : out std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
 
     out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
     out_last  : out std_logic;
@@ -84,7 +84,7 @@ architecture RTL of mpsoc_noc_router_output is
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
       in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
       in_ready : out std_logic_vector(CHANNELS-1 downto 0);
@@ -132,7 +132,7 @@ architecture RTL of mpsoc_noc_router_output is
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
       in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
       in_ready : out std_logic_vector(CHANNELS-1 downto 0);
@@ -148,12 +148,12 @@ architecture RTL of mpsoc_noc_router_output is
   --
   -- Variables
   --
-  signal channel_flit  : M_CHANNELS_FLIT_WIDTH;
+  signal channel_flit  : std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
   signal channel_last  : std_logic_vector(CHANNELS-1 downto 0);
   signal channel_valid : std_logic_vector(CHANNELS-1 downto 0);
   signal channel_ready : std_logic_vector(CHANNELS-1 downto 0);
 
-  signal buffer_flit  : M_CHANNELS_FLIT_WIDTH;
+  signal buffer_flit  : std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
   signal buffer_last  : std_logic_vector(CHANNELS-1 downto 0);
   signal buffer_valid : std_logic_vector(CHANNELS-1 downto 0);
   signal buffer_ready : std_logic_vector(CHANNELS-1 downto 0);

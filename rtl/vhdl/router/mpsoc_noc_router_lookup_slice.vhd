@@ -48,6 +48,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.mpsoc_noc_pkg.all;
+
 entity mpsoc_noc_router_lookup_slice is
   generic (
     FLIT_WIDTH : integer := 32;
@@ -70,32 +72,6 @@ entity mpsoc_noc_router_lookup_slice is
 end mpsoc_noc_router_lookup_slice;
 
 architecture RTL of mpsoc_noc_router_lookup_slice is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Functions
-  --
-  function reduce_nor (
-    reduce_nor_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_nor_out : std_logic := '0';
-  begin
-    for i in reduce_nor_in'range loop
-      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
-    end loop;
-    return reduce_nor_out;
-  end reduce_nor;
-
-  function reduce_or (
-    reduce_or_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
-  begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
-    end loop;
-    return reduce_or_out;
-  end reduce_or;
-
   --////////////////////////////////////////////////////////////////
   --
   -- Variables

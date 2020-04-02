@@ -59,7 +59,7 @@ entity mpsoc_noc_vchannel_mux is
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
     in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
     in_ready : out std_logic_vector(CHANNELS-1 downto 0);

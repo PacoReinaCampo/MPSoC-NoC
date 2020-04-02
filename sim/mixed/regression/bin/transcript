@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.mpsoc_noc_testbench 
-# Start time: 00:16:51 on Feb 11,2020
+# Start time: 03:32:26 on Apr 02,2020
 # Loading sv_std.std
 # Loading work.mpsoc_noc_testbench
 # Loading work.mpsoc_noc_mesh
@@ -8,15 +8,18 @@
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
 # Loading ieee.numeric_std(body)
-# Loading work.mpsoc_noc_pkg
+# Loading work.mpsoc_noc_pkg(body)
 # Loading work.mpsoc_noc_vchannel_mux(rtl)
 # Loading work.mpsoc_noc_arbitrer_rr(rtl)
 # Loading ieee.math_real(body)
 # Loading work.mpsoc_noc_router_input(rtl)
 # Loading work.mpsoc_noc_buffer(rtl)
-# ** Fatal: (vsim-3348) Port length (32) does not match actual length (34) for port "/mpsoc_noc_testbench/mesh/zdir[0]/ydir[0]/xdir[0]/genblk1/router/inputs[0]/router_input/generating_0(0)/U_buffer/out_flit".
-#    Time: 0 ps  Iteration: 0  Instance: /mpsoc_noc_testbench/mesh/zdir[0]/ydir[0]/xdir[0]/genblk1/router/inputs[0]/router_input/generating_0(0)/U_buffer File: ../../../../rtl/vhdl/core/mpsoc_noc_buffer.vhd Line: 70
-# FATAL ERROR while loading design
-# Error loading design
-# End time: 00:16:51 on Feb 11,2020, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
+# Loading work.mpsoc_noc_router_lookup(rtl)
+# Loading work.mpsoc_noc_router_lookup_slice(rtl)
+# Loading work.mpsoc_noc_router_output(rtl)
+# Loading work.mpsoc_noc_mux(rtl)
+# ** Warning: Design size of 128136 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# do run.do
+# End time: 03:32:27 on Apr 02,2020, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1

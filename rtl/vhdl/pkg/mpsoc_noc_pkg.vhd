@@ -65,83 +65,77 @@ package mpsoc_noc_pkg is
   --
   -- Types
   --
-  type M_PCHANNELS_FLIT_WIDTH is array (PCHANNELS-1 downto 0) of std_logic_vector(FLIT_WIDTH-1 downto 0);
-  type M_PCHANNELS_PCHANNELS is array (PCHANNELS-1 downto 0) of std_logic_vector(PCHANNELS-1 downto 0);
-  type M_PCHANNELS_VCHANNELS is array (PCHANNELS-1 downto 0) of std_logic_vector(VCHANNELS-1 downto 0);
-  type M_PCHANNELS_CHANNELS is array (PCHANNELS-1 downto 0) of std_logic_vector(CHANNELS-1 downto 0);
-  type M_PCHANNELS_OUTPUTS is array (PCHANNELS-1 downto 0) of std_logic_vector(OUTPUTS-1 downto 0);
+  type std_logic_matrix is array (natural range <>) of std_logic_vector;
+  type std_logic_3array is array (natural range <>) of std_logic_matrix;
+  type std_logic_4array is array (natural range <>) of std_logic_3array;
+  type std_logic_5array is array (natural range <>) of std_logic_4array;
+  type std_logic_6array is array (natural range <>) of std_logic_5array;
+  type std_logic_7array is array (natural range <>) of std_logic_6array;
+  type std_logic_8array is array (natural range <>) of std_logic_7array;
+  type std_logic_9array is array (natural range <>) of std_logic_8array;
 
-  type M_VCHANNELS_FLIT_WIDTH is array (VCHANNELS-1 downto 0) of std_logic_vector(FLIT_WIDTH-1 downto 0);
-  type M_VCHANNELS_PCHANNELS is array (VCHANNELS-1 downto 0) of std_logic_vector(PCHANNELS-1 downto 0);
-  type M_VCHANNELS_VCHANNELS is array (VCHANNELS-1 downto 0) of std_logic_vector(VCHANNELS-1 downto 0);
-  type M_VCHANNELS_CHANNELS is array (VCHANNELS-1 downto 0) of std_logic_vector(CHANNELS-1 downto 0);
-  type M_VCHANNELS_OUTPUTS is array (VCHANNELS-1 downto 0) of std_logic_vector(OUTPUTS-1 downto 0);
+  type xy_std_logic        is array (natural range <>, natural range <>) of std_logic;
+  type xy_std_logic_vector is array (natural range <>, natural range <>) of std_logic_vector;
+  type xy_std_logic_matrix is array (natural range <>, natural range <>) of std_logic_matrix;
+  type xy_std_logic_3array is array (natural range <>, natural range <>) of std_logic_3array;
+  type xy_std_logic_4array is array (natural range <>, natural range <>) of std_logic_4array;
+  type xy_std_logic_5array is array (natural range <>, natural range <>) of std_logic_5array;
+  type xy_std_logic_6array is array (natural range <>, natural range <>) of std_logic_6array;
+  type xy_std_logic_7array is array (natural range <>, natural range <>) of std_logic_7array;
+  type xy_std_logic_8array is array (natural range <>, natural range <>) of std_logic_8array;
+  type xy_std_logic_9array is array (natural range <>, natural range <>) of std_logic_9array;
 
-  type M_CHANNELS_FLIT_WIDTH is array (CHANNELS-1 downto 0) of std_logic_vector(FLIT_WIDTH-1 downto 0);
-  type M_CHANNELS_PCHANNELS is array (CHANNELS-1 downto 0) of std_logic_vector(PCHANNELS-1 downto 0);
-  type M_CHANNELS_VCHANNELS is array (CHANNELS-1 downto 0) of std_logic_vector(VCHANNELS-1 downto 0);
-  type M_CHANNELS_CHANNELS is array (CHANNELS-1 downto 0) of std_logic_vector(CHANNELS-1 downto 0);
-  type M_CHANNELS_OUTPUTS is array (CHANNELS-1 downto 0) of std_logic_vector(OUTPUTS-1 downto 0);
+  type xyz_std_logic        is array (natural range <>, natural range <>, natural range <>) of std_logic;
+  type xyz_std_logic_vector is array (natural range <>, natural range <>, natural range <>) of std_logic_vector;
+  type xyz_std_logic_matrix is array (natural range <>, natural range <>, natural range <>) of std_logic_matrix;
+  type xyz_std_logic_3array is array (natural range <>, natural range <>, natural range <>) of std_logic_3array;
+  type xyz_std_logic_4array is array (natural range <>, natural range <>, natural range <>) of std_logic_4array;
+  type xyz_std_logic_5array is array (natural range <>, natural range <>, natural range <>) of std_logic_5array;
+  type xyz_std_logic_6array is array (natural range <>, natural range <>, natural range <>) of std_logic_6array;
+  type xyz_std_logic_7array is array (natural range <>, natural range <>, natural range <>) of std_logic_7array;
+  type xyz_std_logic_8array is array (natural range <>, natural range <>, natural range <>) of std_logic_8array;
+  type xyz_std_logic_9array is array (natural range <>, natural range <>, natural range <>) of std_logic_9array;
 
-  type M_OUTPUTS_FLIT_WIDTH is array (OUTPUTS-1 downto 0) of std_logic_vector(FLIT_WIDTH-1 downto 0);
-  type M_OUTPUTS_PCHANNELS is array (OUTPUTS-1 downto 0) of std_logic_vector(PCHANNELS-1 downto 0);
-  type M_OUTPUTS_VCHANNELS is array (OUTPUTS-1 downto 0) of std_logic_vector(VCHANNELS-1 downto 0);
-  type M_OUTPUTS_CHANNELS is array (OUTPUTS-1 downto 0) of std_logic_vector(CHANNELS-1 downto 0);
-  type M_OUTPUTS_OUTPUTS is array (OUTPUTS-1 downto 0) of std_logic_vector(OUTPUTS-1 downto 0);
+  function to_stdlogic (input : boolean) return std_logic;
+  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
+end mpsoc_noc_pkg;
 
-  type M_NODES_FLIT_WIDTH is array (NODES-1 downto 0) of std_logic_vector(FLIT_WIDTH-1 downto 0);
-  type M_NODES_PCHANNELS is array (NODES-1 downto 0) of std_logic_vector(PCHANNELS-1 downto 0);
-  type M_NODES_VCHANNELS is array (NODES-1 downto 0) of std_logic_vector(VCHANNELS-1 downto 0);
-  type M_NODES_CHANNELS is array (NODES-1 downto 0) of std_logic_vector(CHANNELS-1 downto 0);
-  type M_NODES_OUTPUTS is array (NODES-1 downto 0) of std_logic_vector(OUTPUTS-1 downto 0);
+package body mpsoc_noc_pkg is
+  --////////////////////////////////////////////////////////////////
+  --
+  -- Functions
+  --
+  function to_stdlogic (
+    input : boolean
+    ) return std_logic is
+  begin
+    if input then
+      return('1');
+    else
+      return('0');
+    end if;
+  end function to_stdlogic;
 
-  type M_VCHANNELS_CHANNELS_FLIT_WIDTH is array (VCHANNELS-1 downto 0) of M_CHANNELS_FLIT_WIDTH;
-  type M_VCHANNELS_CHANNELS_PCHANNELS is array (VCHANNELS-1 downto 0) of M_CHANNELS_PCHANNELS;
-  type M_VCHANNELS_CHANNELS_VCHANNELS is array (VCHANNELS-1 downto 0) of M_CHANNELS_VCHANNELS;
-  type M_VCHANNELS_CHANNELS_CHANNELS is array (VCHANNELS-1 downto 0) of M_CHANNELS_CHANNELS;
-  type M_VCHANNELS_CHANNELS_OUTPUTS is array (VCHANNELS-1 downto 0) of M_CHANNELS_OUTPUTS;
+  function reduce_or (
+    reduce_or_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_or_out : std_logic := '0';
+  begin
+    for i in reduce_or_in'range loop
+      reduce_or_out := reduce_or_out or reduce_or_in(i);
+    end loop;
+    return reduce_or_out;
+  end reduce_or;
 
-  type M_CHANNELS_PCHANNELS_FLIT_WIDTH is array (CHANNELS-1 downto 0) of M_PCHANNELS_FLIT_WIDTH;
-  type M_CHANNELS_PCHANNELS_PCHANNELS is array (CHANNELS-1 downto 0) of M_PCHANNELS_PCHANNELS;
-  type M_CHANNELS_PCHANNELS_VCHANNELS is array (CHANNELS-1 downto 0) of M_PCHANNELS_VCHANNELS;
-  type M_CHANNELS_PCHANNELS_CHANNELS is array (CHANNELS-1 downto 0) of M_PCHANNELS_CHANNELS;
-  type M_CHANNELS_PCHANNELS_OUTPUTS is array (CHANNELS-1 downto 0) of M_PCHANNELS_OUTPUTS;
-
-  type M_CHANNELS_VCHANNELS_FLIT_WIDTH is array (CHANNELS-1 downto 0) of M_VCHANNELS_FLIT_WIDTH;
-  type M_CHANNELS_VCHANNELS_PCHANNELS is array (CHANNELS-1 downto 0) of M_VCHANNELS_PCHANNELS;
-  type M_CHANNELS_VCHANNELS_VCHANNELS is array (CHANNELS-1 downto 0) of M_VCHANNELS_VCHANNELS;
-  type M_CHANNELS_VCHANNELS_CHANNELS is array (CHANNELS-1 downto 0) of M_VCHANNELS_CHANNELS;
-  type M_CHANNELS_VCHANNELS_OUTPUTS is array (CHANNELS-1 downto 0) of M_VCHANNELS_OUTPUTS;
-
-  type M_OUTPUTS_PCHANNELS_FLIT_WIDTH is array (OUTPUTS-1 downto 0) of M_PCHANNELS_FLIT_WIDTH;
-  type M_OUTPUTS_PCHANNELS_PCHANNELS is array (OUTPUTS-1 downto 0) of M_PCHANNELS_PCHANNELS;
-  type M_OUTPUTS_PCHANNELS_VCHANNELS is array (OUTPUTS-1 downto 0) of M_PCHANNELS_VCHANNELS;
-  type M_OUTPUTS_PCHANNELS_CHANNELS is array (OUTPUTS-1 downto 0) of M_PCHANNELS_CHANNELS;
-  type M_OUTPUTS_PCHANNELS_OUTPUTS is array (OUTPUTS-1 downto 0) of M_PCHANNELS_OUTPUTS;
-
-  type M_OUTPUTS_VCHANNELS_FLIT_WIDTH is array (OUTPUTS-1 downto 0) of M_VCHANNELS_FLIT_WIDTH;
-  type M_OUTPUTS_VCHANNELS_PCHANNELS is array (OUTPUTS-1 downto 0) of M_VCHANNELS_PCHANNELS;
-  type M_OUTPUTS_VCHANNELS_VCHANNELS is array (OUTPUTS-1 downto 0) of M_VCHANNELS_VCHANNELS;
-  type M_OUTPUTS_VCHANNELS_CHANNELS is array (OUTPUTS-1 downto 0) of M_VCHANNELS_CHANNELS;
-  type M_OUTPUTS_VCHANNELS_OUTPUTS is array (OUTPUTS-1 downto 0) of M_VCHANNELS_OUTPUTS;
-
-  type M_NODES_CHANNELS_FLIT_WIDTH is array (NODES-1 downto 0) of M_CHANNELS_FLIT_WIDTH;
-  type M_NODES_CHANNELS_PCHANNELS is array (NODES-1 downto 0) of M_CHANNELS_PCHANNELS;
-  type M_NODES_CHANNELS_VCHANNELS is array (NODES-1 downto 0) of M_CHANNELS_VCHANNELS;
-  type M_NODES_CHANNELS_CHANNELS is array (NODES-1 downto 0) of M_CHANNELS_CHANNELS;
-  type M_NODES_CHANNELS_OUTPUTS is array (NODES-1 downto 0) of M_CHANNELS_OUTPUTS;
-
-  type M_NODES_OUTPUTS_FLIT_WIDTH is array (NODES-1 downto 0) of M_OUTPUTS_FLIT_WIDTH;
-  type M_NODES_OUTPUTS_PCHANNELS is array (NODES-1 downto 0) of M_OUTPUTS_PCHANNELS;
-  type M_NODES_OUTPUTS_VCHANNELS is array (NODES-1 downto 0) of M_OUTPUTS_VCHANNELS;
-  type M_NODES_OUTPUTS_CHANNELS is array (NODES-1 downto 0) of M_OUTPUTS_CHANNELS;
-  type M_NODES_OUTPUTS_OUTPUTS is array (NODES-1 downto 0) of M_OUTPUTS_OUTPUTS;
-
-  type M_NODES_CHANNELS_PCHANNELS_FLIT_WIDTH is array (NODES-1 downto 0) of M_CHANNELS_PCHANNELS_FLIT_WIDTH;
-
-  type M_NODES_OUTPUTS_PCHANNELS_FLIT_WIDTH is array (NODES-1 downto 0) of M_OUTPUTS_PCHANNELS_FLIT_WIDTH;
-
-  type M_OUTPUTS_VCHANNELS_CHANNELS_FLIT_WIDTH is array (OUTPUTS-1 downto 0) of M_VCHANNELS_CHANNELS_FLIT_WIDTH;
-
-
+  function reduce_nor (
+    reduce_nor_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_nor_out : std_logic := '0';
+  begin
+    for i in reduce_nor_in'range loop
+      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
+    end loop;
+    return reduce_nor_out;
+  end reduce_nor;
 end mpsoc_noc_pkg;

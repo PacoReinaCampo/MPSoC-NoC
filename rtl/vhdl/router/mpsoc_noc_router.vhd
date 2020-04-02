@@ -64,17 +64,17 @@ entity mpsoc_noc_router is
     clk : in std_logic;
     rst : in std_logic;
 
-    routes : in M_NODES_OUTPUTS;
+    routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
-    out_flit  : out M_OUTPUTS_FLIT_WIDTH;
+    out_flit  : out std_logic_matrix(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     out_last  : out std_logic_vector(OUTPUTS-1 downto 0);
-    out_valid : out M_OUTPUTS_VCHANNELS;
-    out_ready : in  M_OUTPUTS_VCHANNELS;
+    out_valid : out std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+    out_ready : in  std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
 
-    in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-    in_valid : in  M_CHANNELS_VCHANNELS;
-    in_ready : out M_CHANNELS_VCHANNELS
+    in_valid : in  std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+    in_ready : out std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)
   );
 end mpsoc_noc_router;
 
@@ -91,17 +91,17 @@ architecture RTL of mpsoc_noc_router is
       clk : in std_logic;
       rst : in std_logic;
 
-      routes : in M_NODES_OUTPUTS;
+      routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
       in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic;
       in_valid : in  std_logic_vector(VCHANNELS-1 downto 0);
       in_ready : out std_logic_vector(VCHANNELS-1 downto 0);
 
-      out_valid : out M_VCHANNELS_OUTPUTS;
+      out_valid : out std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0);
       out_last  : out std_logic_vector(VCHANNELS-1 downto 0);
-      out_flit  : out M_VCHANNELS_FLIT_WIDTH;
-      out_ready : in  M_VCHANNELS_OUTPUTS
+      out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+      out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
     );
   end component;
 
@@ -116,10 +116,10 @@ architecture RTL of mpsoc_noc_router is
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  M_VCHANNELS_CHANNELS_FLIT_WIDTH;
-      in_last  : in  M_VCHANNELS_CHANNELS;
-      in_valid : in  M_VCHANNELS_CHANNELS;
-      in_ready : out M_VCHANNELS_CHANNELS;
+      in_flit  : in  std_logic_3array(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+      in_last  : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+      in_valid : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+      in_ready : out std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
 
       out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
       out_last  : out std_logic;
@@ -139,16 +139,16 @@ architecture RTL of mpsoc_noc_router is
 
   -- The input valid signals are one (or zero) hot and hence share
   -- the flit signal.
-  signal switch_in_flit  : M_CHANNELS_VCHANNELS_FLIT_WIDTH;
-  signal switch_in_last  : M_CHANNELS_VCHANNELS;
-  signal switch_in_valid : M_CHANNELS_VCHANNELS_OUTPUTS;
-  signal switch_in_ready : M_CHANNELS_VCHANNELS_OUTPUTS;
+  signal switch_in_flit  : std_logic_3array(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal switch_in_last  : std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal switch_in_valid : std_logic_3array(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0);
+  signal switch_in_ready : std_logic_3array(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0);
 
   -- Outputs are fully wired to receive all input requests.
-  signal switch_out_flit  : M_OUTPUTS_VCHANNELS_CHANNELS_FLIT_WIDTH;
-  signal switch_out_last  : M_OUTPUTS_VCHANNELS_CHANNELS;
-  signal switch_out_valid : M_OUTPUTS_VCHANNELS_CHANNELS;
-  signal switch_out_ready : M_OUTPUTS_VCHANNELS_CHANNELS;
+  signal switch_out_flit  : std_logic_4array(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal switch_out_last  : std_logic_3array(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+  signal switch_out_valid : std_logic_3array(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+  signal switch_out_ready : std_logic_3array(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
 
 begin
 --////////////////////////////////////////////////////////////////

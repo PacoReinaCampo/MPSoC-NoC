@@ -59,7 +59,7 @@ entity mpsoc_noc_mux is
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
     in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
     in_ready : out std_logic_vector(CHANNELS-1 downto 0);
@@ -83,21 +83,6 @@ architecture RTL of mpsoc_noc_mux is
       nxt_gnt : out std_logic_vector(N-1 downto 0)
     );
   end component;
-
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Functions
-  --
-  function reduce_or (
-    reduce_or_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
-  begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
-    end loop;
-    return reduce_or_out;
-  end reduce_or;
 
   --////////////////////////////////////////////////////////////////
   --

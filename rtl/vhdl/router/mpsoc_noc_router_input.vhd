@@ -63,17 +63,17 @@ entity mpsoc_noc_router_input is
     clk : in std_logic;
     rst : in std_logic;
 
-    routes : in M_NODES_OUTPUTS;
+    routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
     in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic;
     in_valid : in  std_logic_vector(VCHANNELS-1 downto 0);
     in_ready : out std_logic_vector(VCHANNELS-1 downto 0);
 
-    out_valid : out M_VCHANNELS_OUTPUTS;
+    out_valid : out std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0);
     out_last  : out std_logic_vector(VCHANNELS-1 downto 0);
-    out_flit  : out M_VCHANNELS_FLIT_WIDTH;
-    out_ready : in  M_VCHANNELS_OUTPUTS
+    out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
   );
 end mpsoc_noc_router_input;
 
@@ -115,7 +115,7 @@ architecture RTL of mpsoc_noc_router_input is
       clk : in std_logic;
       rst : in std_logic;
 
-      routes : in M_NODES_OUTPUTS;
+      routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
       in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic;
@@ -133,7 +133,7 @@ architecture RTL of mpsoc_noc_router_input is
   --
   -- Variables
   --
-  signal buffer_flit  : M_VCHANNELS_FLIT_WIDTH;
+  signal buffer_flit  : std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
   signal buffer_last  : std_logic_vector(VCHANNELS-1 downto 0);
   signal buffer_valid : std_logic_vector(VCHANNELS-1 downto 0);
   signal buffer_ready : std_logic_vector(VCHANNELS-1 downto 0);

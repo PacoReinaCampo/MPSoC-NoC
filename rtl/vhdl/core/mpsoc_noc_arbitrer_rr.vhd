@@ -48,6 +48,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+use work.mpsoc_noc_pkg.all;
+
 entity mpsoc_noc_arbitrer_rr is
   generic (
     N : integer := 2
@@ -63,30 +65,9 @@ end mpsoc_noc_arbitrer_rr;
 architecture RTL of mpsoc_noc_arbitrer_rr is
   --////////////////////////////////////////////////////////////////
   --
-  -- Functions
-  --
-  function reduce_nor (
-    reduce_nor_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_nor_out : std_logic := '0';
-  begin
-    for i in reduce_nor_in'range loop
-      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
-    end loop;
-    return reduce_nor_out;
-  end reduce_nor;
-
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Types
-  --
-  type M_N_N is array (N-1 downto 0) of std_logic_vector (N-1 downto 0);
-
-  --////////////////////////////////////////////////////////////////
-  --
   -- Variables
   --
-  signal mask : M_N_N;
+  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////

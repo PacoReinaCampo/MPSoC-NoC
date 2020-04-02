@@ -66,7 +66,7 @@ entity mpsoc_noc_demux is
     in_valid : in  std_logic;
     in_ready : out std_logic;
 
-    out_flit  : out M_CHANNELS_FLIT_WIDTH;
+    out_flit  : out std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     out_last  : out std_logic_vector(CHANNELS-1 downto 0);
     out_valid : out std_logic_vector(CHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
@@ -74,21 +74,6 @@ entity mpsoc_noc_demux is
 end mpsoc_noc_demux;
 
 architecture RTL of mpsoc_noc_demux is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Functions
-  --
-  function reduce_or (
-    reduce_or_in : std_logic_vector
-    ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
-  begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
-    end loop;
-    return reduce_or_out;
-  end reduce_or;
-
   --////////////////////////////////////////////////////////////////
   --
   -- Constants

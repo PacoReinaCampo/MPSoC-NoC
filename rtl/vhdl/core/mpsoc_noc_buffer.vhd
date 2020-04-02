@@ -49,6 +49,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
+use work.mpsoc_noc_pkg.all;
+
 entity mpsoc_noc_buffer is
   generic (
     FLIT_WIDTH : integer := 32;
@@ -104,34 +106,6 @@ architecture RTL of mpsoc_noc_buffer is
     return find_first_one_return;
   end find_first_one;  -- size_count
 
-  function reduce_or (
-    reduce_or_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
-  begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
-    end loop;
-    return reduce_or_out;
-  end reduce_or;
-
-  function to_stdlogic (
-    input : boolean
-  ) return std_logic is
-  begin
-    if input then
-      return('1');
-    else
-      return('0');
-    end if;
-  end function to_stdlogic;
-
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Types
-  --
-  type M_DEPTH_FLIT_WIDTH1 is array (DEPTH-1 downto 0) of std_logic_vector(FLIT_WIDTH downto 0);
-
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
@@ -149,7 +123,7 @@ architecture RTL of mpsoc_noc_buffer is
   -- Generic dual-port, single clock memory
 
   -- Write
-  signal ram : M_DEPTH_FLIT_WIDTH1;
+  signal ram : std_logic_matrix(DEPTH-1 downto 0)(FLIT_WIDTH downto 0);
 
   -- Read
   signal data_last_buf     : std_logic_vector(DEPTH downto 0);

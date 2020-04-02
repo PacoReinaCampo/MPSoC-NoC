@@ -72,15 +72,15 @@ architecture RTL of mpsoc_noc_testbench is
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  M_NODES_CHANNELS_FLIT_WIDTH;
-      in_last  : in  M_NODES_CHANNELS;
-      in_valid : in  M_NODES_CHANNELS;
-      in_ready : out M_NODES_CHANNELS;
+      in_flit  : in  std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+      in_last  : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+      in_valid : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+      in_ready : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
-      out_flit  : out M_NODES_CHANNELS_FLIT_WIDTH;
-      out_last  : out M_NODES_CHANNELS;
-      out_valid : out M_NODES_CHANNELS;
-      out_ready : in  M_NODES_CHANNELS
+      out_flit  : out std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+      out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+      out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+      out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
     );
   end component;
 
@@ -107,15 +107,15 @@ architecture RTL of mpsoc_noc_testbench is
   signal clk : std_logic;
   signal rst : std_logic;
 
-  signal mpsoc_noc_out_flit  : M_NODES_CHANNELS_FLIT_WIDTH;
-  signal mpsoc_noc_out_last  : M_NODES_CHANNELS;
-  signal mpsoc_noc_out_valid : M_NODES_CHANNELS;
-  signal mpsoc_noc_out_ready : M_NODES_CHANNELS;
+  signal mpsoc_noc_out_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal mpsoc_noc_out_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal mpsoc_noc_out_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal mpsoc_noc_out_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
-  signal mpsoc_noc_in_flit  : M_NODES_CHANNELS_FLIT_WIDTH;
-  signal mpsoc_noc_in_last  : M_NODES_CHANNELS;
-  signal mpsoc_noc_in_valid : M_NODES_CHANNELS;
-  signal mpsoc_noc_in_ready : M_NODES_CHANNELS;
+  signal mpsoc_noc_in_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal mpsoc_noc_in_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal mpsoc_noc_in_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal mpsoc_noc_in_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////

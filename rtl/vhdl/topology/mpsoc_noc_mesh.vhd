@@ -68,15 +68,15 @@ entity mpsoc_noc_mesh is
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  M_NODES_CHANNELS_FLIT_WIDTH;
-    in_last  : in  M_NODES_CHANNELS;
-    in_valid : in  M_NODES_CHANNELS;
-    in_ready : out M_NODES_CHANNELS;
+    in_flit  : in  std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+    in_valid : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+    in_ready : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
-    out_flit  : out M_NODES_CHANNELS_FLIT_WIDTH;
-    out_last  : out M_NODES_CHANNELS;
-    out_valid : out M_NODES_CHANNELS;
-    out_ready : in  M_NODES_CHANNELS
+    out_flit  : out std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+    out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+    out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
   );
 end mpsoc_noc_mesh;
 
@@ -90,7 +90,7 @@ architecture RTL of mpsoc_noc_mesh is
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
       in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
       in_ready : out std_logic_vector(CHANNELS-1 downto 0);
@@ -116,17 +116,17 @@ architecture RTL of mpsoc_noc_mesh is
       clk : in std_logic;
       rst : in std_logic;
 
-      routes : in M_NODES_OUTPUTS;
+      routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
-      out_flit  : out M_OUTPUTS_FLIT_WIDTH;
+      out_flit  : out std_logic_matrix(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       out_last  : out std_logic_vector(OUTPUTS-1 downto 0);
-      out_valid : out M_OUTPUTS_VCHANNELS;
-      out_ready : in  M_OUTPUTS_VCHANNELS;
+      out_valid : out std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+      out_ready : in  std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
 
-      in_flit  : in  M_CHANNELS_FLIT_WIDTH;
+      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_valid : in  M_CHANNELS_VCHANNELS;
-      in_ready : out M_CHANNELS_VCHANNELS
+      in_valid : in  std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+      in_ready : out std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)
     );
   end component;
 
@@ -238,13 +238,13 @@ architecture RTL of mpsoc_noc_mesh is
     x : integer;
     y : integer;
     z : integer
-  ) return M_NODES_OUTPUTS is
+  ) return std_logic_matrix is
     variable xd               : integer;
     variable yd               : integer;
     variable zd               : integer;
     variable nd               : integer;
     variable d                : std_logic_vector(OUTPUTS-1 downto 0);
-    variable genroutes_return : M_NODES_OUTPUTS;
+    variable genroutes_return : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
   begin
 
     genroutes_return := (others => (others => '0'));
@@ -291,40 +291,40 @@ architecture RTL of mpsoc_noc_mesh is
   -- Arrays of wires between the routers. Each router has a
   -- pair of NoC wires per direction and below those are hooked
   -- up.
-  signal node_in_flit  : M_NODES_CHANNELS_PCHANNELS_FLIT_WIDTH;
-  signal node_in_last  : M_NODES_CHANNELS_PCHANNELS;
-  signal node_in_valid : M_NODES_CHANNELS_CHANNELS;
-  signal node_in_ready : M_NODES_CHANNELS_CHANNELS;
+  signal node_in_flit  : std_logic_4array(NODES-1 downto 0)(CHANNELS-1 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_in_last  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(PCHANNELS-1 downto 0);
+  signal node_in_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+  signal node_in_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(CHANNELS-1 downto 0);
 
-  signal node_out_flit  : M_NODES_OUTPUTS_PCHANNELS_FLIT_WIDTH;
-  signal node_out_last  : M_NODES_OUTPUTS_PCHANNELS;
-  signal node_out_valid : M_NODES_OUTPUTS_CHANNELS;
-  signal node_out_ready : M_NODES_OUTPUTS_CHANNELS;
+  signal node_out_flit  : std_logic_4array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_out_last  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(PCHANNELS-1 downto 0);
+  signal node_out_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(CHANNELS-1 downto 0);
+  signal node_out_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(CHANNELS-1 downto 0);
 
-  signal node_rin_flit  : M_NODES_CHANNELS_FLIT_WIDTH;
-  signal node_rin_last  : M_NODES_CHANNELS;
-  signal node_rin_valid : M_NODES_CHANNELS_VCHANNELS;
-  signal node_rin_ready : M_NODES_CHANNELS_VCHANNELS;
+  signal node_rin_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_rin_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal node_rin_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal node_rin_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
 
-  signal node_rout_flit  : M_NODES_OUTPUTS_FLIT_WIDTH;
-  signal node_rout_last  : M_NODES_OUTPUTS;
-  signal node_rout_valid : M_NODES_OUTPUTS_VCHANNELS;
-  signal node_rout_ready : M_NODES_OUTPUTS_VCHANNELS;
+  signal node_rout_flit  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_rout_last  : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
+  signal node_rout_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal node_rout_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
 
   -- First we just need to re-arrange the wires a bit
   -- because the array structure varies a bit here:
   -- The directions and channels and differently
   -- multiplexed here. Hence create some helper
   -- arrays.
-  signal phys_in_flit  : M_NODES_CHANNELS_FLIT_WIDTH;
-  signal phys_in_last  : M_NODES_CHANNELS;
-  signal phys_in_valid : M_NODES_CHANNELS_VCHANNELS;
-  signal phys_in_ready : M_NODES_CHANNELS_VCHANNELS;
+  signal phys_in_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_in_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal phys_in_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal phys_in_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
 
-  signal phys_out_flit  : M_NODES_OUTPUTS_FLIT_WIDTH;
-  signal phys_out_last  : M_NODES_OUTPUTS;
-  signal phys_out_valid : M_NODES_OUTPUTS_VCHANNELS;
-  signal phys_out_ready : M_NODES_OUTPUTS_VCHANNELS;
+  signal phys_out_flit  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_out_last  : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
+  signal phys_out_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal phys_out_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
