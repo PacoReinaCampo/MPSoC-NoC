@@ -81,7 +81,7 @@ module mpsoc_noc_testbench;
   //
 
   //DUT
-  mpsoc_noc_mesh #(
+  mpsoc_noc_mesh3d #(
     .FLIT_WIDTH       (FLIT_WIDTH),
     .CHANNELS         (CHANNELS),
     .OUTPUTS          (OUTPUTS),

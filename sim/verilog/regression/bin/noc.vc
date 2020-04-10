@@ -53,6 +53,6 @@
 ../../../../rtl/verilog/router/mpsoc_noc_router_output.sv
 ../../../../rtl/verilog/router/mpsoc_noc_router.sv
 
-../../../../rtl/verilog/topology/mpsoc_noc_mesh.sv
+../../../../rtl/verilog/topology/mpsoc_noc_mesh3d.sv
 
 ../../../../bench/verilog/regression/mpsoc_noc_testbench.sv

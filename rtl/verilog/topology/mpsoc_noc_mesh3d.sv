@@ -41,7 +41,7 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_noc_mesh #(
+module mpsoc_noc_mesh3d #(
   parameter FLIT_WIDTH       = 34,
   parameter VCHANNELS        = 7,
   parameter CHANNELS         = 7,
