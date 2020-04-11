@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.mpsoc_noc_testbench 
-# Start time: 00:43:56 on Apr 12,2020
+# Start time: 01:10:23 on Apr 12,2020
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -17,7 +17,7 @@
 # Loading work.noc_router_lookup_slice(rtl)
 # Loading work.noc_router_output(rtl)
 # Loading work.noc_mux(rtl)
-# ** Warning: Design size of 140447 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 140465 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
 # ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/in_ready(7)(6 downto 0) has no driver.
 # This port will contribute value (UUUUUUU) to the signal network.
@@ -60,5 +60,5 @@
 # ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_valid(6)(6 downto 0) has no driver.
 # This port will contribute value (UUUUUUU) to the signal network.
 # do run.do
-# End time: 00:43:57 on Apr 12,2020, Elapsed time: 0:00:01
+# End time: 01:10:24 on Apr 12,2020, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 21

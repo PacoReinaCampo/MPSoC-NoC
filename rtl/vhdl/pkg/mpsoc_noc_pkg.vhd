@@ -99,6 +99,8 @@ package mpsoc_noc_pkg is
   function to_stdlogic (input : boolean) return std_logic;
   function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
   function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
+
+  function ternary (a : integer; b : integer; selection : integer) return integer;
 end mpsoc_noc_pkg;
 
 package body mpsoc_noc_pkg is
@@ -138,4 +140,17 @@ package body mpsoc_noc_pkg is
     end loop;
     return reduce_nor_out;
   end reduce_nor;
+
+  function ternary (
+    a : integer;
+    b : integer;
+    selection : integer
+    ) return integer is
+  begin
+    if selection > 0 then
+      return a;
+    else
+      return b;
+    end if;
+  end function ternary;
 end mpsoc_noc_pkg;

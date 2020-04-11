@@ -159,7 +159,7 @@ architecture RTL of noc_mesh3d is
 
   -- Number of physical channels between routers. This is essentially
   -- the number of flits (and last) between the routers.
-  constant PCHANNELS : integer := 1;
+  constant PCHANNELS : integer := ternary(1, CHANNELS, ENABLE_VCHANNELS);
 
   --////////////////////////////////////////////////////////////////
   --
