@@ -41,92 +41,100 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_noc_demux #(
-  parameter        FLIT_WIDTH = 32,
-  parameter        CHANNELS   = 7,
-  parameter [63:0] MAPPING    = 'x
+module noc_mux #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 7
 )
   (
-    input                                     clk,
-    input                                     rst,
+    input                                clk,
+    input                                rst,
 
-    input                    [FLIT_WIDTH-1:0] in_flit,
-    input                                     in_last,
-    input                                     in_valid,
-    output reg                                in_ready,
+    input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+    input      [CHANNELS-1:0]                 in_last,
+    input      [CHANNELS-1:0]                 in_valid,
+    output reg [CHANNELS-1:0]                 in_ready,
 
-    output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
-    output     [CHANNELS-1:0]                 out_last,
-    output reg [CHANNELS-1:0]                 out_valid,
-    input      [CHANNELS-1:0]                 out_ready
+    output reg               [FLIT_WIDTH-1:0] out_flit,
+    output reg                                out_last,
+    output reg                                out_valid,
+    input                                     out_ready
   );
-
-  //////////////////////////////////////////////////////////////////
-  //
-  // Constants
-  //
-
-  // NoC packet header
-  // Mandatory fields
-  localparam mpsoc_noc_CLASS_MSB = 26;
-  localparam mpsoc_noc_CLASS_LSB = 24;
 
   //////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg [CHANNELS-1:0] active;
-  reg [CHANNELS-1:0] nxt_active;
+  wire [CHANNELS-1:0] select;
+  reg  [CHANNELS-1:0] active;
 
-  wire [         2:0] packet_class;
-  reg  [CHANNELS-1:0] select;
+  reg                 activeroute;
+  reg                 nxt_activeroute;
+
+  wire [CHANNELS-1:0] req_masked;
+
+  integer c;
 
   //////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  assign packet_class = in_flit[mpsoc_noc_CLASS_MSB:mpsoc_noc_CLASS_LSB];
+  assign req_masked = {CHANNELS{~activeroute & out_ready}} & in_valid;
 
-  always @(*) begin : gen_select
-    select = MAPPING[8*packet_class +: CHANNELS];
-    if (select == 0) begin
-      select = { {CHANNELS-1{1'b0}}, 1'b1};
+  always @(*) begin
+    out_flit = {FLIT_WIDTH{1'b0}};
+    out_last = 1'b0;
+    for (c = 0; c < CHANNELS; c = c + 1) begin
+      if (select[c]) begin
+        out_flit = in_flit[c];
+        out_last = in_last[c];
+      end
     end
   end
 
-  assign out_flit = {CHANNELS{in_flit}};
-  assign out_last = {CHANNELS{in_last}};
-
   always @(*) begin
-    nxt_active = active;
+    nxt_activeroute = activeroute;
+    in_ready        = {CHANNELS{1'b0}};
 
-    out_valid = 0;
-    in_ready  = 0;
-
-    if (active == 0) begin
-      in_ready  = |(select & out_ready);
-      out_valid =   select & {CHANNELS{in_valid}};
-
-      if (in_valid & ~in_last) begin
-        nxt_active = select;
+    if (activeroute) begin
+      if (|(in_valid & active) && out_ready) begin
+        in_ready  = active;
+        out_valid = 1;
+        if (out_last)
+          nxt_activeroute = 0;
+      end
+      else begin
+        out_valid = 1'b0;
+        in_ready  = 0;
       end
     end
     else begin
-      in_ready  = |(active & out_ready);
-      out_valid = active & {CHANNELS{in_valid}};
-
-      if (in_valid & in_last) begin
-        nxt_active = 0;
+      out_valid = 0;
+      if (|in_valid && out_ready) begin
+        out_valid       = 1'b1;
+        nxt_activeroute = ~out_last;
+        in_ready        = select;
       end
     end
   end
 
   always @(posedge clk) begin
     if (rst) begin
-      active <= '0;
+      activeroute <= 0;
+      active      <= {{CHANNELS-1{1'b0}},1'b1};
     end
     else begin
-      active <= nxt_active;
+      activeroute <= nxt_activeroute;
+      active      <= select;
     end
   end
-endmodule // mpsoc_noc_demux
+
+  arb_rr #(
+    .N (CHANNELS)
+  )
+  arbiter_rr (
+    .nxt_gnt (select),
+    .req     (req_masked),
+    .gnt     (active),
+    .en      (1'b1)
+  );
+endmodule

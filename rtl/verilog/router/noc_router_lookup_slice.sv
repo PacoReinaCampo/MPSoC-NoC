@@ -41,7 +41,7 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_noc_router_lookup_slice #(
+module noc_router_lookup_slice #(
   parameter FLIT_WIDTH = 32,
   parameter OUTPUTS    = 7
 )
@@ -123,4 +123,4 @@ module mpsoc_noc_router_lookup_slice #(
       end
     end
   end
-endmodule // mpsoc_noc_router_lookup_slice
+endmodule

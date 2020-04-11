@@ -41,88 +41,68 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module mpsoc_noc_router_input #(
-  parameter FLIT_WIDTH   = 32,
-  parameter VCHANNELS    = 7,
-  parameter OUTPUTS      = 7,
-  parameter NODES        = 8,
-  parameter BUFFER_DEPTH = 4
+module noc_vchannel_mux #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 7
 )
   (
-    input clk,
-    input rst,
+    input                                 clk,
+    input                                 rst,
 
-    input [NODES-1:0][OUTPUTS-1:0] routes,
+    input  [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+    input  [CHANNELS-1:0]                 in_last,
+    input  [CHANNELS-1:0]                 in_valid,
+    output [CHANNELS-1:0]                 in_ready,
 
-    input                              [FLIT_WIDTH-1:0] in_flit,
-    input                                               in_last,
-    input  [VCHANNELS-1:0]                              in_valid,
-    output [VCHANNELS-1:0]                              in_ready,
-
-    output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
-    output [VCHANNELS-1:0]                              out_last,
-    output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
-    input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
+    output reg           [FLIT_WIDTH-1:0] out_flit,
+    output reg                            out_last,
+    output [CHANNELS-1:0]                 out_valid,
+    input  [CHANNELS-1:0]                 out_ready
   );
 
   //////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  wire [FLIT_WIDTH-1:0] buffer_flit;
-  wire                  buffer_last;
-  wire                  buffer_valid;
-  wire                  buffer_ready;
+  reg   [CHANNELS-1:0] select;
+  logic [CHANNELS-1:0] nxt_select;
 
-  genvar                v;
+  integer c;
 
   //////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  generate
-    for (v = 0; v < VCHANNELS; v=v+1) begin : vc
-      mpsoc_noc_buffer #(
-        .FLIT_WIDTH (FLIT_WIDTH),
-        .DEPTH      (BUFFER_DEPTH)
-      )
-      buffer (
-        .clk         (clk),
-        .rst         (rst),
+  assign out_valid = in_valid  & select;
+  assign in_ready  = out_ready & select;
 
-        .in_flit     (in_flit),
-        .in_last     (in_last),
-        .in_valid    (in_valid [v]),
-        .in_ready    (in_ready [v]),
-
-        .out_flit    (buffer_flit),
-        .out_last    (buffer_last),
-        .out_valid   (buffer_valid),
-        .out_ready   (buffer_ready),
-        .packet_size ()
-      );
-
-      mpsoc_noc_router_lookup #(
-        .FLIT_WIDTH (FLIT_WIDTH),
-        .NODES      (NODES),
-        .OUTPUTS    (OUTPUTS)
-      )
-      router_lookup (
-        .clk       (clk),
-        .rst       (rst),
-
-        .routes    (routes),
-
-        .in_flit   (buffer_flit),
-        .in_last   (buffer_last),
-        .in_valid  (buffer_valid),
-        .in_ready  (buffer_ready),
-
-        .out_flit  (out_flit  [v]),
-        .out_last  (out_last  [v]),
-        .out_valid (out_valid [v]),
-        .out_ready (out_ready [v])
-      );
+  always @(*) begin
+    out_flit = 'x;
+    out_last = 'x;
+    for (c = 0; c < CHANNELS; c=c+1) begin
+      if (select[c]) begin
+        out_flit = in_flit[c];
+        out_last = in_last[c];
+      end
     end
-  endgenerate
-endmodule // mpsoc_noc_router_input
+  end
+
+  arb_rr #(
+    .N (CHANNELS)
+  )
+  arbiter_rr (
+    .req     (in_valid & out_ready),
+    .en      (1'b1),
+    .gnt     (select),
+    .nxt_gnt (nxt_select)
+  );
+
+  always @(posedge clk) begin
+    if (rst) begin
+      select <= {{CHANNELS-1{1'b0}},1'b1};
+    end
+    else begin
+      select <= nxt_select;
+    end
+  end
+endmodule
