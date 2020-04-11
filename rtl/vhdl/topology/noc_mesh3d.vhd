@@ -367,32 +367,32 @@ begin
 
           -- Instantiate the router. We call a function to
           -- generate the routing table
-          ----router : noc_router
-            ----generic map (
-              ----FLIT_WIDTH      => FLIT_WIDTH,
-              ----VCHANNELS       => CHANNELS,
-              ----INPUTS          => 7,
-              ----OUTPUTS         => 7,
-              ----BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
-              ----BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-              ----DESTS           => NODES,
+          router : noc_router
+            generic map (
+              FLIT_WIDTH      => FLIT_WIDTH,
+              VCHANNELS       => CHANNELS,
+              INPUTS          => 7,
+              OUTPUTS         => 7,
+              BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
+              BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
+              DESTS           => NODES,
 
-              ----ROUTES => genroutes(xd, yd, zd)
-              ----)
-            ----port map (
-              ----clk => clk,
-              ----rst => rst,
+              ROUTES => genroutes(xd, yd, zd)
+              )
+            port map (
+              clk => clk,
+              rst => rst,
 
-              ----in_flit  => node_in_flit  (nodenum(xd, yd, zd)),
-              ----in_last  => node_in_last  (nodenum(xd, yd, zd)),
-              ----in_valid => node_in_valid (nodenum(xd, yd, zd)),
-              ----in_ready => node_in_ready (nodenum(xd, yd, zd)),
+              in_flit  => (others => (others => '0')),
+              in_last  => (others => '0'),
+              in_valid => node_in_valid (nodenum(xd, yd, zd)),
+              in_ready => node_in_ready (nodenum(xd, yd, zd)),
 
-              ----out_flit  => node_out_flit  (nodenum(xd, yd, zd)),
-              ----out_last  => node_out_last  (nodenum(xd, yd, zd)),
-              ----out_valid => node_out_valid (nodenum(xd, yd, zd)),
-              ----out_ready => node_out_ready (nodenum(xd, yd, zd))
-              ----);
+              out_flit  => open,
+              out_last  => open,
+              out_valid => node_out_valid (nodenum(xd, yd, zd)),
+              out_ready => node_out_ready (nodenum(xd, yd, zd))
+              );
         elsif (ENABLE_VCHANNELS = 0) generate
           out_flit  (nodenum(xd, yd, zd)) <= node_out_flit  (nodenum(xd, yd, zd))(LOCAL);
           out_last  (nodenum(xd, yd, zd)) <= node_out_last  (nodenum(xd, yd, zd))(LOCAL);
@@ -431,32 +431,32 @@ begin
 
               -- Instantiate the router. We call a function to
               -- generate the routing table
-              ----router : noc_router
-              ----generic map (
-                ----FLIT_WIDTH      => FLIT_WIDTH,
-                ----VCHANNELS       => 1,
-                ----INPUTS          => 7,
-                ----OUTPUTS         => 7,
-                ----BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
-                ----BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-                ----DESTS           => NODES,
+              router : noc_router
+              generic map (
+                FLIT_WIDTH      => FLIT_WIDTH,
+                VCHANNELS       => 1,
+                INPUTS          => 7,
+                OUTPUTS         => 7,
+                BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
+                BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
+                DESTS           => NODES,
 
-                ----ROUTES => genroutes(xd, yd, zd)
-                ----)
-              ----port map (
-                ----clk => clk,
-                ----rst => rst,
+                ROUTES => genroutes(xd, yd, zd)
+                )
+              port map (
+                clk => clk,
+                rst => rst,
 
-                ----in_flit  => phys_in_flit (nodenum(xd, yd, zd)),
-                ----in_last  => phys_in_last (nodenum(xd, yd, zd)),
-                ----in_valid => phys_in_valid (nodenum(xd, yd, zd)),
-                ----in_ready => phys_in_ready (nodenum(xd, yd, zd)),
+                in_flit  => (others => (others => '0')),
+                in_last  => (others => '0'),
+                in_valid => phys_in_valid (nodenum(xd, yd, zd)),
+                in_ready => phys_in_ready (nodenum(xd, yd, zd)),
 
-                ----out_flit  => phys_out_flit (nodenum(xd, yd, zd)),
-                ----out_last  => phys_out_last (nodenum(xd, yd, zd)),
-                ----out_valid => phys_out_valid (nodenum(xd, yd, zd)),
-                ----out_ready => phys_out_ready (nodenum(xd, yd, zd))
-                ----);
+                out_flit  => open,
+                out_last  => open,
+                out_valid => phys_out_valid (nodenum(xd, yd, zd)),
+                out_ready => phys_out_ready (nodenum(xd, yd, zd))
+                );
           end generate;
         end generate;
 
