@@ -68,8 +68,8 @@ module noc_demux #(
 
   // NoC packet header
   // Mandatory fields
-  localparam mpsoc_noc_CLASS_MSB = 26;
-  localparam mpsoc_noc_CLASS_LSB = 24;
+  localparam CLASS_MSB = 26;
+  localparam CLASS_LSB = 24;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -85,7 +85,7 @@ module noc_demux #(
   //
   // Module Body
   //
-  assign packet_class = in_flit[mpsoc_noc_CLASS_MSB:mpsoc_noc_CLASS_LSB];
+  assign packet_class = in_flit[CLASS_MSB:CLASS_LSB];
 
   always @(*) begin : gen_select
     select = MAPPING[8*packet_class +: CHANNELS];

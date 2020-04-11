@@ -43,7 +43,7 @@
 
 module noc_mux #(
   parameter FLIT_WIDTH = 32,
-  parameter CHANNELS   = 7
+  parameter CHANNELS   = 2
 )
   (
     input                                     clk,

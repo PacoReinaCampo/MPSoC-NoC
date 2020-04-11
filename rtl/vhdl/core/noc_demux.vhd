@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/mpsoc_noc_mux.sv
+-- Converted from rtl/verilog/core/noc_demux.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -50,95 +50,88 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_mux is
+entity noc_demux is
   generic (
-    FLIT_WIDTH : integer := 34;
-    CHANNELS   : integer := 7
+    FLIT_WIDTH : integer := 32;
+    CHANNELS   : integer := 7;
+
+    MAPPING    : std_logic_vector(63 downto 0) := (others => 'X')
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-    in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-    in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
-    in_ready : out std_logic_vector(CHANNELS-1 downto 0);
+    in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic;
+    in_valid : in  std_logic;
+    in_ready : out std_logic;
 
-    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
-    out_last  : out std_logic;
-    out_valid : out std_logic;
-    out_ready : in  std_logic
+    out_flit  : out std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    out_last  : out std_logic_vector(CHANNELS-1 downto 0);
+    out_valid : out std_logic_vector(CHANNELS-1 downto 0);
+    out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
   );
-end mpsoc_noc_mux;
+end noc_demux;
 
-architecture RTL of mpsoc_noc_mux is
-  component mpsoc_noc_arbitrer_rr
-    generic (
-      N : integer := 2
-    );
-    port (
-      req     : in  std_logic_vector(N-1 downto 0);
-      en      : in  std_logic;
-      gnt     : in  std_logic_vector(N-1 downto 0);
-      nxt_gnt : out std_logic_vector(N-1 downto 0)
-    );
-  end component;
+architecture RTL of noc_demux is
+  --////////////////////////////////////////////////////////////////
+  --
+  -- Constants
+  --
+  constant CLASS_MSB : integer := 26;
+  constant CLASS_LSB : integer := 24;
 
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
-  signal selected : std_logic_vector(CHANNELS-1 downto 0);
-  signal active   : std_logic_vector(CHANNELS-1 downto 0);
+  signal actived     : std_logic_vector(CHANNELS-1 downto 0);
+  signal nxt_actived : std_logic_vector(CHANNELS-1 downto 0);
 
-  signal activeroute     : std_logic;
-  signal nxt_activeroute : std_logic;
-
-  signal req_masked : std_logic_vector(CHANNELS-1 downto 0);
-
-  signal out_last_sgn : std_logic;
+  signal packet_class : std_logic_vector(2 downto 0);
+  signal selected     : std_logic_vector(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
   --
   -- Module Body
   --
-  req_masked <= (req_masked'range => not activeroute and out_ready) and in_valid;
+  packet_class <= in_flit(CLASS_MSB downto CLASS_LSB);
 
-  processing_0 : process (selected, in_flit, in_last)
+  processing_0 : process (selected, packet_class)
   begin
-    out_flit     <= (others => '0');
-    out_last_sgn <= '0';
-    for c in 0 to CHANNELS - 1 loop
-      if (selected(c) = '1') then
-        out_flit     <= in_flit(c);
-        out_last_sgn <= in_last(c);
-      end if;
-    end loop;
+    selected <= MAPPING(8*to_integer(unsigned(packet_class))+CHANNELS-1 downto 8*to_integer(unsigned(packet_class)));
+    if (selected = (selected'range => '0')) then
+      selected <= std_logic_vector(to_unsigned(1, CHANNELS));
+    end if;
   end process;
 
-  processing_1 : process (activeroute, in_valid, out_ready, active, out_last_sgn, selected)
-  begin
-    nxt_activeroute <= activeroute;
-    in_ready        <= (others => '0');
+  generating_0 : for i in CHANNELS-1 downto 0 generate
+    out_flit(i) <= in_flit;
+  end generate;
 
-    if (activeroute = '1') then
-      if (reduce_or(in_valid) = '1' and out_ready = '1') then
-        in_ready  <= active;
-        out_valid <= '1';
-        if (out_last_sgn = '1') then
-          nxt_activeroute <= '0';
-        end if;
-      else
-        out_valid <= '0';
-        in_ready  <= (others => '0');
+  out_last <= (out_last'range => in_last);
+
+  processing_1 : process (actived, in_valid, in_last, out_ready, selected)
+  begin
+    nxt_actived <= actived;
+
+    out_valid <= (others => '0');
+    in_ready  <= '0';
+
+    if (actived = (actived'range => '0')) then
+      in_ready  <= reduce_or(selected and out_ready);
+      out_valid <= selected and (out_valid'range => in_valid);
+
+      if (in_valid = '1' and in_last = '0') then
+        nxt_actived <= selected;
       end if;
     else
-      out_valid <= '0';
-      if (reduce_or(in_valid) = '1' and out_ready = '1') then
-        out_valid       <= '1';
-        nxt_activeroute <= not out_last_sgn;
-        in_ready        <= selected;
+      in_ready  <= reduce_or(actived and out_ready);
+      out_valid <= actived and (out_valid'range => in_valid);
+
+      if (in_valid = '1' and in_last = '1') then
+        nxt_actived <= (others => '0');
       end if;
     end if;
   end process;
@@ -147,25 +140,10 @@ begin
   begin
     if (rising_edge(clk)) then
       if (rst = '1') then
-        activeroute <= '0';
-        active      <= std_logic_vector(to_unsigned(1, CHANNELS));
+        actived <= (others => '0');
       else
-        activeroute <= nxt_activeroute;
-        active      <= selected;
+        actived <= nxt_actived;
       end if;
     end if;
   end process;
-
-  arbitrer_rr : mpsoc_noc_arbitrer_rr
-    generic map (
-      N => CHANNELS
-    )
-    port map (
-      nxt_gnt => selected,
-      req     => req_masked,
-      gnt     => active,
-      en      => '1'
-    );
-
-  out_last <= out_last_sgn;
 end RTL;

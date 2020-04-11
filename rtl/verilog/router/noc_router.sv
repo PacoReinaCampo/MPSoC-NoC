@@ -50,7 +50,7 @@ module noc_router #(
   parameter BUFFER_SIZE_OUT = 4,
   parameter DESTS           = 'x,
 
-    parameter [OUTPUTS*DESTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
+  parameter [OUTPUTS*DESTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
 )
   (
     input clk,

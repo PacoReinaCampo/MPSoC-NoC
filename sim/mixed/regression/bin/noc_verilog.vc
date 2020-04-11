@@ -41,7 +41,6 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../../rtl/verilog/router/noc_router.sv
 ../../../../rtl/verilog/topology/noc_mesh3d.sv
 
 ../../../../bench/verilog/regression/mpsoc_noc_testbench.sv

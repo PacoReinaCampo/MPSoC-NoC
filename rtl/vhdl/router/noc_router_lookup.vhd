@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/mpsoc_noc_demux.sv
+-- Converted from rtl/verilog/router/noc_router_lookup.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -50,12 +50,14 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_demux is
+entity noc_router_lookup is
   generic (
     FLIT_WIDTH : integer := 32;
-    CHANNELS   : integer := 7;
+    DEST_WIDTH : integer := 5;
+    DESTS      : integer := 1;
+    OUTPUTS    : integer := 1;
 
-    MAPPING    : std_logic_vector(63 downto 0) := (others => 'X')
+    ROUTES : in std_logic_vector(DESTS*OUTPUTS-1 downto 0) := (others => '0')
   );
   port (
     clk : in std_logic;
@@ -66,84 +68,128 @@ entity mpsoc_noc_demux is
     in_valid : in  std_logic;
     in_ready : out std_logic;
 
-    out_flit  : out std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-    out_last  : out std_logic_vector(CHANNELS-1 downto 0);
-    out_valid : out std_logic_vector(CHANNELS-1 downto 0);
-    out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
+    out_valid : out std_logic_vector(OUTPUTS-1 downto 0);
+    out_last  : out std_logic;
+    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
   );
-end mpsoc_noc_demux;
+end noc_router_lookup;
 
-architecture RTL of mpsoc_noc_demux is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Constants
-  --
-  constant mpsoc_noc_CLASS_MSB : integer := 26;
-  constant mpsoc_noc_CLASS_LSB : integer := 24;
+architecture RTL of noc_router_lookup is
+  component noc_router_lookup_slice
+    generic (
+      FLIT_WIDTH : integer := 32;
+      OUTPUTS    : integer := 7
+    );
+    port (
+      clk : in std_logic;
+      rst : in std_logic;
 
+      in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
+      in_last  : in  std_logic;
+      in_valid : in  std_logic_vector(OUTPUTS-1 downto 0);
+      in_ready : out std_logic;
+
+      out_valid : out std_logic_vector(OUTPUTS-1 downto 0);
+      out_last  : out std_logic;
+      out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+      out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
+    );
+  end component;
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
-  signal actived     : std_logic_vector(CHANNELS-1 downto 0);
-  signal nxt_actived : std_logic_vector(CHANNELS-1 downto 0);
 
-  signal packet_class : std_logic_vector(2 downto 0);
-  signal selected     : std_logic_vector(CHANNELS-1 downto 0);
+  -- We need to track worms and directly encode the output of the
+  -- current worm.
+  signal worm     : std_logic_vector(OUTPUTS-1 downto 0);
+  signal nxt_worm : std_logic_vector(OUTPUTS-1 downto 0);
+
+  -- This is high if we are in a worm
+  signal wormhole : std_logic;
+
+  -- Extract destination from flit
+  signal dest : std_logic_vector(DEST_WIDTH-1 downto 0);
+  signal d    : integer;
+
+  -- This is the selection signal of the slave, one hot so that it
+  -- directly serves as flow control valid
+  signal valid : std_logic_vector(OUTPUTS-1 downto 0);
+
+  signal in_ready_sgn : std_logic;
 
 begin
   --////////////////////////////////////////////////////////////////
   --
   -- Module Body
   --
-  packet_class <= in_flit(mpsoc_noc_CLASS_MSB downto mpsoc_noc_CLASS_LSB);
 
-  processing_0 : process (selected, packet_class)
+  -- This is high if we are in a worm
+  wormhole <= reduce_or(worm);
+
+  -- Extract destination from flit
+  dest <= in_flit(FLIT_WIDTH-1 downto FLIT_WIDTH-DEST_WIDTH);
+  d    <= to_integer(unsigned(dest));
+
+  -- Register slice at the output.
+  router_lookup_slice : noc_router_lookup_slice
+    generic map (
+      FLIT_WIDTH => FLIT_WIDTH,
+      OUTPUTS    => OUTPUTS
+    )
+    port map (
+      clk => clk,
+      rst => rst,
+
+      in_flit  => in_flit,
+      in_last  => in_last,
+      in_valid => valid,
+      in_ready => in_ready_sgn,
+
+      out_valid => out_valid,
+      out_last  => out_last,
+      out_flit  => out_flit,
+      out_ready => out_ready
+    );
+
+  processing_0 : process (d, in_last, in_ready_sgn, in_valid, worm, wormhole)
   begin
-    selected <= MAPPING(8*to_integer(unsigned(packet_class))+CHANNELS-1 downto 8*to_integer(unsigned(packet_class)));
-    if (selected = (selected'range => '0')) then
-      selected <= std_logic_vector(to_unsigned(1, CHANNELS));
+    nxt_worm <= worm;
+    valid    <= (others => '0');
+
+    if (wormhole = '1') then
+      -- We are waiting for a flit
+      if (in_valid = '1') then
+        -- This is a header. Lookup output
+        valid <= ROUTES(OUTPUTS*(d-1) downto OUTPUTS*d);
+        if (in_ready_sgn = '1' and in_last = '0') then
+          -- If we can push it further and it is not the only
+          -- flit, enter a worm and store the output
+          nxt_worm <= ROUTES(OUTPUTS*(d-1) downto OUTPUTS*d);
+        end if;
+      end if;
+    else  -- if (!wormhole)
+      -- We are in a worm
+      -- The valid is set on the currently select output
+      valid <= worm and (valid'range => in_valid);
+      if (in_ready_sgn = '1' and in_last = '1') then
+        -- End of worm
+        nxt_worm <= (others => '0');
+      end if;
     end if;
   end process;
 
-  generating_0 : for i in CHANNELS-1 downto 0 generate
-    out_flit(i) <= in_flit;
-  end generate;
-
-  out_last <= (out_last'range => in_last);
-
-  processing_1 : process (actived, in_valid, in_last, out_ready, selected)
-  begin
-    nxt_actived <= actived;
-
-    out_valid <= (others => '0');
-    in_ready  <= '0';
-
-    if (actived = (actived'range => '0')) then
-      in_ready  <= reduce_or(selected and out_ready);
-      out_valid <= selected and (out_valid'range => in_valid);
-
-      if (in_valid = '1' and in_last = '0') then
-        nxt_actived <= selected;
-      end if;
-    else
-      in_ready  <= reduce_or(actived and out_ready);
-      out_valid <= actived and (out_valid'range => in_valid);
-
-      if (in_valid = '1' and in_last = '1') then
-        nxt_actived <= (others => '0');
-      end if;
-    end if;
-  end process;
-
-  processing_2 : process (clk)
+  processing_1 : process (clk)
   begin
     if (rising_edge(clk)) then
       if (rst = '1') then
-        actived <= (others => '0');
+        worm <= (others => '0');
       else
-        actived <= nxt_actived;
+        worm <= nxt_worm;
       end if;
     end if;
   end process;
+
+  in_ready <= in_ready_sgn;
 end RTL;

@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/router/mpsoc_noc_router_lookup_slice.sv
+-- Converted from rtl/verilog/core/arb_rr.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -50,41 +50,24 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_router_lookup_slice is
+entity arb_rr is
   generic (
-    FLIT_WIDTH : integer := 32;
-    OUTPUTS    : integer := 7
+    N : integer := 2
   );
   port (
-    clk : in std_logic;
-    rst : in std_logic;
-
-    in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
-    in_last  : in  std_logic;
-    in_valid : in  std_logic_vector(OUTPUTS-1 downto 0);
-    in_ready : out std_logic;
-
-    out_valid : out std_logic_vector(OUTPUTS-1 downto 0);
-    out_last  : out std_logic;
-    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
-    out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
+    req     : in  std_logic_vector(N-1 downto 0);
+    en      : in  std_logic;
+    gnt     : in  std_logic_vector(N-1 downto 0);
+    nxt_gnt : out std_logic_vector(N-1 downto 0)
   );
-end mpsoc_noc_router_lookup_slice;
+end arb_rr;
 
-architecture RTL of mpsoc_noc_router_lookup_slice is
+architecture RTL of arb_rr is
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
-
-  -- This is an intermediate register that we use to avoid
-  -- stop-and-go behavior
-  signal reg_flit  : std_logic_vector(FLIT_WIDTH-1 downto 0);
-  signal reg_last  : std_logic;
-  signal reg_valid : std_logic_vector(OUTPUTS-1 downto 0);
-
-  -- This signal selects where to store the next incoming flit
-  signal pressure : std_logic;
+  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
@@ -92,48 +75,45 @@ begin
   -- Module Body
   --
 
-  -- A backpressure in the output port leads to backpressure on the
-  -- input with one cycle delay
-  in_ready <= not pressure;
+  -- Calculate the mask
+  generating_0 : for i in 0 to N - 1 generate
+    -- Initialize mask as 0
 
-  processing_0 : process (clk)
-    variable out_valid_sgn : std_logic_vector(OUTPUTS-1 downto 0);
-  begin
-    if (rising_edge(clk)) then
-      if (rst = '1') then
-        pressure       <= '0';
-        out_valid_sgn := (others => '0');
-      elsif (pressure = '0') then
-        -- We are accepting the input in this cycle, determine
-        -- where to store it..
-        if (reduce_nor(out_valid_sgn) = '1' or reduce_or(out_ready and out_valid_sgn) = '1') then
-          -- There is no flit waiting in the register, or
-          -- The current flit is transfered this cycle
-          out_flit       <= in_flit;
-          out_last       <= in_last;
-          out_valid_sgn := in_valid;
-        elsif (reduce_or(out_valid_sgn) = '1' and reduce_nor(out_ready) = '1') then
-          -- Otherwise if there is a flit waiting and upstream
-          -- not ready, push it to the second register. Enter the
-          -- backpressure mode.
-          reg_flit  <= in_flit;
-          reg_last  <= in_last;
-          reg_valid <= in_valid;
-          pressure  <= '1';
-        end if;
-      -- if (!pressure)
-      -- We can be sure that a flit is waiting now (don't need
-      -- to check)
-      elsif (reduce_or(out_ready) = '1') then
-        -- If the output accepted this flit, go back to
-        -- accepting input flits.
-        out_flit  <= reg_flit;
-        out_last  <= reg_last;
-        out_valid <= reg_valid;
-        pressure  <= '0';
-      end if;
-    end if;
+    -- All participants to the "right" up to the current grant
+    -- holder have precendence and therefore a 1 in the mask.
+    -- First check if the next right from us has the grant.
+    -- Afterwards the mask is calculated iteratively based on
+    -- this.
+    generating_1 : if (i > 0) generate
+      -- For i=N:1 the next right is i-1
+      mask(i)(i-1) <= not gnt(i-1);
+    elsif (i <= 0) generate
+      -- For i=0 the next right is N-1
+      mask(i)(N-1) <= not gnt(N-1);
+    end generate;
+    -- Now the mask contains a 1 when the next right to us is not
+    -- the grant holder. If it is the grant holder that means,
+    -- that we are the next served (if necessary) as no other has
+    -- higher precendence, which is then calculated in the
+    -- following by filling up 1s up to the grant holder. To stop
+    -- filling up there and not fill up any after this is
+    -- iterative by always checking if the one before was not
+    -- before the grant holder.
+    generating_3 : for j in 2 to N - 1 generate
+      generating_4 : if (i-j >= 0) generate
+        mask(i)(i-j) <= mask(i)(i-j+1) and not gnt(i-j);
+      elsif (i-j+1 >= 0) generate
+        mask(i)(i-j+N) <= mask(i)(i-j+1)   and not gnt(i-j+N);
+      elsif (i-j+2 >= 0) generate
+        mask(i)(i-j+N) <= mask(i)(i-j+N+1) and not gnt(i-j+N);
+      end generate;
+    end generate;
+  end generate;
 
-  out_valid <= out_valid_sgn;
-  end process;
+  -- Calculate the nxt_gnt
+  generating_5 : for k in 0 to N - 1 generate
+    -- Finally, we only arbitrate when enable is set.         
+    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k))
+                  when en = '1' else gnt(k);
+  end generate;
 end RTL;

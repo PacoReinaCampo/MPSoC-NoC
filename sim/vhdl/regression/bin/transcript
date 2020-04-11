@@ -1,23 +1,54 @@
-# vsim -c -do "run.do" work.mpsoc_noc_mesh 
-# Start time: 03:32:19 on Apr 02,2020
+# vsim -c -do "run.do" work.mpsoc_noc_testbench 
+# Start time: 23:52:38 on Apr 11,2020
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
 # Loading ieee.numeric_std(body)
 # Loading work.mpsoc_noc_pkg(body)
-# Loading work.mpsoc_noc_mesh(rtl)
-# Loading work.mpsoc_noc_vchannel_mux(rtl)
-# Loading work.mpsoc_noc_arbitrer_rr(rtl)
-# Loading work.mpsoc_noc_router(rtl)
-# Loading ieee.math_real(body)
-# Loading work.mpsoc_noc_router_input(rtl)
-# Loading work.mpsoc_noc_buffer(rtl)
-# Loading work.mpsoc_noc_router_lookup(rtl)
-# Loading work.mpsoc_noc_router_lookup_slice(rtl)
-# Loading work.mpsoc_noc_router_output(rtl)
-# Loading work.mpsoc_noc_mux(rtl)
-# ** Warning: Design size of 139591 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
-# Expect performance to be adversely affected.
+# Loading work.mpsoc_noc_testbench(rtl)
+# Loading work.noc_mesh3d(rtl)
+# Loading work.noc_vchannel_mux(rtl)
+# Loading work.arb_rr(rtl)
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/in_ready(7)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/in_ready(6)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(6)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(5)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(4)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(3)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(2)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(1)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(7)(0)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(6)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(5)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(4)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(3)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(2)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(1)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_flit(6)(0)(31 downto 0) has no driver.
+# This port will contribute value (UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_last(7)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_last(6)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_valid(7)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
+# ** Warning: (vsim-8683) Uninitialized out port /mpsoc_noc_testbench/u_mesh/out_valid(6)(6 downto 0) has no driver.
+# This port will contribute value (UUUUUUU) to the signal network.
 # do run.do
-# End time: 03:32:20 on Apr 02,2020, Elapsed time: 0:00:01
-# Errors: 0, Warnings: 1
+# End time: 23:52:39 on Apr 11,2020, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 20

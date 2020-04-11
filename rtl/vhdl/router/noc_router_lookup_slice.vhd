@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/mpsoc_noc_vchannel_mux.sv
+-- Converted from rtl/verilog/router/noc_router_lookup_slice.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -50,91 +50,90 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_vchannel_mux is
+entity noc_router_lookup_slice is
   generic (
-    FLIT_WIDTH : integer := 34;
-    CHANNELS   : integer := 7
+    FLIT_WIDTH : integer := 32;
+    OUTPUTS    : integer := 7
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-    in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-    in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
-    in_ready : out std_logic_vector(CHANNELS-1 downto 0);
+    in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic;
+    in_valid : in  std_logic_vector(OUTPUTS-1 downto 0);
+    in_ready : out std_logic;
 
-    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    out_valid : out std_logic_vector(OUTPUTS-1 downto 0);
     out_last  : out std_logic;
-    out_valid : out std_logic_vector(CHANNELS-1 downto 0);
-    out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
+    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
   );
-end mpsoc_noc_vchannel_mux;
+end noc_router_lookup_slice;
 
-architecture RTL of mpsoc_noc_vchannel_mux is
-  component mpsoc_noc_arbitrer_rr
-    generic (
-      N : integer := 2
-    );
-    port (
-      req     : in  std_logic_vector(N-1 downto 0);
-      en      : in  std_logic;
-      gnt     : in  std_logic_vector(N-1 downto 0);
-      nxt_gnt : out std_logic_vector(N-1 downto 0)
-    );
-  end component;
-
+architecture RTL of noc_router_lookup_slice is
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
-  signal selected     : std_logic_vector(CHANNELS-1 downto 0);
-  signal nxt_selected : std_logic_vector(CHANNELS-1 downto 0);
 
-  signal req_rr : std_logic_vector(CHANNELS-1 downto 0);
+  -- This is an intermediate register that we use to avoid
+  -- stop-and-go behavior
+  signal reg_flit  : std_logic_vector(FLIT_WIDTH-1 downto 0);
+  signal reg_last  : std_logic;
+  signal reg_valid : std_logic_vector(OUTPUTS-1 downto 0);
+
+  -- This signal selects where to store the next incoming flit
+  signal pressure : std_logic;
 
 begin
   --////////////////////////////////////////////////////////////////
   --
   -- Module Body
   --
-  out_valid <= in_valid  and selected;
-  in_ready  <= out_ready and selected;
 
-  processing_0 : process (rst, selected, in_flit, in_last)
+  -- A backpressure in the output port leads to backpressure on the
+  -- input with one cycle delay
+  in_ready <= not pressure;
+
+  processing_0 : process (clk)
+    variable out_valid_sgn : std_logic_vector(OUTPUTS-1 downto 0);
   begin
-    if (rst = '1') then
-      out_flit <= (others => 'X');
-      out_last <= 'X';
-    else
-      for c in 0 to CHANNELS - 1 loop
-        if (selected(c) = '1') then
-          out_flit <= in_flit(c);
-          out_last <= in_last(c);
+    if (rising_edge(clk)) then
+      if (rst = '1') then
+        pressure       <= '0';
+        out_valid_sgn := (others => '0');
+      elsif (pressure = '0') then
+        -- We are accepting the input in this cycle, determine
+        -- where to store it..
+        if (reduce_nor(out_valid_sgn) = '1' or reduce_or(out_ready and out_valid_sgn) = '1') then
+          -- There is no flit waiting in the register, or
+          -- The current flit is transfered this cycle
+          out_flit       <= in_flit;
+          out_last       <= in_last;
+          out_valid_sgn := in_valid;
+        elsif (reduce_or(out_valid_sgn) = '1' and reduce_nor(out_ready) = '1') then
+          -- Otherwise if there is a flit waiting and upstream
+          -- not ready, push it to the second register. Enter the
+          -- backpressure mode.
+          reg_flit  <= in_flit;
+          reg_last  <= in_last;
+          reg_valid <= in_valid;
+          pressure  <= '1';
         end if;
-      end loop;
+      -- if (!pressure)
+      -- We can be sure that a flit is waiting now (don't need
+      -- to check)
+      elsif (reduce_or(out_ready) = '1') then
+        -- If the output accepted this flit, go back to
+        -- accepting input flits.
+        out_flit  <= reg_flit;
+        out_last  <= reg_last;
+        out_valid <= reg_valid;
+        pressure  <= '0';
+      end if;
     end if;
-  end process;
 
-  arbitrer_rr : mpsoc_noc_arbitrer_rr
-    generic map (
-      N => CHANNELS
-    )
-    port map (
-      req     => req_rr,
-      en      => '1',
-      gnt     => selected,
-      nxt_gnt => nxt_selected
-    );
-
-  req_rr <= in_valid and out_ready;
-
-  processing_1 : process (clk, rst)
-  begin
-    if (rst = '1') then
-      selected <= std_logic_vector(to_unsigned(1, CHANNELS));
-    elsif (rising_edge(clk)) then
-      selected <= nxt_selected;
-    end if;
+  out_valid <= out_valid_sgn;
   end process;
 end RTL;

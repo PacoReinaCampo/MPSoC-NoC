@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/router/mpsoc_noc_router_output.sv
+-- Converted from rtl/verilog/router/noc_router_input.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -51,56 +51,37 @@ use ieee.math_real.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_router_output is
+entity noc_router_input is
   generic (
     FLIT_WIDTH   : integer := 32;
-    VCHANNELS    : integer := 7;
-    CHANNELS     : integer := 7;
-    BUFFER_DEPTH : integer := 4
+    VCHANNELS    : integer := 1;
+    DESTS        : integer := 1;
+    OUTPUTS      : integer := 1;
+    BUFFER_DEPTH : integer := 4;
+
+    ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
 
-    in_flit  : in  std_logic_3array(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-    in_last  : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
-    in_valid : in  std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
-    in_ready : out std_logic_matrix(VCHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+    in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic;
+    in_valid : in  std_logic_vector(VCHANNELS-1 downto 0);
+    in_ready : out std_logic_vector(VCHANNELS-1 downto 0);
 
-    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
-    out_last  : out std_logic;
-    out_valid : out std_logic_vector(VCHANNELS-1 downto 0);
-    out_ready : in  std_logic_vector(VCHANNELS-1 downto 0)
+    out_valid : out std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0);
+    out_last  : out std_logic_vector(VCHANNELS-1 downto 0);
+    out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
   );
-end mpsoc_noc_router_output;
+end noc_router_input;
 
-architecture RTL of mpsoc_noc_router_output is
-  component mpsoc_noc_mux
+architecture RTL of noc_router_input is
+  component noc_buffer
     generic (
       FLIT_WIDTH : integer := 32;
-      CHANNELS   : integer := 7
-    );
-    port (
-      clk : in std_logic;
-      rst : in std_logic;
-
-      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-      in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_ready : out std_logic_vector(CHANNELS-1 downto 0);
-
-      out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
-      out_last  : out std_logic;
-      out_valid : out std_logic;
-      out_ready : in  std_logic
-    );
-  end component;
-
-  component mpsoc_noc_buffer
-    generic (
-      FLIT_WIDTH : integer := 32;
-      DEPTH      : integer := 16;
-      FULLPACKET : integer := 0
+      DEPTH      : integer := 16
     );
     port (
       -- the width of the index
@@ -123,24 +104,27 @@ architecture RTL of mpsoc_noc_router_output is
     );
   end component;
 
-  component mpsoc_noc_vchannel_mux
+  component noc_router_lookup
     generic (
       FLIT_WIDTH : integer := 32;
-      CHANNELS   : integer := 7
+      DESTS      : integer := 1;
+      OUTPUTS    : integer := 1;
+
+      ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
     );
     port (
       clk : in std_logic;
       rst : in std_logic;
 
-      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-      in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_ready : out std_logic_vector(CHANNELS-1 downto 0);
+      in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
+      in_last  : in  std_logic;
+      in_valid : in  std_logic;
+      in_ready : out std_logic;
 
-      out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+      out_valid : out std_logic_vector(OUTPUTS-1 downto 0);
       out_last  : out std_logic;
-      out_valid : out std_logic_vector(CHANNELS-1 downto 0);
-      out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
+      out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+      out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
     );
   end component;
 
@@ -148,47 +132,46 @@ architecture RTL of mpsoc_noc_router_output is
   --
   -- Variables
   --
-  signal channel_flit  : std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal channel_last  : std_logic_vector(CHANNELS-1 downto 0);
-  signal channel_valid : std_logic_vector(CHANNELS-1 downto 0);
-  signal channel_ready : std_logic_vector(CHANNELS-1 downto 0);
+  signal buffer_flit  : std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal buffer_last  : std_logic_vector(VCHANNELS-1 downto 0);
+  signal buffer_valid : std_logic_vector(VCHANNELS-1 downto 0);
+  signal buffer_ready : std_logic_vector(VCHANNELS-1 downto 0);
 
-  signal buffer_flit  : std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal buffer_last  : std_logic_vector(CHANNELS-1 downto 0);
-  signal buffer_valid : std_logic_vector(CHANNELS-1 downto 0);
-  signal buffer_ready : std_logic_vector(CHANNELS-1 downto 0);
-
+--////////////////////////////////////////////////////////////////
+--
+-- Module Body
+--
 begin
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Module Body
-  --
   generating_0 : for v in 0 to VCHANNELS - 1 generate
-    mux : mpsoc_noc_mux
+    U_buffer : noc_buffer
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
-        CHANNELS   => CHANNELS
+        DEPTH      => BUFFER_DEPTH
       )
       port map (
         clk => clk,
         rst => rst,
 
-        in_flit  => in_flit  (v),
-        in_last  => in_last  (v),
+        in_flit  => in_flit,
+        in_last  => in_last,
         in_valid => in_valid (v),
         in_ready => in_ready (v),
 
         out_flit  => buffer_flit  (v),
         out_last  => buffer_last  (v),
         out_valid => buffer_valid (v),
-        out_ready => buffer_ready (v)
+        out_ready => buffer_ready (v),
+
+        packet_size => open
       );
 
-    u_buffer : mpsoc_noc_buffer
+    router_lookup : noc_router_lookup
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
-        DEPTH      => BUFFER_DEPTH,
-        FULLPACKET => 0
+        DESTS      => DESTS,
+        OUTPUTS    => OUTPUTS,
+
+        ROUTES => ROUTES
       )
       port map (
         clk => clk,
@@ -199,41 +182,10 @@ begin
         in_valid => buffer_valid (v),
         in_ready => buffer_ready (v),
 
-        out_flit  => channel_flit  (v),
-        out_last  => channel_last  (v),
-        out_valid => channel_valid (v),
-        out_ready => channel_ready (v),
-
-        packet_size => open
+        out_flit  => out_flit  (v),
+        out_last  => out_last  (v),
+        out_valid => out_valid (v),
+        out_ready => out_ready (v)
       );
-  end generate;
-
-  generating_1 : if (VCHANNELS > 1) generate
-    vchannel_mux : mpsoc_noc_vchannel_mux
-      generic map (
-        FLIT_WIDTH => FLIT_WIDTH,
-        CHANNELS   => VCHANNELS
-      )
-      port map (
-        clk => clk,
-        rst => rst,
-
-        in_flit  => channel_flit,
-        in_last  => channel_last,
-        in_valid => channel_valid,
-        in_ready => channel_ready,
-
-        out_flit  => out_flit,
-        out_last  => out_last,
-        out_valid => out_valid,
-        out_ready => out_ready
-      );
-  elsif (VCHANNELS <= 1) generate
-    out_flit      <= channel_flit (0);
-    out_last      <= channel_last (0);
-
-    out_valid     <= channel_valid;
-
-    channel_ready <= out_ready;
   end generate;
 end RTL;

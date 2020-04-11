@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/mpsoc_noc_arbitrer_rr.sv
+-- Converted from rtl/verilog/core/noc_vchannel_mux.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -50,70 +50,91 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_arbitrer_rr is
+entity noc_vchannel_mux is
   generic (
-    N : integer := 2
+    FLIT_WIDTH : integer := 32;
+    CHANNELS   : integer := 7
   );
   port (
-    req     : in  std_logic_vector(N-1 downto 0);
-    en      : in  std_logic;
-    gnt     : in  std_logic_vector(N-1 downto 0);
-    nxt_gnt : out std_logic_vector(N-1 downto 0)
-  );
-end mpsoc_noc_arbitrer_rr;
+    clk : in std_logic;
+    rst : in std_logic;
 
-architecture RTL of mpsoc_noc_arbitrer_rr is
+    in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+    in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
+    in_valid : in  std_logic_vector(CHANNELS-1 downto 0);
+    in_ready : out std_logic_vector(CHANNELS-1 downto 0);
+
+    out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
+    out_last  : out std_logic;
+    out_valid : out std_logic_vector(CHANNELS-1 downto 0);
+    out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
+  );
+end noc_vchannel_mux;
+
+architecture RTL of noc_vchannel_mux is
+  component arb_rr
+    generic (
+      N : integer := 2
+    );
+    port (
+      req     : in  std_logic_vector(N-1 downto 0);
+      en      : in  std_logic;
+      gnt     : in  std_logic_vector(N-1 downto 0);
+      nxt_gnt : out std_logic_vector(N-1 downto 0)
+    );
+  end component;
+
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
-  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0);
+  signal selected     : std_logic_vector(CHANNELS-1 downto 0);
+  signal nxt_selected : std_logic_vector(CHANNELS-1 downto 0);
+
+  signal req_rr : std_logic_vector(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
   --
   -- Module Body
   --
+  out_valid <= in_valid  and selected;
+  in_ready  <= out_ready and selected;
 
-  -- Calculate the mask
-  generating_0 : for i in 0 to N - 1 generate
-    -- Initialize mask as 0
+  processing_0 : process (rst, selected, in_flit, in_last)
+  begin
+    if (rst = '1') then
+      out_flit <= (others => 'X');
+      out_last <= 'X';
+    else
+      for c in 0 to CHANNELS - 1 loop
+        if (selected(c) = '1') then
+          out_flit <= in_flit(c);
+          out_last <= in_last(c);
+        end if;
+      end loop;
+    end if;
+  end process;
 
-    -- All participants to the "right" up to the current grant
-    -- holder have precendence and therefore a 1 in the mask.
-    -- First check if the next right from us has the grant.
-    -- Afterwards the mask is calculated iteratively based on
-    -- this.
-    generating_1 : if (i > 0) generate
-      -- For i=N:1 the next right is i-1
-      mask(i)(i-1) <= not gnt(i-1);
-    elsif (i <= 0) generate
-      -- For i=0 the next right is N-1
-      mask(i)(N-1) <= not gnt(N-1);
-    end generate;
-    -- Now the mask contains a 1 when the next right to us is not
-    -- the grant holder. If it is the grant holder that means,
-    -- that we are the next served (if necessary) as no other has
-    -- higher precendence, which is then calculated in the
-    -- following by filling up 1s up to the grant holder. To stop
-    -- filling up there and not fill up any after this is
-    -- iterative by always checking if the one before was not
-    -- before the grant holder.
-    generating_3 : for j in 2 to N - 1 generate
-      generating_4 : if (i-j >= 0) generate
-        mask(i)(i-j) <= mask(i)(i-j+1) and not gnt(i-j);
-      elsif (i-j+1 >= 0) generate
-        mask(i)(i-j+N) <= mask(i)(i-j+1)   and not gnt(i-j+N);
-      elsif (i-j+2 >= 0) generate
-        mask(i)(i-j+N) <= mask(i)(i-j+N+1) and not gnt(i-j+N);
-      end generate;
-    end generate;
-  end generate;
+  arbiter_rr : arb_rr
+    generic map (
+      N => CHANNELS
+    )
+    port map (
+      req     => req_rr,
+      en      => '1',
+      gnt     => selected,
+      nxt_gnt => nxt_selected
+    );
 
-  -- Calculate the nxt_gnt
-  generating_5 : for k in 0 to N - 1 generate
-    -- Finally, we only arbitrate when enable is set.         
-    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k))
-                  when en = '1' else gnt(k);
-  end generate;
+  req_rr <= in_valid and out_ready;
+
+  processing_1 : process (clk, rst)
+  begin
+    if (rst = '1') then
+      selected <= std_logic_vector(to_unsigned(1, CHANNELS));
+    elsif (rising_edge(clk)) then
+      selected <= nxt_selected;
+    end if;
+  end process;
 end RTL;

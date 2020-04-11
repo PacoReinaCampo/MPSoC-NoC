@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.mpsoc_noc_testbench 
-# Start time: 16:46:18 on Apr 11,2020
+# Start time: 23:52:43 on Apr 11,2020
 # Loading sv_std.std
 # Loading work.mpsoc_noc_testbench
 # Loading work.noc_mesh3d
@@ -13,5 +13,5 @@
 # Loading work.noc_router_lookup_slice
 # Loading work.noc_mux
 # do run.do
-# End time: 16:46:19 on Apr 11,2020, Elapsed time: 0:00:01
+# End time: 23:52:44 on Apr 11,2020, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0

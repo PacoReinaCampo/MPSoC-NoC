@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/mpsoc_noc_buffer.sv
+-- Converted from rtl/verilog/core/noc_buffer.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ use ieee.math_real.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_buffer is
+entity noc_buffer is
   generic (
     FLIT_WIDTH : integer := 32;
     DEPTH      : integer := 16;
@@ -76,9 +76,9 @@ entity mpsoc_noc_buffer is
 
     packet_size : out std_logic_vector(integer(log2(real(DEPTH))) downto 0)
   );
-end mpsoc_noc_buffer;
+end noc_buffer;
 
-architecture RTL of mpsoc_noc_buffer is
+architecture RTL of noc_buffer is
   --////////////////////////////////////////////////////////////////
   --
   -- Constants

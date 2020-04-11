@@ -50,20 +50,22 @@ use ieee.numeric_std.all;
 
 use work.mpsoc_noc_pkg.all;
 
-entity mpsoc_noc_mesh is
+entity noc_mesh3d is
   generic (
-    FLIT_WIDTH       : integer := 34;
-    VCHANNELS        : integer := 7;
-    CHANNELS         : integer := 7;
-    OUTPUTS          : integer := 7;
+    FLIT_WIDTH : integer := 32;
+    CHANNELS   : integer := 1;
+
     ENABLE_VCHANNELS : integer := 1;
-    X                : integer := 2;
-    Y                : integer := 2;
-    Z                : integer := 2;
-    NODES            : integer := 8;
-    BUFFER_SIZE_IN   : integer := 4;
-    BUFFER_SIZE_OUT  : integer := 4
-  );
+
+    X : integer := 2;
+    Y : integer := 2;
+    Z : integer := 2;
+
+    BUFFER_SIZE_IN  : integer := 4;
+    BUFFER_SIZE_OUT : integer := 4;
+
+    NODES : integer := 8
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -77,15 +79,15 @@ entity mpsoc_noc_mesh is
     out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
-  );
-end mpsoc_noc_mesh;
+    );
+end noc_mesh3d;
 
-architecture RTL of mpsoc_noc_mesh is
-  component mpsoc_noc_vchannel_mux
+architecture RTL of noc_mesh3d is
+  component noc_vchannel_mux
     generic (
       FLIT_WIDTH : integer := 34;
       CHANNELS   : integer := 7
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -99,35 +101,35 @@ architecture RTL of mpsoc_noc_mesh is
       out_last  : out std_logic;
       out_valid : out std_logic_vector(CHANNELS-1 downto 0);
       out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-    );
+      );
   end component;
 
-  component mpsoc_noc_router
+  component noc_router
     generic (
-      FLIT_WIDTH      : integer := 34;
+      FLIT_WIDTH      : integer := 32;
       VCHANNELS       : integer := 7;
-      CHANNELS        : integer := 7;
+      INPUTS          : integer := 7;
       OUTPUTS         : integer := 7;
       BUFFER_SIZE_IN  : integer := 4;
       BUFFER_SIZE_OUT : integer := 4;
-      NODES           : integer := 8
-    );
+      DESTS           : integer := 8;
+
+      ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
-
-      routes : in std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
 
       out_flit  : out std_logic_matrix(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       out_last  : out std_logic_vector(OUTPUTS-1 downto 0);
       out_valid : out std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
       out_ready : in  std_logic_matrix(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
 
-      in_flit  : in  std_logic_matrix(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-      in_last  : in  std_logic_vector(CHANNELS-1 downto 0);
-      in_valid : in  std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
-      in_ready : out std_logic_matrix(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0)
-    );
+      in_flit  : in  std_logic_matrix(INPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+      in_last  : in  std_logic_vector(INPUTS-1 downto 0);
+      in_valid : in  std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+      in_ready : out std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0)
+      );
   end component;
 
   --////////////////////////////////////////////////////////////////
@@ -169,7 +171,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return xd+yd*X+zd*X;
   end function nodenum;
@@ -179,7 +181,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return xd+yd*X+(zd+1)*X;
   end function upof;
@@ -189,7 +191,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return xd+(yd+1)*X+zd*X;
   end function northof;
@@ -199,7 +201,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return (xd+1)+yd*X+zd*X;
   end function eastof;
@@ -209,7 +211,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return xd+yd*X+(zd-1)*X;
   end function downof;
@@ -219,7 +221,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return xd+(yd-1)*X+zd*X;
   end function southof;
@@ -229,7 +231,7 @@ architecture RTL of mpsoc_noc_mesh is
     xd : integer;
     yd : integer;
     zd : integer
-  ) return integer is
+    ) return integer is
   begin
     return (xd-1)+yd*X+zd*X;
   end function westof;
@@ -238,16 +240,16 @@ architecture RTL of mpsoc_noc_mesh is
     x : integer;
     y : integer;
     z : integer
-  ) return std_logic_matrix is
+    ) return std_logic_vector is
     variable xd               : integer;
     variable yd               : integer;
     variable zd               : integer;
     variable nd               : integer;
     variable d                : std_logic_vector(OUTPUTS-1 downto 0);
-    variable genroutes_return : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
+    variable genroutes_return : std_logic_vector(NODES*7-1 downto 0);
   begin
 
-    genroutes_return := (others => (others => '0'));
+    genroutes_return := (others => '0');
 
     for zd in 0 to Z - 1 loop
       for yd in 0 to Y - 1 loop
@@ -275,7 +277,7 @@ architecture RTL of mpsoc_noc_mesh is
               d := DIR_EAST;
             end if;
           end if;
-          genroutes_return(nd) := d;
+          genroutes_return(OUTPUTS*(nd+1)-1 downto OUTPUTS*nd) := d;
         end loop;
       end loop;
     end loop;
@@ -291,40 +293,30 @@ architecture RTL of mpsoc_noc_mesh is
   -- Arrays of wires between the routers. Each router has a
   -- pair of NoC wires per direction and below those are hooked
   -- up.
-  signal node_in_flit  : std_logic_4array(NODES-1 downto 0)(CHANNELS-1 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_in_last  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(PCHANNELS-1 downto 0);
-  signal node_in_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(CHANNELS-1 downto 0);
-  signal node_in_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(CHANNELS-1 downto 0);
+  signal node_in_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_in_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
+  signal node_in_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal node_in_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
 
-  signal node_out_flit  : std_logic_4array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_out_last  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(PCHANNELS-1 downto 0);
-  signal node_out_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(CHANNELS-1 downto 0);
-  signal node_out_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(CHANNELS-1 downto 0);
-
-  signal node_rin_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_rin_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal node_rin_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
-  signal node_rin_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
-
-  signal node_rout_flit  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_rout_last  : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
-  signal node_rout_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
-  signal node_rout_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal node_out_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_out_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
+  signal node_out_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal node_out_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
 
   -- First we just need to re-arrange the wires a bit
   -- because the array structure varies a bit here:
   -- The directions and channels and differently
   -- multiplexed here. Hence create some helper
   -- arrays.
-  signal phys_in_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal phys_in_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal phys_in_valid : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
-  signal phys_in_ready : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal phys_in_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_in_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
+  signal phys_in_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal phys_in_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
 
-  signal phys_out_flit  : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal phys_out_last  : std_logic_matrix(NODES-1 downto 0)(OUTPUTS-1 downto 0);
-  signal phys_out_valid : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
-  signal phys_out_ready : std_logic_3array(NODES-1 downto 0)(OUTPUTS-1 downto 0)(VCHANNELS-1 downto 0);
+  signal phys_out_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_out_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
+  signal phys_out_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal phys_out_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
@@ -342,11 +334,11 @@ begin
       generating_2 : for xd in 0 to X - 1 generate
         generating_3 : if (ENABLE_VCHANNELS = 1) generate
           -- Mux inputs to virtual channels
-          vchannel_mux : mpsoc_noc_vchannel_mux
+          vchannel_mux : noc_vchannel_mux
             generic map (
               FLIT_WIDTH => FLIT_WIDTH,
               CHANNELS   => CHANNELS
-            )
+              )
             port map (
               clk => clk,
               rst => rst,
@@ -360,7 +352,7 @@ begin
               out_last  => node_in_last  (nodenum(xd, yd, zd))(LOCAL)(0),
               out_valid => node_in_valid (nodenum(xd, yd, zd))(LOCAL),
               out_ready => node_in_ready (nodenum(xd, yd, zd))(LOCAL)
-            );
+              );
 
           -- Replicate the flit to all output channels and the
           -- rest is just wiring
@@ -375,121 +367,96 @@ begin
 
           -- Instantiate the router. We call a function to
           -- generate the routing table
-          router : mpsoc_noc_router
-            generic map (
-              FLIT_WIDTH      => FLIT_WIDTH,
-              VCHANNELS       => CHANNELS,
-              CHANNELS        => CHANNELS,
-              OUTPUTS         => OUTPUTS,
-              BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
-              BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-              NODES           => NODES
-            )
-            port map (
-              clk => clk,
-              rst => rst,
+          ----router : noc_router
+            ----generic map (
+              ----FLIT_WIDTH      => FLIT_WIDTH,
+              ----VCHANNELS       => CHANNELS,
+              ----INPUTS          => 7,
+              ----OUTPUTS         => 7,
+              ----BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
+              ----BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
+              ----DESTS           => NODES,
 
-              routes => genroutes(xd, yd, zd),
+              ----ROUTES => genroutes(xd, yd, zd)
+              ----)
+            ----port map (
+              ----clk => clk,
+              ----rst => rst,
 
-              in_flit  => node_rin_flit  (nodenum(xd, yd, zd)),
-              in_last  => node_rin_last  (nodenum(xd, yd, zd)),
-              in_valid => node_rin_valid (nodenum(xd, yd, zd)),
-              in_ready => node_rin_ready (nodenum(xd, yd, zd)),
+              ----in_flit  => node_in_flit  (nodenum(xd, yd, zd)),
+              ----in_last  => node_in_last  (nodenum(xd, yd, zd)),
+              ----in_valid => node_in_valid (nodenum(xd, yd, zd)),
+              ----in_ready => node_in_ready (nodenum(xd, yd, zd)),
 
-              out_flit  => node_rout_flit  (nodenum(xd, yd, zd)),
-              out_last  => node_rout_last  (nodenum(xd, yd, zd)),
-              out_valid => node_rout_valid (nodenum(xd, yd, zd)),
-              out_ready => node_rout_ready (nodenum(xd, yd, zd))
-            );
-
-          generating_5 : for c in 0 to CHANNELS - 1 generate
-            -- Re-wire the channels
-            generating_6 : for p in 0 to CHANNELS - 1 generate
-              node_rin_flit  (nodenum(xd, yd, zd))(p) <= node_in_flit  (nodenum(xd, yd, zd))(p)(0);
-              node_rin_last  (nodenum(xd, yd, zd))(p) <= node_in_last  (nodenum(xd, yd, zd))(p)(0);
-
-              node_rin_valid (nodenum(xd, yd, zd))(p)(c) <= node_in_valid (nodenum(xd, yd, zd))(p)(c);
-
-              node_in_ready (nodenum(xd, yd, zd))(p)(c) <= node_rin_ready (nodenum(xd, yd, zd))(p)(c);
-            end generate;
-
-            -- Re-wire the outputs
-            generating_7 : for o in 0 to OUTPUTS - 1 generate
-              node_out_flit  (nodenum(xd, yd, zd))(o)(0) <= node_rout_flit  (nodenum(xd, yd, zd))(o);
-              node_out_last  (nodenum(xd, yd, zd))(o)(0) <= node_rout_last  (nodenum(xd, yd, zd))(o);
-
-              node_out_valid (nodenum(xd, yd, zd))(o)(c) <= node_rout_valid (nodenum(xd, yd, zd))(o)(c);
-
-              node_rout_ready (nodenum(xd, yd, zd))(o)(c) <= node_out_ready (nodenum(xd, yd, zd))(o)(c);
-            end generate;
-          end generate;
+              ----out_flit  => node_out_flit  (nodenum(xd, yd, zd)),
+              ----out_last  => node_out_last  (nodenum(xd, yd, zd)),
+              ----out_valid => node_out_valid (nodenum(xd, yd, zd)),
+              ----out_ready => node_out_ready (nodenum(xd, yd, zd))
+              ----);
         elsif (ENABLE_VCHANNELS = 0) generate
-          generating_8 : for c in 0 to CHANNELS - 1 generate
-            out_flit (nodenum(xd, yd, zd))(c) <= node_out_flit (nodenum(xd, yd, zd))(LOCAL)(c);
-            out_last (nodenum(xd, yd, zd))(c) <= node_out_last (nodenum(xd, yd, zd))(LOCAL)(c);
-          end generate;
-
+          out_flit  (nodenum(xd, yd, zd)) <= node_out_flit  (nodenum(xd, yd, zd))(LOCAL);
+          out_last  (nodenum(xd, yd, zd)) <= node_out_last  (nodenum(xd, yd, zd))(LOCAL);
           out_valid (nodenum(xd, yd, zd)) <= node_out_valid (nodenum(xd, yd, zd))(LOCAL);
 
           node_out_ready(nodenum(xd, yd, zd))(LOCAL) <= out_ready(nodenum(xd, yd, zd));
 
-          generating_9 : for c in 0 to CHANNELS - 1 generate
-            --node_out_flit (nodenum(xd, yd, zd))(LOCAL)(c) <= out_flit (nodenum(xd, yd, zd))(c);
-            --node_out_last (nodenum(xd, yd, zd))(LOCAL)(c) <= out_last (nodenum(xd, yd, zd))(c);
-          end generate;
-
+          node_out_flit (nodenum(xd, yd, zd))(LOCAL) <= out_flit (nodenum(xd, yd, zd));
+          node_out_last (nodenum(xd, yd, zd))(LOCAL) <= out_last (nodenum(xd, yd, zd));
           node_in_valid (nodenum(xd, yd, zd))(LOCAL) <= in_valid (nodenum(xd, yd, zd));
 
           in_ready(nodenum(xd, yd, zd)) <= node_in_ready(nodenum(xd, yd, zd))(LOCAL);
 
-          -- Instantiate the router. We call a function to
-          -- generate the routing table
-          router : mpsoc_noc_router
-            generic map (
-              FLIT_WIDTH      => FLIT_WIDTH,
-              VCHANNELS       => 1,
-              CHANNELS        => CHANNELS,
-              OUTPUTS         => OUTPUTS,
-              BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
-              BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-              NODES           => NODES
-            )
-            port map (
-              clk => clk,
-              rst => rst,
+          generating_5 : for c in 0 to CHANNELS - 1 generate
+            -- First we just need to re-arrange the wires a bit
+            -- because the array structure varies a bit here:
+            -- The directions and channels and differently
+            -- multiplexed here. Hence create some helper
+            -- arrays.
 
-              routes => genroutes(xd, yd, zd),
-
-              in_flit  => phys_in_flit  (nodenum(xd, yd, zd)),
-              in_last  => phys_in_last  (nodenum(xd, yd, zd)),
-              in_valid => phys_in_valid (nodenum(xd, yd, zd)),
-              in_ready => phys_in_ready (nodenum(xd, yd, zd)),
-
-              out_flit  => phys_out_flit  (nodenum(xd, yd, zd)),
-              out_last  => phys_out_last  (nodenum(xd, yd, zd)),
-              out_valid => phys_out_valid (nodenum(xd, yd, zd)),
-              out_ready => phys_out_ready (nodenum(xd, yd, zd))
-            );
-
-          generating_10 : for c in 0 to CHANNELS - 1 generate
             -- Re-wire the ports
-            generating_11 : for p in 0 to CHANNELS - 1 generate
-              phys_in_flit  (nodenum(xd, yd, zd))(p) <= node_in_flit  (nodenum(xd, yd, zd))(p)(c);
-              phys_in_last  (nodenum(xd, yd, zd))(p) <= node_in_last  (nodenum(xd, yd, zd))(p)(c);
-
+            generating_6 : for p in 0 to 6 generate
+              phys_in_flit  (nodenum(xd, yd, zd))(p)(c) <= node_in_flit  (nodenum(xd, yd, zd))(p)(c);
+              phys_in_last  (nodenum(xd, yd, zd))(p)(c) <= node_in_last  (nodenum(xd, yd, zd))(p)(c);
               phys_in_valid (nodenum(xd, yd, zd))(p)(c) <= node_in_valid (nodenum(xd, yd, zd))(p)(c);
 
               node_in_ready (nodenum(xd, yd, zd))(p)(c) <= phys_in_ready (nodenum(xd, yd, zd))(p)(c);
+
+
+              node_out_flit  (nodenum(xd, yd, zd))(p)(c) <= phys_out_flit  (nodenum(xd, yd, zd))(p)(c);
+              node_out_last  (nodenum(xd, yd, zd))(p)(c) <= phys_out_last  (nodenum(xd, yd, zd))(p)(c);
+              node_out_valid (nodenum(xd, yd, zd))(p)(c) <= phys_out_valid (nodenum(xd, yd, zd))(p)(c);
+
+              phys_out_ready (nodenum(xd, yd, zd))(p)(c) <= node_out_ready (nodenum(xd, yd, zd))(p)(c);
             end generate;
 
-            generating_12 : for o in 0 to OUTPUTS - 1 generate
-              node_out_flit  (nodenum(xd, yd, zd))(o)(c) <= phys_out_flit  (nodenum(xd, yd, zd))(o);
-              node_out_last  (nodenum(xd, yd, zd))(o)(c) <= phys_out_last  (nodenum(xd, yd, zd))(o);
+              -- Instantiate the router. We call a function to
+              -- generate the routing table
+              ----router : noc_router
+              ----generic map (
+                ----FLIT_WIDTH      => FLIT_WIDTH,
+                ----VCHANNELS       => 1,
+                ----INPUTS          => 7,
+                ----OUTPUTS         => 7,
+                ----BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
+                ----BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
+                ----DESTS           => NODES,
 
-              node_out_valid (nodenum(xd, yd, zd))(o)(c) <= phys_out_valid (nodenum(xd, yd, zd))(o)(c);
+                ----ROUTES => genroutes(xd, yd, zd)
+                ----)
+              ----port map (
+                ----clk => clk,
+                ----rst => rst,
 
-              phys_out_ready (nodenum(xd, yd, zd))(o)(c) <= node_out_ready (nodenum(xd, yd, zd))(o)(c);
-            end generate;
+                ----in_flit  => phys_in_flit (nodenum(xd, yd, zd)),
+                ----in_last  => phys_in_last (nodenum(xd, yd, zd)),
+                ----in_valid => phys_in_valid (nodenum(xd, yd, zd)),
+                ----in_ready => phys_in_ready (nodenum(xd, yd, zd)),
+
+                ----out_flit  => phys_out_flit (nodenum(xd, yd, zd)),
+                ----out_last  => phys_out_last (nodenum(xd, yd, zd)),
+                ----out_valid => phys_out_valid (nodenum(xd, yd, zd)),
+                ----out_ready => phys_out_ready (nodenum(xd, yd, zd))
+                ----);
           end generate;
         end generate;
 
@@ -497,69 +464,69 @@ begin
         -- in the four directions. If the router is on an outer
         -- border, tie off.
         generating_13 : if (zd > 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(DOWN) <= node_out_flit  (nodenum(xd, yd, zd))(UP);
-          node_in_last   (nodenum(xd, yd, zd))(DOWN) <= node_out_last  (nodenum(xd, yd, zd))(UP);
-          node_in_valid  (nodenum(xd, yd, zd))(DOWN) <= node_out_valid (nodenum(xd, yd, zd))(UP);
-          node_out_ready (nodenum(xd, yd, zd))(DOWN) <= node_in_ready  (nodenum(xd, yd, zd))(UP);
+          node_in_flit (nodenum(xd, yd, zd))(DOWN)   <= node_out_flit (nodenum(xd, yd, zd))(UP);
+          node_in_last (nodenum(xd, yd, zd))(DOWN)   <= node_out_last (nodenum(xd, yd, zd))(UP);
+          node_in_valid (nodenum(xd, yd, zd))(DOWN)  <= node_out_valid (nodenum(xd, yd, zd))(UP);
+          node_out_ready (nodenum(xd, yd, zd))(DOWN) <= node_in_ready (nodenum(xd, yd, zd))(UP);
         elsif (zd <= 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(DOWN) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(DOWN) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(DOWN) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(DOWN)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(DOWN)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(DOWN)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(DOWN) <= (others => '0');
         end generate;
         generating_14 : if (zd < Z-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(UP) <= node_out_flit  (nodenum(xd, yd, zd))(DOWN);
-          node_in_last   (nodenum(xd, yd, zd))(UP) <= node_out_last  (nodenum(xd, yd, zd))(DOWN);
-          node_in_valid  (nodenum(xd, yd, zd))(UP) <= node_out_valid (nodenum(xd, yd, zd))(DOWN);
-          node_out_ready (nodenum(xd, yd, zd))(UP) <= node_in_ready  (nodenum(xd, yd, zd))(DOWN);
+          node_in_flit (nodenum(xd, yd, zd))(UP)   <= node_out_flit (nodenum(xd, yd, zd))(DOWN);
+          node_in_last (nodenum(xd, yd, zd))(UP)   <= node_out_last (nodenum(xd, yd, zd))(DOWN);
+          node_in_valid (nodenum(xd, yd, zd))(UP)  <= node_out_valid (nodenum(xd, yd, zd))(DOWN);
+          node_out_ready (nodenum(xd, yd, zd))(UP) <= node_in_ready (nodenum(xd, yd, zd))(DOWN);
         elsif (zd >= Z-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(UP) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(UP) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(UP) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(UP)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(UP)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(UP)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(UP) <= (others => '0');
         end generate;
         generating_15 : if (yd > 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(SOUTH) <= node_out_flit  (nodenum(xd, yd, zd))(NORTH);
-          node_in_last   (nodenum(xd, yd, zd))(SOUTH) <= node_out_last  (nodenum(xd, yd, zd))(NORTH);
-          node_in_valid  (nodenum(xd, yd, zd))(SOUTH) <= node_out_valid (nodenum(xd, yd, zd))(NORTH);
-          node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= node_in_ready  (nodenum(xd, yd, zd))(NORTH);
+          node_in_flit (nodenum(xd, yd, zd))(SOUTH)   <= node_out_flit (nodenum(xd, yd, zd))(NORTH);
+          node_in_last (nodenum(xd, yd, zd))(SOUTH)   <= node_out_last (nodenum(xd, yd, zd))(NORTH);
+          node_in_valid (nodenum(xd, yd, zd))(SOUTH)  <= node_out_valid (nodenum(xd, yd, zd))(NORTH);
+          node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= node_in_ready (nodenum(xd, yd, zd))(NORTH);
         elsif (yd <= 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(SOUTH) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(SOUTH) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(SOUTH) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(SOUTH)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(SOUTH)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(SOUTH)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= (others => '0');
         end generate;
         generating_16 : if (yd < Y-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(NORTH) <= node_out_flit  (nodenum(xd, yd, zd))(SOUTH);
-          node_in_last   (nodenum(xd, yd, zd))(NORTH) <= node_out_last  (nodenum(xd, yd, zd))(SOUTH);
-          node_in_valid  (nodenum(xd, yd, zd))(NORTH) <= node_out_valid (nodenum(xd, yd, zd))(SOUTH);
-          node_out_ready (nodenum(xd, yd, zd))(NORTH) <= node_in_ready  (nodenum(xd, yd, zd))(SOUTH);
+          node_in_flit (nodenum(xd, yd, zd))(NORTH)   <= node_out_flit (nodenum(xd, yd, zd))(SOUTH);
+          node_in_last (nodenum(xd, yd, zd))(NORTH)   <= node_out_last (nodenum(xd, yd, zd))(SOUTH);
+          node_in_valid (nodenum(xd, yd, zd))(NORTH)  <= node_out_valid (nodenum(xd, yd, zd))(SOUTH);
+          node_out_ready (nodenum(xd, yd, zd))(NORTH) <= node_in_ready (nodenum(xd, yd, zd))(SOUTH);
         elsif (yd >= Y-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(NORTH) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(NORTH) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(NORTH) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(NORTH)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(NORTH)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(NORTH)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(NORTH) <= (others => '0');
         end generate;
         generating_17 : if (xd > 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(WEST) <= node_out_flit  (nodenum(xd, yd, zd))(EAST);
-          node_in_last   (nodenum(xd, yd, zd))(WEST) <= node_out_last  (nodenum(xd, yd, zd))(EAST);
-          node_in_valid  (nodenum(xd, yd, zd))(WEST) <= node_out_valid (nodenum(xd, yd, zd))(EAST);
-          node_out_ready (nodenum(xd, yd, zd))(WEST) <= node_in_ready  (nodenum(xd, yd, zd))(EAST);
+          node_in_flit (nodenum(xd, yd, zd))(WEST)   <= node_out_flit (nodenum(xd, yd, zd))(EAST);
+          node_in_last (nodenum(xd, yd, zd))(WEST)   <= node_out_last (nodenum(xd, yd, zd))(EAST);
+          node_in_valid (nodenum(xd, yd, zd))(WEST)  <= node_out_valid (nodenum(xd, yd, zd))(EAST);
+          node_out_ready (nodenum(xd, yd, zd))(WEST) <= node_in_ready (nodenum(xd, yd, zd))(EAST);
         elsif (xd <= 0) generate
-          node_in_flit   (nodenum(xd, yd, zd))(WEST) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(WEST) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(WEST) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(WEST)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(WEST)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(WEST)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(WEST) <= (others => '0');
         end generate;
         generating_18 : if (xd < X-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(EAST) <= node_out_flit  (nodenum(xd, yd, zd))(WEST);
-          node_in_last   (nodenum(xd, yd, zd))(EAST) <= node_out_last  (nodenum(xd, yd, zd))(WEST);
-          node_in_valid  (nodenum(xd, yd, zd))(EAST) <= node_out_valid (nodenum(xd, yd, zd))(WEST);
-          node_out_ready (nodenum(xd, yd, zd))(EAST) <= node_in_ready  (nodenum(xd, yd, zd))(WEST);
+          node_in_flit (nodenum(xd, yd, zd))(EAST)   <= node_out_flit (nodenum(xd, yd, zd))(WEST);
+          node_in_last (nodenum(xd, yd, zd))(EAST)   <= node_out_last (nodenum(xd, yd, zd))(WEST);
+          node_in_valid (nodenum(xd, yd, zd))(EAST)  <= node_out_valid (nodenum(xd, yd, zd))(WEST);
+          node_out_ready (nodenum(xd, yd, zd))(EAST) <= node_in_ready (nodenum(xd, yd, zd))(WEST);
         elsif (xd >= X-1) generate
-          node_in_flit   (nodenum(xd, yd, zd))(EAST) <= (others => (others => 'X'));
-          node_in_last   (nodenum(xd, yd, zd))(EAST) <= (others => 'X');
-          node_in_valid  (nodenum(xd, yd, zd))(EAST) <= (others => '0');
+          node_in_flit (nodenum(xd, yd, zd))(EAST)   <= (others => (others => 'X'));
+          node_in_last (nodenum(xd, yd, zd))(EAST)   <= (others => 'X');
+          node_in_valid (nodenum(xd, yd, zd))(EAST)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(EAST) <= (others => '0');
         end generate;
       end generate;
