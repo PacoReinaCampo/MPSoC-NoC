@@ -49,14 +49,17 @@ module mpsoc_noc_testbench;
   //
   parameter FLIT_WIDTH       = 32;
   parameter CHANNELS         = 7;
-  parameter OUTPUTS          = 7;
+
   parameter ENABLE_VCHANNELS = 1;
+
   parameter X                = 2;
   parameter Y                = 2;
   parameter Z                = 2;
-  parameter NODES            = 8;
+
   parameter BUFFER_SIZE_IN   = 4;
   parameter BUFFER_SIZE_OUT  = 4;
+
+  parameter NODES            = 8;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -81,15 +84,14 @@ module mpsoc_noc_testbench;
   //
 
   //DUT
-  noc_mesh #(
+  noc_mesh3d #(
     .FLIT_WIDTH       (FLIT_WIDTH),
     .CHANNELS         (CHANNELS),
-    .OUTPUTS          (OUTPUTS),
+
     .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
     .X                (X),
     .Y                (Y),
     .Z                (Z),
-    .NODES            (NODES),
     .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
     .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT)
   )

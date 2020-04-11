@@ -92,12 +92,12 @@ module noc_buffer #(
   // Functions
   //
 
-      function logic [AW:0] find_first_one(input logic [DEPTH:0] data);
-        automatic int i;
-        for (i = DEPTH; i >= 0; i--)
-          if (data[i]) return i;
-        return DEPTH + 1;
-      endfunction
+  function logic [AW:0] find_first_one(input logic [DEPTH:0] data);
+    automatic int i;
+    for (i = DEPTH; i >= 0; i--)
+      if (data[i]) return i;
+    return DEPTH + 1;
+  endfunction
 
   //////////////////////////////////////////////////////////////////
   //
@@ -111,7 +111,8 @@ module noc_buffer #(
     end
   end
 
-  assign in_ready = (rd_count < DEPTH + 1); // The actual depth is DEPTH+1 because of the output register
+  // The actual depth is DEPTH+1 because of the output register
+  assign in_ready = (rd_count < DEPTH + 1);
   assign fifo_read     = out_valid & out_ready;
   assign fifo_write    = in_ready & in_valid;
   assign read_ram      = fifo_read & (rd_count > 1);

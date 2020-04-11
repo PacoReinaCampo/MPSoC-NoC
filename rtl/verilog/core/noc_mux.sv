@@ -46,8 +46,8 @@ module noc_mux #(
   parameter CHANNELS   = 7
 )
   (
-    input                                clk,
-    input                                rst,
+    input                                     clk,
+    input                                     rst,
 
     input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
     input      [CHANNELS-1:0]                 in_last,

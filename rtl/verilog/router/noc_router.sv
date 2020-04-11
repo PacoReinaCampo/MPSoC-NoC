@@ -1,4 +1,22 @@
-/* Copyright (c) 2017 by the author(s)
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              MPSoC-RISCV CPU                                               //
+//              Network on Chip                                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
+//              WishBone Bus Interface                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+/* Copyright (c) 2018-2019 by the author(s)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,27 +37,21 @@
  * THE SOFTWARE.
  *
  * =============================================================================
- *
- * This is a NoC router. It has a configurable number of input ports
- * and output ports, that are not necessarily equal. It supports
- * virtual channels, meaning that the flit signal between routers is
- * shared logically.
- *
  * Author(s):
- *   Stefan Wallentowitz <stefan@wallentowitz.de>
+ *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module noc_router
-  #(parameter FLIT_WIDTH      = 32,
-    parameter VCHANNELS       = 1,
-    parameter INPUTS          = 'x,
-    parameter OUTPUTS         = 'x,
-    parameter BUFFER_SIZE_IN  = 4,
-    parameter BUFFER_SIZE_OUT = 4,
-    parameter DESTS           = 'x,
+module noc_router #(
+  parameter FLIT_WIDTH      = 32,
+  parameter VCHANNELS       = 1,
+  parameter INPUTS          = 'x,
+  parameter OUTPUTS         = 'x,
+  parameter BUFFER_SIZE_IN  = 4,
+  parameter BUFFER_SIZE_OUT = 4,
+  parameter DESTS           = 'x,
 
     parameter [OUTPUTS*DESTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
-   )
+)
   (
     input clk,
     input rst,

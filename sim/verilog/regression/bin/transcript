@@ -1,17 +1,17 @@
 # vsim -c -do "run.do" work.mpsoc_noc_testbench 
-# Start time: 03:32:02 on Apr 02,2020
+# Start time: 16:46:18 on Apr 11,2020
 # Loading sv_std.std
 # Loading work.mpsoc_noc_testbench
-# Loading work.mpsoc_noc_mesh
-# Loading work.mpsoc_noc_vchannel_mux
-# Loading work.mpsoc_noc_arbitrer_rr
-# Loading work.mpsoc_noc_router
-# Loading work.mpsoc_noc_router_input
-# Loading work.mpsoc_noc_router_output
-# Loading work.mpsoc_noc_buffer
-# Loading work.mpsoc_noc_router_lookup
-# Loading work.mpsoc_noc_router_lookup_slice
-# Loading work.mpsoc_noc_mux
+# Loading work.noc_mesh3d
+# Loading work.noc_vchannel_mux
+# Loading work.arb_rr
+# Loading work.noc_router
+# Loading work.noc_router_input
+# Loading work.noc_router_output
+# Loading work.noc_buffer
+# Loading work.noc_router_lookup
+# Loading work.noc_router_lookup_slice
+# Loading work.noc_mux
 # do run.do
-# End time: 03:32:02 on Apr 02,2020, Elapsed time: 0:00:00
+# End time: 16:46:19 on Apr 11,2020, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0

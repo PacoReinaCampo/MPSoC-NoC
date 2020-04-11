@@ -44,7 +44,7 @@
 module noc_router_output #(
   parameter FLIT_WIDTH   = 32,
   parameter VCHANNELS    = 7,
-  parameter INPUTS     = 7,
+  parameter INPUTS       = 7,
   parameter BUFFER_DEPTH = 4
 )
   (
@@ -146,7 +146,7 @@ module noc_router_output #(
        .out_ready (out_ready)
       );
     end
-    else begin // block: vc_mux
+    else begin
       assign out_flit  = channel_flit  [0];
       assign out_last  = channel_last  [0];
       assign out_valid = channel_valid [0];

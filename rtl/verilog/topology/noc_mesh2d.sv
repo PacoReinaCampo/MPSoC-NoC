@@ -1,4 +1,22 @@
-/* Copyright (c) 2015-2017 by the author(s)
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              MPSoC-RISCV CPU                                               //
+//              Network on Chip                                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
+//              WishBone Bus Interface                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+/* Copyright (c) 2018-2019 by the author(s)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,19 +37,11 @@
  * THE SOFTWARE.
  *
  * =============================================================================
- *
- * This is a mesh topology network-on-chip. It generates the mesh with
- * routers in the X and the Y direction and generates all wiring.
- *
- * This NoC contains CHANNELS number of channels. By setting
- * ENABLE_VCHANNELS you can switch between separate physical NoCs and
- * one NoC with virtual channels.
- *
  * Author(s):
- *   Stefan Wallentowitz <stefan@wallentowitz.de>
+ *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-module noc_mesh #(
+module noc_mesh2d #(
   parameter FLIT_WIDTH = 32,
   parameter CHANNELS   = 1,
 
