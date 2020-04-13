@@ -132,7 +132,7 @@ module noc_mesh3d #(
 
   // Get the node number
   function integer nodenum(input integer x, input integer y, input integer z);
-    nodenum = x+y*X+z*X;
+    nodenum = x+y*X+z*X*Y;
   endfunction // nodenum
 
   // Get the node up of position
@@ -142,12 +142,12 @@ module noc_mesh3d #(
 
   // Get the node north of position
   function integer northof(input integer x, input integer y, input integer z);
-    northof = x+(y+1)*X+z*X;
+    northof = x+(y+1)*X+z*X*Y;
   endfunction // northof
 
   // Get the node east of position
   function integer eastof(input integer x, input integer y, input integer z);
-    eastof  = (x+1)+y*X+z*X;
+    eastof  = (x+1)+y*X+z*X*Y;
   endfunction // eastof
 
   // Get the node down of position
@@ -157,12 +157,12 @@ module noc_mesh3d #(
 
   // Get the node south of position
   function integer southof(input integer x, input integer y, input integer z);
-    southof = x+(y-1)*X+z*X;
+    southof = x+(y-1)*X+z*X*Y;
   endfunction // southof
 
   // Get the node west of position
   function integer westof(input integer x, input integer y, input integer z);
-    westof = (x-1)+y*X+z*X;
+    westof = (x-1)+y*X+z*X*Y;
   endfunction // westof
 
   // This generates the lookup table for each individual node

@@ -13,7 +13,7 @@
 --                                                                            //
 --                                                                            //
 --              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
+--              Direct Access Memory Interface                                //
 --              AMBA3 AHB-Lite Bus Interface                                  //
 --              WishBone Bus Interface                                        //
 --                                                                            //
@@ -48,18 +48,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
-
 entity arb_rr is
   generic (
     N : integer := 2
-  );
+    );
   port (
     req     : in  std_logic_vector(N-1 downto 0);
-    en      : in  std_logic;
     gnt     : in  std_logic_vector(N-1 downto 0);
     nxt_gnt : out std_logic_vector(N-1 downto 0)
-  );
+    );
 end arb_rr;
 
 architecture RTL of arb_rr is
@@ -67,53 +64,62 @@ architecture RTL of arb_rr is
   --
   -- Variables
   --
-  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0);
+  type M_N_N is array (N-1 downto 0) of std_logic_vector(N-1 downto 0);
+
+  --////////////////////////////////////////////////////////////////
+  --
+  -- Variables
+  --
+
+  -- Mask net
+  signal mask : M_N_N;
+
+  --//////////////////////////////////////////////////////////////
+  --
+  -- Functions
+  --
+  function reduce_nor (
+    reduce_nor_in : std_logic_vector
+  ) return std_logic is
+    variable reduce_nor_out : std_logic := '0';
+  begin
+    for i in reduce_nor_in'range loop
+      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
+    end loop;
+    return reduce_nor_out;
+  end reduce_nor;
 
 begin
   --////////////////////////////////////////////////////////////////
   --
-  -- Module Body
+  -- Module body
   --
-
-  -- Calculate the mask
-  generating_0 : for i in 0 to N - 1 generate
-    -- Initialize mask as 0
-
-    -- All participants to the "right" up to the current grant
-    -- holder have precendence and therefore a 1 in the mask.
-    -- First check if the next right from us has the grant.
-    -- Afterwards the mask is calculated iteratively based on
-    -- this.
-    generating_1 : if (i > 0) generate
-      -- For i=N:1 the next right is i-1
-      mask(i)(i-1) <= not gnt(i-1);
-    elsif (i <= 0) generate
-      -- For i=0 the next right is N-1
-      mask(i)(N-1) <= not gnt(N-1);
-    end generate;
-    -- Now the mask contains a 1 when the next right to us is not
-    -- the grant holder. If it is the grant holder that means,
-    -- that we are the next served (if necessary) as no other has
-    -- higher precendence, which is then calculated in the
-    -- following by filling up 1s up to the grant holder. To stop
-    -- filling up there and not fill up any after this is
-    -- iterative by always checking if the one before was not
-    -- before the grant holder.
-    generating_3 : for j in 2 to N - 1 generate
-      generating_4 : if (i-j >= 0) generate
-        mask(i)(i-j) <= mask(i)(i-j+1) and not gnt(i-j);
-      elsif (i-j+1 >= 0) generate
-        mask(i)(i-j+N) <= mask(i)(i-j+1)   and not gnt(i-j+N);
-      elsif (i-j+2 >= 0) generate
-        mask(i)(i-j+N) <= mask(i)(i-j+N+1) and not gnt(i-j+N);
-      end generate;
-    end generate;
-  end generate;
+  processing_0 : process (gnt)
+  begin
+    for i in 0 to N - 1 loop
+      -- Initialize mask as 0
+      mask(i) <= (others => '0');
+      if (i > 0) then
+        -- For i=N:1 the next right is i-1
+        mask(i)(i-1) <= not gnt(i-1);
+      else
+        -- For i=0 the next right is N-1
+        mask(i)(N-1) <= not gnt(N-1);
+      end if;
+      for j in 2 to N - 1 loop
+        if (i-j >= 0) then
+          mask(i)(i-j) <= mask(i)(i-j+1) and not gnt(i-j);
+        elsif (i-j+1 >= 0) then
+          mask(i)(i-j+N) <= mask(i)(i-j+1) and not gnt(i-j+N);
+        else
+          mask(i)(i-j+N) <= mask(i)(i-j+N+1) and not gnt(i-j+N);
+        end if;
+      end loop;
+    end loop;
+  end process;
 
   -- Calculate the nxt_gnt
-  generating_5 : for k in 0 to N - 1 generate
-    -- Finally, we only arbitrate when enable is set.         
-    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k))
-                  when en = '1' else gnt(k);
+  generating_0 : for k in 0 to N - 1 generate
+    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k));
   end generate;
 end RTL;

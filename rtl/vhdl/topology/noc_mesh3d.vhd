@@ -173,7 +173,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return xd+yd*X+zd*X;
+    return xd+yd*X+zd*X*Y;
   end function nodenum;
 
   -- Get the node up of position
@@ -183,7 +183,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return xd+yd*X+(zd+1)*X;
+    return xd+yd*X+(zd+1)*X*Y;
   end function upof;
 
   -- Get the node north of position
@@ -193,7 +193,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return xd+(yd+1)*X+zd*X;
+    return xd+(yd+1)*X+zd*X*Y;
   end function northof;
 
   -- Get the node east of position
@@ -203,7 +203,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return (xd+1)+yd*X+zd*X;
+    return (xd+1)+yd*X+zd*X*Y;
   end function eastof;
 
   -- Get the node down of position
@@ -213,7 +213,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return xd+yd*X+(zd-1)*X;
+    return xd+yd*X+(zd-1)*X*Y;
   end function downof;
 
   -- Get the node south of position
@@ -223,7 +223,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return xd+(yd-1)*X+zd*X;
+    return xd+(yd-1)*X+zd*X*Y;
   end function southof;
 
   -- Get the node west of position
@@ -233,7 +233,7 @@ architecture RTL of noc_mesh3d is
     zd : integer
     ) return integer is
   begin
-    return (xd-1)+yd*X+zd*X;
+    return (xd-1)+yd*X+zd*X*Y;
   end function westof;
 
   function genroutes (
