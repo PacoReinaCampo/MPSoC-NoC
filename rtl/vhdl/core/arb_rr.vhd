@@ -54,6 +54,7 @@ entity arb_rr is
     );
   port (
     req     : in  std_logic_vector(N-1 downto 0);
+    en      : in std_logic;
     gnt     : in  std_logic_vector(N-1 downto 0);
     nxt_gnt : out std_logic_vector(N-1 downto 0)
     );
@@ -120,6 +121,6 @@ begin
 
   -- Calculate the nxt_gnt
   generating_0 : for k in 0 to N - 1 generate
-    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k));
+    nxt_gnt(k) <= (reduce_nor(mask(k) and req) and req(k)) or (reduce_nor(req) and gnt(k)) when en = '1' else gnt(k);
   end generate;
 end RTL;

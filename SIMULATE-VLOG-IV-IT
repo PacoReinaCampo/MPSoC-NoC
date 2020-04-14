@@ -1,3 +1,0 @@
-rm -rf system.vvp
-iverilog -g2012 -o system.vvp -c system.vtor -s mpsoc_noc_testbench
-vvp system.vvp

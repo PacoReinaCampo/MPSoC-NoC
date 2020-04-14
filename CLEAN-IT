@@ -1,10 +1,13 @@
-rm -rf sim/mixed/regression/bin/work
-rm -rf sim/verilog/regression/bin/work
-rm -rf sim/vhdl/regression/bin/work
+rm -rf sim/mixed/regression/msim/transcript
+rm -rf sim/verilog/regression/msim/transcript
+rm -rf sim/vhdl/regression/msim/transcript
 
-rm -rf synthesis
+rm -rf sim/mixed/regression/msim/work
+rm -rf sim/verilog/regression/msim/work
+rm -rf sim/vhdl/regression/msim/work
 
-rm -rf work-obj93.cf
-rm -rf system.vvp
-rm -rf obj_dir
-rm -rf mpsoc_noc_testbench.tree
+rm -rf sim/verilog/regression/iverilog/system.vvp
+
+rm -rf sim/verilog/regression/iverilog/*.tap
+
+rm -rf sim/verilog/regression/vtor/obj_dir
