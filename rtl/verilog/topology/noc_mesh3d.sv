@@ -137,7 +137,7 @@ module noc_mesh3d #(
 
   // Get the node up of position
   function integer upof(input integer x, input integer y, input integer z);
-    upof = x+y*X+(z+1)*X;
+    upof = x+y*X+(z+1)*X*Y;
   endfunction // upof
 
   // Get the node north of position
@@ -152,7 +152,7 @@ module noc_mesh3d #(
 
   // Get the node down of position
   function integer downof(input integer x, input integer y, input integer z);
-    downof = x+y*X+(z-1)*X;
+    downof = x+y*X+(z-1)*X*Y;
   endfunction // downof
 
   // Get the node south of position
