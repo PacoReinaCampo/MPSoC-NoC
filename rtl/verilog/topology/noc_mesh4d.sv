@@ -79,27 +79,27 @@ module noc_mesh4d #(
 
   // Those are indexes into the wiring arrays
   localparam LOCAL = 0;
-  localparam FWARD = 1;
-  localparam UP    = 2;
+  localparam UP    = 1;
   localparam NORTH = 3;
-  localparam EAST  = 4;
-  localparam BWARD = 5;
-  localparam DOWN  = 6;
-  localparam SOUTH = 7;
-  localparam WEST  = 8;
+  localparam EAST  = 3;
+  localparam FWARD = 4;
+  localparam DOWN  = 5;
+  localparam SOUTH = 6;
+  localparam WEST  = 7;
+  localparam BWARD = 8;
 
   // Those are direction codings that match the wiring indices
   // above. The router is configured to use those to select the
   // proper output port.
   localparam DIR_LOCAL = 9'b000000001;
-  localparam DIR_FWARD = 9'b000000010;
-  localparam DIR_UP    = 9'b000000100;
-  localparam DIR_NORTH = 9'b000001000;
-  localparam DIR_EAST  = 9'b000010000;
-  localparam DIR_BWARD = 9'b000100000;
-  localparam DIR_DOWN  = 9'b001000000;
-  localparam DIR_SOUTH = 9'b010000000;
-  localparam DIR_WEST  = 9'b100000000;
+  localparam DIR_UP    = 9'b000000010;
+  localparam DIR_NORTH = 9'b000000100;
+  localparam DIR_EAST  = 9'b000001000;
+  localparam DIR_FWARD = 9'b000010000;
+  localparam DIR_DOWN  = 9'b000100000;
+  localparam DIR_SOUTH = 9'b001000000;
+  localparam DIR_WEST  = 9'b010000000;
+  localparam DIR_BWARD = 9'b100000000;
 
   // Number of physical channels between routers. This is essentially
   // the number of flits (and last) between the routers.
@@ -141,11 +141,6 @@ module noc_mesh4d #(
   endfunction // nodenum
 
   // Get the node up of position
-  function integer fwardof(input integer x, input integer y, input integer z, input integer t);
-    fwardof = x+y*X+z*X*Y+(t+1)*X*Y*Z;
-  endfunction // fwardof
-
-  // Get the node up of position
   function integer upof(input integer x, input integer y, input integer z, input integer t);
     upof = x+y*X+(z+1)*X*Y+t*X*Y*Z;
   endfunction // upof
@@ -160,10 +155,10 @@ module noc_mesh4d #(
     eastof  = (x+1)+y*X+z*X*Y+t*X*Y*Z;
   endfunction // eastof
 
-  // Get the node down of position
-  function integer bwardof(input integer x, input integer y, input integer z, input integer t);
-    bwardof = x+y*X+z*X*Y+(t-1)*X*Y*Z;
-  endfunction // bwardof
+  // Get the node up of position
+  function integer fwardof(input integer x, input integer y, input integer z, input integer t);
+    fwardof = x+y*X+z*X*Y+(t+1)*X*Y*Z;
+  endfunction // fwardof
 
   // Get the node down of position
   function integer downof(input integer x, input integer y, input integer z, input integer t);
@@ -180,6 +175,11 @@ module noc_mesh4d #(
     westof = (x-1)+y*X+z*X*Y+t*X*Y*Z;
   endfunction // westof
 
+  // Get the node down of position
+  function integer bwardof(input integer x, input integer y, input integer z, input integer t);
+    bwardof = x+y*X+z*X*Y+(t-1)*X*Y*Z;
+  endfunction // bwardof
+
   // This generates the lookup table for each individual node
   function [NODES-1:0][8:0] genroutes(input integer x, input integer y, input integer z, input integer t);
     integer td,zd,yd,xd;
@@ -188,14 +188,22 @@ module noc_mesh4d #(
 
     genroutes = {NODES{9'b000000000}};
 
-    for (td = 0; td < T; td=td+1) begin
-      for (zd = 0; zd < Z; zd=zd+1) begin
-        for (yd = 0; yd < Y; yd=yd+1) begin
-          for (xd = 0; xd < X; xd=xd+1) begin : inner_loop
-            nd = nodenum(td, xd, yd, zd);
+    for (td = 0; td < T; td=td+1) begin : inner_loop_t
+      for (zd = 0; zd < Z; zd=zd+1) begin : inner_loop_z
+        for (yd = 0; yd < Y; yd=yd+1) begin : inner_loop_y
+          for (xd = 0; xd < X; xd=xd+1) begin : inner_loop_x
+            nd = nodenum(xd, yd, zd, td);
             d = 9'b000000000;
             if ((td==t) && (xd==x) && (yd==y) && (zd==z)) begin
               d = DIR_LOCAL;
+            end
+            else if ((xd==x) && (yd==z) && (zd==z)) begin
+              if (td<t) begin
+                d = DIR_BWARD;
+              end
+              else begin
+                d = DIR_FWARD;
+              end
             end
             else if ((td==t) && (xd==x) && (yd==z)) begin
               if (zd<z) begin
@@ -219,14 +227,6 @@ module noc_mesh4d #(
               end
               else begin
                 d = DIR_EAST;
-              end
-            end
-            else if ((xd==x) && (yd==z) && (zd==z)) begin
-              if (td<t) begin
-                d = DIR_BWARD;
-              end
-              else begin
-                d = DIR_FWARD;
               end
             end
             genroutes[nd] = d;
