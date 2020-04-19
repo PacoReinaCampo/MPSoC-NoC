@@ -464,10 +464,10 @@ begin
         -- in the four directions. If the router is on an outer
         -- border, tie off.
         generating_13 : if (zd > 0) generate
-          node_in_flit (nodenum(xd, yd, zd))(DOWN)   <= node_out_flit (nodenum(xd, yd, zd))(UP);
-          node_in_last (nodenum(xd, yd, zd))(DOWN)   <= node_out_last (nodenum(xd, yd, zd))(UP);
-          node_in_valid (nodenum(xd, yd, zd))(DOWN)  <= node_out_valid (nodenum(xd, yd, zd))(UP);
-          node_out_ready (nodenum(xd, yd, zd))(DOWN) <= node_in_ready (nodenum(xd, yd, zd))(UP);
+          node_in_flit (nodenum(xd, yd, zd))(DOWN)   <= node_out_flit (downof(xd, yd, zd))(UP);
+          node_in_last (nodenum(xd, yd, zd))(DOWN)   <= node_out_last (downof(xd, yd, zd))(UP);
+          node_in_valid (nodenum(xd, yd, zd))(DOWN)  <= node_out_valid (downof(xd, yd, zd))(UP);
+          node_out_ready (nodenum(xd, yd, zd))(DOWN) <= node_in_ready (downof(xd, yd, zd))(UP);
         elsif (zd <= 0) generate
           node_in_flit (nodenum(xd, yd, zd))(DOWN)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(DOWN)   <= (others => 'X');
@@ -475,10 +475,10 @@ begin
           node_out_ready (nodenum(xd, yd, zd))(DOWN) <= (others => '0');
         end generate;
         generating_14 : if (zd < Z-1) generate
-          node_in_flit (nodenum(xd, yd, zd))(UP)   <= node_out_flit (nodenum(xd, yd, zd))(DOWN);
-          node_in_last (nodenum(xd, yd, zd))(UP)   <= node_out_last (nodenum(xd, yd, zd))(DOWN);
-          node_in_valid (nodenum(xd, yd, zd))(UP)  <= node_out_valid (nodenum(xd, yd, zd))(DOWN);
-          node_out_ready (nodenum(xd, yd, zd))(UP) <= node_in_ready (nodenum(xd, yd, zd))(DOWN);
+          node_in_flit (nodenum(xd, yd, zd))(UP)   <= node_out_flit (upof(xd, yd, zd))(DOWN);
+          node_in_last (nodenum(xd, yd, zd))(UP)   <= node_out_last (upof(xd, yd, zd))(DOWN);
+          node_in_valid (nodenum(xd, yd, zd))(UP)  <= node_out_valid (upof(xd, yd, zd))(DOWN);
+          node_out_ready (nodenum(xd, yd, zd))(UP) <= node_in_ready (upof(xd, yd, zd))(DOWN);
         elsif (zd >= Z-1) generate
           node_in_flit (nodenum(xd, yd, zd))(UP)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(UP)   <= (others => 'X');
@@ -486,10 +486,10 @@ begin
           node_out_ready (nodenum(xd, yd, zd))(UP) <= (others => '0');
         end generate;
         generating_15 : if (yd > 0) generate
-          node_in_flit (nodenum(xd, yd, zd))(SOUTH)   <= node_out_flit (nodenum(xd, yd, zd))(NORTH);
-          node_in_last (nodenum(xd, yd, zd))(SOUTH)   <= node_out_last (nodenum(xd, yd, zd))(NORTH);
-          node_in_valid (nodenum(xd, yd, zd))(SOUTH)  <= node_out_valid (nodenum(xd, yd, zd))(NORTH);
-          node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= node_in_ready (nodenum(xd, yd, zd))(NORTH);
+          node_in_flit (nodenum(xd, yd, zd))(SOUTH)   <= node_out_flit (southof(xd, yd, zd))(NORTH);
+          node_in_last (nodenum(xd, yd, zd))(SOUTH)   <= node_out_last (southof(xd, yd, zd))(NORTH);
+          node_in_valid (nodenum(xd, yd, zd))(SOUTH)  <= node_out_valid (southof(xd, yd, zd))(NORTH);
+          node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= node_in_ready (southof(xd, yd, zd))(NORTH);
         elsif (yd <= 0) generate
           node_in_flit (nodenum(xd, yd, zd))(SOUTH)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(SOUTH)   <= (others => 'X');
@@ -497,21 +497,21 @@ begin
           node_out_ready (nodenum(xd, yd, zd))(SOUTH) <= (others => '0');
         end generate;
         generating_16 : if (yd < Y-1) generate
-          node_in_flit (nodenum(xd, yd, zd))(NORTH)   <= node_out_flit (nodenum(xd, yd, zd))(SOUTH);
-          node_in_last (nodenum(xd, yd, zd))(NORTH)   <= node_out_last (nodenum(xd, yd, zd))(SOUTH);
-          node_in_valid (nodenum(xd, yd, zd))(NORTH)  <= node_out_valid (nodenum(xd, yd, zd))(SOUTH);
-          node_out_ready (nodenum(xd, yd, zd))(NORTH) <= node_in_ready (nodenum(xd, yd, zd))(SOUTH);
+          node_in_flit (nodenum(xd, yd, zd))(NORTH)   <= node_out_flit (northof(xd, yd, zd))(SOUTH);
+          node_in_last (nodenum(xd, yd, zd))(NORTH)   <= node_out_last (northof(xd, yd, zd))(SOUTH);
+          node_in_valid (nodenum(xd, yd, zd))(NORTH)  <= node_out_valid (northof(xd, yd, zd))(SOUTH);
+          node_out_ready (nodenum(xd, yd, zd))(NORTH) <= node_in_ready (northof(xd, yd, zd))(SOUTH);
         elsif (yd >= Y-1) generate
           node_in_flit (nodenum(xd, yd, zd))(NORTH)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(NORTH)   <= (others => 'X');
           node_in_valid (nodenum(xd, yd, zd))(NORTH)  <= (others => '0');
           node_out_ready (nodenum(xd, yd, zd))(NORTH) <= (others => '0');
         end generate;
-        generating_17 : if (xd > 0) generate
-          node_in_flit (nodenum(xd, yd, zd))(WEST)   <= node_out_flit (nodenum(xd, yd, zd))(EAST);
-          node_in_last (nodenum(xd, yd, zd))(WEST)   <= node_out_last (nodenum(xd, yd, zd))(EAST);
-          node_in_valid (nodenum(xd, yd, zd))(WEST)  <= node_out_valid (nodenum(xd, yd, zd))(EAST);
-          node_out_ready (nodenum(xd, yd, zd))(WEST) <= node_in_ready (nodenum(xd, yd, zd))(EAST);
+        generating_19 : if (xd > 0) generate
+          node_in_flit (nodenum(xd, yd, zd))(WEST)   <= node_out_flit (westof(xd, yd, zd))(EAST);
+          node_in_last (nodenum(xd, yd, zd))(WEST)   <= node_out_last (westof(xd, yd, zd))(EAST);
+          node_in_valid (nodenum(xd, yd, zd))(WEST)  <= node_out_valid (westof(xd, yd, zd))(EAST);
+          node_out_ready (nodenum(xd, yd, zd))(WEST) <= node_in_ready (westof(xd, yd, zd))(EAST);
         elsif (xd <= 0) generate
           node_in_flit (nodenum(xd, yd, zd))(WEST)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(WEST)   <= (others => 'X');
@@ -519,10 +519,10 @@ begin
           node_out_ready (nodenum(xd, yd, zd))(WEST) <= (others => '0');
         end generate;
         generating_18 : if (xd < X-1) generate
-          node_in_flit (nodenum(xd, yd, zd))(EAST)   <= node_out_flit (nodenum(xd, yd, zd))(WEST);
-          node_in_last (nodenum(xd, yd, zd))(EAST)   <= node_out_last (nodenum(xd, yd, zd))(WEST);
-          node_in_valid (nodenum(xd, yd, zd))(EAST)  <= node_out_valid (nodenum(xd, yd, zd))(WEST);
-          node_out_ready (nodenum(xd, yd, zd))(EAST) <= node_in_ready (nodenum(xd, yd, zd))(WEST);
+          node_in_flit (nodenum(xd, yd, zd))(EAST)   <= node_out_flit (eastof(xd, yd, zd))(WEST);
+          node_in_last (nodenum(xd, yd, zd))(EAST)   <= node_out_last (eastof(xd, yd, zd))(WEST);
+          node_in_valid (nodenum(xd, yd, zd))(EAST)  <= node_out_valid (eastof(xd, yd, zd))(WEST);
+          node_out_ready (nodenum(xd, yd, zd))(EAST) <= node_in_ready (eastof(xd, yd, zd))(WEST);
         elsif (xd >= X-1) generate
           node_in_flit (nodenum(xd, yd, zd))(EAST)   <= (others => (others => 'X'));
           node_in_last (nodenum(xd, yd, zd))(EAST)   <= (others => 'X');

@@ -55,7 +55,7 @@ module noc_mesh4d #(
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
 
-  localparam NODES = T*X*Y*Z
+  localparam NODES = X*Y*Z*T
 )
   (
     input                                            clk,
@@ -79,27 +79,27 @@ module noc_mesh4d #(
 
   // Those are indexes into the wiring arrays
   localparam LOCAL = 0;
-  localparam UP    = 1;
+  localparam FWARD = 1;
+  localparam UP    = 2;
   localparam NORTH = 3;
-  localparam EAST  = 3;
-  localparam FWARD = 4;
-  localparam DOWN  = 5;
-  localparam SOUTH = 6;
-  localparam WEST  = 7;
-  localparam BWARD = 8;
+  localparam EAST  = 4;
+  localparam BWARD = 5;
+  localparam DOWN  = 6;
+  localparam SOUTH = 7;
+  localparam WEST  = 8;
 
   // Those are direction codings that match the wiring indices
   // above. The router is configured to use those to select the
   // proper output port.
   localparam DIR_LOCAL = 9'b000000001;
-  localparam DIR_UP    = 9'b000000010;
-  localparam DIR_NORTH = 9'b000000100;
-  localparam DIR_EAST  = 9'b000001000;
-  localparam DIR_FWARD = 9'b000010000;
-  localparam DIR_DOWN  = 9'b000100000;
-  localparam DIR_SOUTH = 9'b001000000;
-  localparam DIR_WEST  = 9'b010000000;
-  localparam DIR_BWARD = 9'b100000000;
+  localparam DIR_FWARD = 9'b000000010;
+  localparam DIR_UP    = 9'b000000100;
+  localparam DIR_NORTH = 9'b000001000;
+  localparam DIR_EAST  = 9'b000010000;
+  localparam DIR_BWARD = 9'b000100000;
+  localparam DIR_DOWN  = 9'b001000000;
+  localparam DIR_SOUTH = 9'b010000000;
+  localparam DIR_WEST  = 9'b100000000;
 
   // Number of physical channels between routers. This is essentially
   // the number of flits (and last) between the routers.
@@ -110,7 +110,7 @@ module noc_mesh4d #(
   // Variables
   //
 
-  genvar c, p, t, x, y, z;
+  genvar c, p, x, y, z, t;
 
   wire [8:0][PCHANNELS-1:0][FLIT_WIDTH-1:0]     node_in_flit   [0:NODES-1];
   wire [8:0][PCHANNELS-1:0]                     node_in_last   [0:NODES-1];
@@ -141,6 +141,11 @@ module noc_mesh4d #(
   endfunction // nodenum
 
   // Get the node up of position
+  function integer fwardof(input integer x, input integer y, input integer z, input integer t);
+    fwardof = x+y*X+z*X*Y+(t+1)*X*Y*Z;
+  endfunction // fwardof
+
+  // Get the node up of position
   function integer upof(input integer x, input integer y, input integer z, input integer t);
     upof = x+y*X+(z+1)*X*Y+t*X*Y*Z;
   endfunction // upof
@@ -155,10 +160,10 @@ module noc_mesh4d #(
     eastof  = (x+1)+y*X+z*X*Y+t*X*Y*Z;
   endfunction // eastof
 
-  // Get the node up of position
-  function integer fwardof(input integer x, input integer y, input integer z, input integer t);
-    fwardof = x+y*X+z*X*Y+(t+1)*X*Y*Z;
-  endfunction // fwardof
+  // Get the node down of position
+  function integer bwardof(input integer x, input integer y, input integer z, input integer t);
+    bwardof = x+y*X+z*X*Y+(t-1)*X*Y*Z;
+  endfunction // bwardof
 
   // Get the node down of position
   function integer downof(input integer x, input integer y, input integer z, input integer t);
@@ -175,11 +180,6 @@ module noc_mesh4d #(
     westof = (x-1)+y*X+z*X*Y+t*X*Y*Z;
   endfunction // westof
 
-  // Get the node down of position
-  function integer bwardof(input integer x, input integer y, input integer z, input integer t);
-    bwardof = x+y*X+z*X*Y+(t-1)*X*Y*Z;
-  endfunction // bwardof
-
   // This generates the lookup table for each individual node
   function [NODES-1:0][8:0] genroutes(input integer x, input integer y, input integer z, input integer t);
     integer td,zd,yd,xd;
@@ -194,7 +194,7 @@ module noc_mesh4d #(
           for (xd = 0; xd < X; xd=xd+1) begin : inner_loop_x
             nd = nodenum(xd, yd, zd, td);
             d = 9'b000000000;
-            if ((td==t) && (xd==x) && (yd==y) && (zd==z)) begin
+            if ((xd==x) && (yd==y) && (zd==z) && (td==t)) begin
               d = DIR_LOCAL;
             end
             else if ((xd==x) && (yd==z) && (zd==z)) begin
@@ -377,10 +377,10 @@ module noc_mesh4d #(
             // in the four directions. If the router is on an outer
             // border, tie off.
             if (t > 0) begin
-              assign node_in_flit   [nodenum(x,y,z,t)][BWARD] = node_out_flit  [southof(x,y,z,t)][FWARD];
-              assign node_in_last   [nodenum(x,y,z,t)][BWARD] = node_out_last  [southof(x,y,z,t)][FWARD];
-              assign node_in_valid  [nodenum(x,y,z,t)][BWARD] = node_out_valid [southof(x,y,z,t)][FWARD];
-              assign node_out_ready [nodenum(x,y,z,t)][BWARD] = node_in_ready  [southof(x,y,z,t)][FWARD];
+              assign node_in_flit   [nodenum(x,y,z,t)][BWARD] = node_out_flit  [bwardof(x,y,z,t)][FWARD];
+              assign node_in_last   [nodenum(x,y,z,t)][BWARD] = node_out_last  [bwardof(x,y,z,t)][FWARD];
+              assign node_in_valid  [nodenum(x,y,z,t)][BWARD] = node_out_valid [bwardof(x,y,z,t)][FWARD];
+              assign node_out_ready [nodenum(x,y,z,t)][BWARD] = node_in_ready  [bwardof(x,y,z,t)][FWARD];
             end
             else begin
               assign node_in_flit   [nodenum(x,y,z,t)][BWARD] = 'x;
@@ -390,10 +390,10 @@ module noc_mesh4d #(
             end
 
             if (t < T-1) begin
-              assign node_in_flit   [nodenum(x,y,z,t)][FWARD] = node_out_flit  [northof(x,y,z,t)][BWARD];
-              assign node_in_last   [nodenum(x,y,z,t)][FWARD] = node_out_last  [northof(x,y,z,t)][BWARD];
-              assign node_in_valid  [nodenum(x,y,z,t)][FWARD] = node_out_valid [northof(x,y,z,t)][BWARD];
-              assign node_out_ready [nodenum(x,y,z,t)][FWARD] = node_in_ready  [northof(x,y,z,t)][BWARD];
+              assign node_in_flit   [nodenum(x,y,z,t)][FWARD] = node_out_flit  [fwardof(x,y,z,t)][BWARD];
+              assign node_in_last   [nodenum(x,y,z,t)][FWARD] = node_out_last  [fwardof(x,y,z,t)][BWARD];
+              assign node_in_valid  [nodenum(x,y,z,t)][FWARD] = node_out_valid [fwardof(x,y,z,t)][BWARD];
+              assign node_out_ready [nodenum(x,y,z,t)][FWARD] = node_in_ready  [fwardof(x,y,z,t)][BWARD];
             end
             else begin
               assign node_in_flit   [nodenum(x,y,z,t)][FWARD] = 'x;
