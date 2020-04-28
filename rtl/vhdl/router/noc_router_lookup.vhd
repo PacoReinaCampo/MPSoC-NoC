@@ -15,7 +15,7 @@
 --              MPSoC-RISCV CPU                                               //
 --              Network on Chip                                               //
 --              AMBA3 AHB-Lite Bus Interface                                  //
---              WishBone Bus Interface                                        //
+--              Wishbone Bus Interface                                        //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -55,13 +55,13 @@ entity noc_router_lookup is
     FLIT_WIDTH : integer := 32;
     DEST_WIDTH : integer := 5;
     DESTS      : integer := 1;
-    OUTPUTS    : integer := 1;
-
-    ROUTES : in std_logic_vector(DESTS*OUTPUTS-1 downto 0) := (others => '0')
+    OUTPUTS    : integer := 1
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
+
+    ROUTES : in std_logic_vector(DESTS*OUTPUTS-1 downto 0);
 
     in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic;

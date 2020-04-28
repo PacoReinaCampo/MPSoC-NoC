@@ -48,13 +48,13 @@ module noc_router #(
   parameter OUTPUTS         = 'x,
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
-  parameter DESTS           = 'x,
-
-  parameter [OUTPUTS*DESTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
+  parameter DESTS           = 'x
 )
   (
     input clk,
     input rst,
+
+    input  [OUTPUTS*DESTS-1:0] ROUTES,
 
     output [OUTPUTS-1:0]               [FLIT_WIDTH-1:0] out_flit,
     output [OUTPUTS-1:0]                                out_last,
@@ -96,20 +96,21 @@ module noc_router #(
   // Module Body
   //
   generate
-    for (i = 0; i < INPUTS; i++) begin : inputs
+    for (i = 0; i < INPUTS; i=i+1) begin : inputs
       // The input stages
       noc_router_input #(
         .FLIT_WIDTH   (FLIT_WIDTH),
         .VCHANNELS    (VCHANNELS),
         .DESTS        (DESTS),
         .OUTPUTS      (OUTPUTS),
-        .ROUTES       (ROUTES),
         .BUFFER_DEPTH (BUFFER_SIZE_IN)
       )
       u_input (
 
         .clk (clk),
         .rst (rst),
+
+        .ROUTES    (ROUTES),
 
         .in_flit   (in_flit[i]),
         .in_last   (in_last[i]),
@@ -124,9 +125,9 @@ module noc_router #(
     end
 
     // The switching logic
-    for (o = 0; o < OUTPUTS; o++) begin
-      for (v = 0; v < VCHANNELS; v++) begin
-        for (i = 0; i < INPUTS; i++) begin
+    for (o = 0; o < OUTPUTS; o=o+1) begin
+      for (v = 0; v < VCHANNELS; v=v+1) begin
+        for (i = 0; i < INPUTS; i=i+1) begin
           assign switch_out_flit  [o][v][i] = switch_in_flit   [i][v];
           assign switch_out_last  [o][v][i] = switch_in_last   [i][v];
           assign switch_out_valid [o][v][i] = switch_in_valid  [i][v][o];
@@ -135,7 +136,7 @@ module noc_router #(
       end
     end
 
-    for (o = 0; o < OUTPUTS; o++) begin :  outputs
+    for (o = 0; o < OUTPUTS; o=o+1) begin :  outputs
       // The output stages
       noc_router_output #(
         .FLIT_WIDTH   (FLIT_WIDTH),

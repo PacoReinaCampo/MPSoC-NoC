@@ -15,7 +15,7 @@
 --              MPSoC-RISCV CPU                                               //
 --              Network on Chip                                               //
 --              AMBA3 AHB-Lite Bus Interface                                  //
---              WishBone Bus Interface                                        //
+--              Wishbone Bus Interface                                        //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -112,13 +112,13 @@ architecture RTL of noc_mesh3d is
       OUTPUTS         : integer := 7;
       BUFFER_SIZE_IN  : integer := 4;
       BUFFER_SIZE_OUT : integer := 4;
-      DESTS           : integer := 8;
-
-      ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+      DESTS           : integer := 8
       );
     port (
       clk : in std_logic;
       rst : in std_logic;
+
+      ROUTES : in std_logic_vector(OUTPUTS*DESTS-1 downto 0);
 
       out_flit  : out std_logic_matrix(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       out_last  : out std_logic_vector(OUTPUTS-1 downto 0);
@@ -375,13 +375,13 @@ begin
               OUTPUTS         => 7,
               BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
               BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-              DESTS           => NODES,
-
-              ROUTES => genroutes(xd, yd, zd)
+              DESTS           => NODES
               )
             port map (
               clk => clk,
               rst => rst,
+
+              ROUTES => genroutes(xd, yd, zd),
 
               in_flit  => (others => (others => '0')),
               in_last  => (others => '0'),
@@ -439,13 +439,13 @@ begin
                 OUTPUTS         => 7,
                 BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
                 BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
-                DESTS           => NODES,
-
-                ROUTES => genroutes(xd, yd, zd)
+                DESTS           => NODES
                 )
               port map (
                 clk => clk,
                 rst => rst,
+
+                ROUTES => genroutes(xd, yd, zd),
 
                 in_flit  => (others => (others => '0')),
                 in_last  => (others => '0'),

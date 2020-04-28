@@ -15,7 +15,7 @@
 --              MPSoC-RISCV CPU                                               //
 --              Network on Chip                                               //
 --              AMBA3 AHB-Lite Bus Interface                                  //
---              WishBone Bus Interface                                        //
+--              Wishbone Bus Interface                                        //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -58,13 +58,13 @@ entity noc_router is
     OUTPUTS         : integer := 7;
     BUFFER_SIZE_IN  : integer := 4;
     BUFFER_SIZE_OUT : integer := 4;
-    DESTS           : integer := 8;
-
-    ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+    DESTS           : integer := 8
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
+
+    ROUTES : in std_logic_vector(OUTPUTS*DESTS-1 downto 0);
 
     out_flit  : out std_logic_matrix(OUTPUTS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     out_last  : out std_logic_vector(OUTPUTS-1 downto 0);
@@ -85,13 +85,13 @@ architecture RTL of noc_router is
       VCHANNELS    : integer := 7;
       DESTS        : integer := 8;
       OUTPUTS      : integer := 7;
-      BUFFER_DEPTH : integer := 4;
-
-      ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+      BUFFER_DEPTH : integer := 4
     );
     port (
       clk : in std_logic;
       rst : in std_logic;
+
+      ROUTES : in std_logic_vector(OUTPUTS*DESTS-1 downto 0);
 
       in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic;
@@ -163,12 +163,13 @@ begin
         VCHANNELS    => VCHANNELS,
         DESTS        => DESTS,
         OUTPUTS      => OUTPUTS,
-        ROUTES       => ROUTES,
         BUFFER_DEPTH => BUFFER_SIZE_IN
       )
       port map (
         clk => clk,
         rst => rst,
+
+        ROUTES => ROUTES,
 
         in_flit  => in_flit  (i),
         in_last  => in_last  (i),

@@ -12,7 +12,7 @@
 //              MPSoC-RISCV CPU                                               //
 //              Network on Chip                                               //
 //              AMBA3 AHB-Lite Bus Interface                                  //
-//              WishBone Bus Interface                                        //
+//              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ module noc_mesh3d #(
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
 
-  localparam NODES = X*Y*Z
+  parameter NODES = X*Y*Z
 )
   (
     input                                            clk,
@@ -225,9 +225,9 @@ module noc_mesh3d #(
     // Arrays of wires between the routers. Each router has a
     // pair of NoC wires per direction and below those are hooked
     // up.
-    for (z = 0; z < Z; z++) begin : zdir
-      for (y = 0; y < Y; y++) begin : ydir
-        for (x = 0; x < X; x++) begin : xdir
+    for (z = 0; z < Z; z=z+1) begin : zdir
+      for (y = 0; y < Y; y=y+1) begin : ydir
+        for (x = 0; x < X; x=x+1) begin : xdir
           if (ENABLE_VCHANNELS) begin
             // Mux inputs to virtual channels
             noc_vchannel_mux #(
@@ -251,7 +251,7 @@ module noc_mesh3d #(
 
             // Replicate the flit to all output channels and the
             // rest is just wiring
-            for (c = 0; c < CHANNELS; c++) begin : flit_demux
+            for (c = 0; c < CHANNELS; c=c+1) begin : flit_demux
               assign out_flit[nodenum(x,y,z)][c] = node_out_flit[nodenum(x,y,z)][LOCAL][0];
               assign out_last[nodenum(x,y,z)][c] = node_out_last[nodenum(x,y,z)][LOCAL][0];
             end
@@ -267,12 +267,13 @@ module noc_mesh3d #(
               .OUTPUTS         (7),
               .BUFFER_SIZE_IN  (BUFFER_SIZE_IN),
               .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
-              .DESTS           (NODES),
-              .ROUTES          (genroutes(x,y,z))
+              .DESTS           (NODES)
             )
             u_router (
               .clk (clk),
               .rst (rst),
+
+              .ROUTES    (genroutes(x,y,z)),
 
               .in_flit   (node_in_flit  [nodenum(x,y,z)]),
               .in_last   (node_in_last  [nodenum(x,y,z)]),
@@ -298,7 +299,7 @@ module noc_mesh3d #(
 
             assign in_ready [nodenum(x,y,z)] = node_in_ready [nodenum(x,y,z)][LOCAL];
 
-            for (c = 0; c < CHANNELS; c++) begin
+            for (c = 0; c < CHANNELS; c=c+1) begin
               // First we just need to re-arrange the wires a bit
               // because the array structure varies a bit here:
               // The directions and channels and differently
@@ -306,7 +307,7 @@ module noc_mesh3d #(
               // arrays.
 
               // Re-wire the ports
-              for (p = 0; p < 7; p++) begin
+              for (p = 0; p < 7; p=p+1) begin
                 assign phys_in_flit  [p] = node_in_flit  [nodenum(x,y,z)][p][c];
                 assign phys_in_last  [p] = node_in_last  [nodenum(x,y,z)][p][c];
                 assign phys_in_valid [p] = node_in_valid [nodenum(x,y,z)][p][c];
@@ -327,12 +328,13 @@ module noc_mesh3d #(
                 .VCHANNELS  (1),
                 .INPUTS     (7),
                 .OUTPUTS    (7),
-                .DESTS      (NODES),
-                .ROUTES     (genroutes(x,y,z))
+                .DESTS      (NODES)
               )
               u_router (
                 .clk (clk),
                 .rst (rst),
+
+                .ROUTES    (genroutes(x,y,z)),
 
                 .in_flit   (phys_in_flit),
                 .in_last   (phys_in_last),

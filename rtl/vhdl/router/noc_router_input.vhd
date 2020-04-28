@@ -15,7 +15,7 @@
 --              MPSoC-RISCV CPU                                               //
 --              Network on Chip                                               //
 --              AMBA3 AHB-Lite Bus Interface                                  //
---              WishBone Bus Interface                                        //
+--              Wishbone Bus Interface                                        //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -57,13 +57,13 @@ entity noc_router_input is
     VCHANNELS    : integer := 1;
     DESTS        : integer := 1;
     OUTPUTS      : integer := 1;
-    BUFFER_DEPTH : integer := 4;
-
-    ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+    BUFFER_DEPTH : integer := 4
   );
   port (
     clk : in std_logic;
     rst : in std_logic;
+
+    ROUTES : in std_logic_vector(OUTPUTS*DESTS-1 downto 0);
 
     in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
     in_last  : in  std_logic;
@@ -108,13 +108,13 @@ architecture RTL of noc_router_input is
     generic (
       FLIT_WIDTH : integer := 32;
       DESTS      : integer := 1;
-      OUTPUTS    : integer := 1;
-
-      ROUTES : std_logic_vector(OUTPUTS*DESTS-1 downto 0) := (others => '0')
+      OUTPUTS    : integer := 1
     );
     port (
       clk : in std_logic;
       rst : in std_logic;
+
+      ROUTES : in std_logic_vector(OUTPUTS*DESTS-1 downto 0);
 
       in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic;
@@ -169,13 +169,13 @@ begin
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DESTS      => DESTS,
-        OUTPUTS    => OUTPUTS,
-
-        ROUTES => ROUTES
+        OUTPUTS    => OUTPUTS
       )
       port map (
         clk => clk,
         rst => rst,
+
+        ROUTES => ROUTES,
 
         in_flit  => buffer_flit  (v),
         in_last  => buffer_last  (v),

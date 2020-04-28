@@ -12,7 +12,8 @@
 //              MPSoC-RISCV CPU                                               //
 //              Network on Chip                                               //
 //              AMBA3 AHB-Lite Bus Interface                                  //
-//              WishBone Bus Interface                                        //
+//              Wishbone Bus Interface                                        //
+//              Blackbone Bus Interface                                       //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +47,7 @@ module noc_buffer #(
   parameter DEPTH      = 16,  // must be a power of 2
   parameter FULLPACKET = 0,
 
-  localparam AW = $clog2(DEPTH) // the width of the index
+  parameter AW = $clog2(DEPTH) // the width of the index
 )
   (
     input clk,
@@ -93,8 +94,7 @@ module noc_buffer #(
   //
 
   function logic [AW:0] find_first_one(input logic [DEPTH:0] data);
-    automatic int i;
-    for (i = DEPTH; i >= 0; i--)
+    for (int i = DEPTH; i >= 0; i--)
       if (data[i]) return i;
     return DEPTH + 1;
   endfunction
@@ -120,7 +120,7 @@ module noc_buffer #(
   assign write_ram     = fifo_write & ~write_through;
 
   // Address logic
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (rst) begin
       wr_addr  <= 'b0;
       rd_addr  <= 'b0;
@@ -139,14 +139,14 @@ module noc_buffer #(
   end
 
   // Write
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (write_ram) begin
       ram[wr_addr] <= {in_last, in_flit};
     end
   end
 
   // Read
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (read_ram) begin
       out_flit <= ram[rd_addr][0 +: FLIT_WIDTH];
       out_last <= ram[rd_addr][FLIT_WIDTH];

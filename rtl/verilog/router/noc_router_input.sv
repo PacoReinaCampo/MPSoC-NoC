@@ -12,7 +12,7 @@
 //              MPSoC-RISCV CPU                                               //
 //              Network on Chip                                               //
 //              AMBA3 AHB-Lite Bus Interface                                  //
-//              WishBone Bus Interface                                        //
+//              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -46,13 +46,13 @@ module noc_router_input #(
   parameter VCHANNELS    = 1,
   parameter DESTS        = 1,
   parameter OUTPUTS      = 1,
-  parameter BUFFER_DEPTH = 4,
-
-  parameter [OUTPUTS*DESTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
+  parameter BUFFER_DEPTH = 4
 )
   (
     input                                               clk,
     input                                               rst,
+
+    input  [OUTPUTS*DESTS-1:0]                          ROUTES,
 
     input                              [FLIT_WIDTH-1:0] in_flit,
     input                                               in_last,
@@ -82,7 +82,7 @@ module noc_router_input #(
   // Module Body
   //
   generate
-    for (v = 0; v < VCHANNELS; v++) begin : vc
+    for (v = 0; v < VCHANNELS; v=v+1) begin : vc
 
       noc_buffer #(
         .FLIT_WIDTH (FLIT_WIDTH),
@@ -108,12 +108,13 @@ module noc_router_input #(
       noc_router_lookup #(
         .FLIT_WIDTH (FLIT_WIDTH),
         .DESTS (DESTS),
-        .OUTPUTS (OUTPUTS),
-        .ROUTES (ROUTES)
+        .OUTPUTS (OUTPUTS)
       )
       u_lookup (
         .clk       (clk),
         .rst       (rst),
+
+        .ROUTES    (ROUTES),
 
         .in_flit   (buffer_flit  [v]),
         .in_last   (buffer_last  [v]),

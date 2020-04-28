@@ -1,4 +1,22 @@
-/* Copyright (c) 2017 by the author(s)
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              MPSoC-RISCV CPU                                               //
+//              Network on Chip                                               //
+//              AMBA3 AHB-Lite Bus Interface                                  //
+//              Wishbone Bus Interface                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+/* Copyright (c) 2018-2019 by the author(s)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,30 +37,21 @@
  * THE SOFTWARE.
  *
  * =============================================================================
- *
- * This is the route lookup. It uses a given table of routes. It first
- * extracts the destination of the incoming NoC packets and then looks
- * the output port up. The output valid and ready signals contain bits
- * for each output and the flit and last are shared by the outputs.
- *
- * The output of this module is registered, minimizing the critical
- * path to the lookup function.
- *
  * Author(s):
- *   Stefan Wallentowitz <stefan@wallentowitz.de>
+ *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
 module noc_router_lookup #(
   parameter FLIT_WIDTH = 32,
   parameter DEST_WIDTH = 5,
   parameter DESTS      = 1,
-  parameter OUTPUTS    = 1,
-
-  parameter [DESTS*OUTPUTS-1:0] ROUTES = {DESTS*OUTPUTS{1'b0}}
+  parameter OUTPUTS    = 1
 )
   (
     input                   clk,
     input                   rst,
+
+    input  [DESTS*OUTPUTS-1:0] ROUTES,
 
     input  [FLIT_WIDTH-1:0] in_flit,
     input                   in_last,
@@ -104,7 +113,7 @@ module noc_router_lookup #(
     .out_ready (out_ready)
   );
 
-  always_comb begin
+  always @(*) begin
     nxt_worm = worm;
     valid = 0;
     if (!wormhole) begin
@@ -130,7 +139,7 @@ module noc_router_lookup #(
     end
   end
 
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (rst) begin
       worm <= 0;
     end

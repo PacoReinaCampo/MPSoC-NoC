@@ -12,7 +12,7 @@
 //              MPSoC-RISCV CPU                                               //
 //              Network on Chip                                               //
 //              AMBA3 AHB-Lite Bus Interface                                  //
-//              WishBone Bus Interface                                        //
+//              Wishbone Bus Interface                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,7 @@ module noc_mesh2d #(
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
 
-  localparam NODES = X*Y
+  parameter NODES = X*Y
 )
   (
     input                                            clk,
@@ -199,8 +199,8 @@ module noc_mesh2d #(
     // Arrays of wires between the routers. Each router has a
     // pair of NoC wires per direction and below those are hooked
     // up.
-    for (y = 0; y < Y; y++) begin : ydir
-      for (x = 0; x < X; x++) begin : xdir
+    for (y = 0; y < Y; y=y+1) begin : ydir
+      for (x = 0; x < X; x=x+1) begin : xdir
         if (ENABLE_VCHANNELS) begin
           // Mux inputs to virtual channels
           noc_vchannel_mux #(
@@ -224,7 +224,7 @@ module noc_mesh2d #(
 
           // Replicate the flit to all output channels and the
           // rest is just wiring
-          for (c = 0; c < CHANNELS; c++) begin : flit_demux
+          for (c = 0; c < CHANNELS; c=c+1) begin : flit_demux
             assign out_flit[nodenum(x,y)][c] = node_out_flit[nodenum(x,y)][LOCAL][0];
             assign out_last[nodenum(x,y)][c] = node_out_last[nodenum(x,y)][LOCAL][0];
           end
@@ -240,12 +240,13 @@ module noc_mesh2d #(
             .OUTPUTS         (5),
             .BUFFER_SIZE_IN  (BUFFER_SIZE_IN),
             .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
-            .DESTS           (NODES),
-            .ROUTES          (genroutes(x,y))
+            .DESTS           (NODES)
           )
           u_router (
             .clk (clk),
             .rst (rst),
+
+            .ROUTES    (genroutes(x,y)),
 
             .in_flit   (node_in_flit  [nodenum(x,y)]),
             .in_last   (node_in_last  [nodenum(x,y)]),
@@ -271,7 +272,7 @@ module noc_mesh2d #(
 
           assign in_ready [nodenum(x,y)] = node_in_ready [nodenum(x,y)][LOCAL];
 
-          for (c = 0; c < CHANNELS; c++) begin
+          for (c = 0; c < CHANNELS; c=c+1) begin
             // First we just need to re-arrange the wires a bit
             // because the array structure varies a bit here:
             // The directions and channels and differently
@@ -279,7 +280,7 @@ module noc_mesh2d #(
             // arrays.
 
             // Re-wire the ports
-            for (p = 0; p < 5; p++) begin
+            for (p = 0; p < 5; p=p+1) begin
               assign phys_in_flit  [p] = node_in_flit  [nodenum(x,y)][p][c];
               assign phys_in_last  [p] = node_in_last  [nodenum(x,y)][p][c];
               assign phys_in_valid [p] = node_in_valid [nodenum(x,y)][p][c];
@@ -300,12 +301,13 @@ module noc_mesh2d #(
               .VCHANNELS  (1),
               .INPUTS     (5),
               .OUTPUTS    (5),
-              .DESTS      (NODES),
-              .ROUTES     (genroutes(x,y))
+              .DESTS      (NODES)
             )
             u_router (
               .clk (clk),
               .rst (rst),
+
+              .ROUTES    (genroutes(x,y)),
 
               .in_flit   (phys_in_flit),
               .in_last   (phys_in_last),
