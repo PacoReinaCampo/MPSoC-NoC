@@ -38,7 +38,7 @@
  *
  * =============================================================================
  * Author(s):
- *   Francisco Javier Reina Campo <frareicam@gmail.com>
+ *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
 class apb4_write_sequence extends uvm_sequence#(apb4_transaction);  

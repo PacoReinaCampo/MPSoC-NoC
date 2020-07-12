@@ -41,7 +41,10 @@
 -- *
 -- * =============================================================================
 -- * Author(s):
--- *   Francisco Javier Reina Campo <frareicam@gmail.com>
+-- *   Stefan Wallentowitz <stefan@wallentowitz.de>
+-- *   Wei Song <wsong83@gmail.com>
+-- *   Max Koenen <max.koenen@tum.de>
+-- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 -- */
 
 library ieee;
