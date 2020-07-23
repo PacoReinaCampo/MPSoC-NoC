@@ -1,14 +1,3 @@
-../../../../../uvm/verilog/wb/testbench.sv
-../../../../../uvm/verilog/wb/wb_agent.svh
-../../../../../uvm/verilog/wb/wb_bus_monitor.svh
-../../../../../uvm/verilog/wb/wb_driver.svh
-../../../../../uvm/verilog/wb/wb_env.svh
-../../../../../uvm/verilog/wb/wb_monitor.svh
-../../../../../uvm/verilog/wb/wb_read_sequence.svh
-../../../../../uvm/verilog/wb/wb_scoreboard.svh
-../../../../../uvm/verilog/wb/wb_sequence.svh
-../../../../../uvm/verilog/wb/wb_test.svh
-../../../../../uvm/verilog/wb/wb_transaction.svh
-../../../../../uvm/verilog/wb/wb_write_sequence.svh
+../../../../../uvm/bus/wb/bench/verilog/testbench.sv
 
-../../../../../uvm/verilog/wb/design.sv
+../../../../../uvm/bus/wb/rtl/verilog/design.sv
