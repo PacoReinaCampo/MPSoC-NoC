@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,8 +41,8 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_subscriber extends uvm_subscriber#(apb4_transaction);
-  `uvm_component_utils(apb4_subscriber)
+class noc2d_subscriber extends uvm_subscriber#(noc2d_transaction);
+  `uvm_component_utils(noc2d_subscriber)
   
   bit [31:0] addr;
   bit [31:0] data;
@@ -61,8 +61,8 @@ class apb4_subscriber extends uvm_subscriber#(apb4_transaction);
     cover_bus=new;
   endfunction
   
-  function void write(apb4_transaction t);
-    `uvm_info("APB4_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+  function void write(noc2d_transaction t);
+    `uvm_info("NoC2D_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

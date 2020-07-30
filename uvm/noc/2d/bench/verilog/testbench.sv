@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,49 +47,53 @@
 import uvm_pkg::*;
 
 //Include common files
-`include "apb4_transaction.svh"
-`include "apb4_sequence.svh"
-`include "apb4_sequencer.svh"
-`include "apb4_driver.svh"
-`include "apb4_monitor.svh"
-`include "apb4_agent.svh"
-`include "apb4_scoreboard.svh"
-`include "apb4_subscriber.svh"
-`include "apb4_env.svh"
-`include "apb4_test.svh"
+`include "noc2d_transaction.svh"
+`include "noc2d_sequence.svh"
+`include "noc2d_sequencer.svh"
+`include "noc2d_driver.svh"
+`include "noc2d_monitor.svh"
+`include "noc2d_agent.svh"
+`include "noc2d_scoreboard.svh"
+`include "noc2d_subscriber.svh"
+`include "noc2d_env.svh"
+`include "noc2d_test.svh"
 
 module test;
-  logic        pclk;
-  logic        prst;
-  logic [31:0] paddr;
-  logic        psel;
-  logic        penable;
-  logic        pwrite;
-  logic [31:0] prdata;
-  logic [31:0] pwdata;
+  logic clk;
+  logic rst;
 
-  dut_if apb4_if();
+  logic [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_last;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_valid;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_ready;
 
-  apb4_slave dut(.dif(apb4_if));
+  logic [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_last;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_valid;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_ready;
+
+  dut_if noc2d_if();
+
+  noc_mesh2d dut(.dif(noc2d_if));
 
   initial begin
-    apb4_if.pclk=0;
+    noc2d_if.clk=0;
   end
 
   //Generate a clock
   always begin
-    #10 apb4_if.pclk = ~apb4_if.pclk;
+    #10 noc2d_if.clk = ~noc2d_if.clk;
   end
 
   initial begin
-    apb4_if.prst=0;
-    repeat (1) @(posedge apb4_if.pclk);
-    apb4_if.prst=1;
+    noc2d_if.rst=0;
+    repeat (1) @(posedge noc2d_if.clk);
+    noc2d_if.rst=1;
   end
 
   initial begin
-    uvm_config_db#(virtual dut_if)::set( null, "uvm_test_top", "vif", apb4_if);
-    run_test("apb4_test");
+    uvm_config_db#(virtual dut_if)::set( null, "uvm_test_top", "vif", noc2d_if);
+    run_test("noc2d_test");
   end
 
   initial begin

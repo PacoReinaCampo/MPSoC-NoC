@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,66 +41,37 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_driver extends uvm_driver#(apb4_transaction);
-  `uvm_component_utils(apb4_driver)
-  
+class noc2d_env extends uvm_env;
+  `uvm_component_utils(noc2d_env);
+
+  //ENV class will have agent as its sub component
+  noc2d_agent agt;
+  noc2d_scoreboard scb;
+  noc2d_subscriber noc2d_subscriber_h;
+
+  //virtual interface for NoC2D interface
   virtual dut_if vif;
-  
+
   function new(string name, uvm_component parent);
-    super.new(name,parent);
+    super.new(name, parent);
   endfunction
-  
+
+  //Build phase
+  //Construct agent and get virtual interface handle from test and pass it down to agent
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if(!uvm_config_db#(virtual dut_if)::get(this,"","vif",vif)) begin
-      `uvm_error("build_phase","driver virtual interface failed")
+    agt = noc2d_agent::type_id::create("agt", this);
+    scb = noc2d_scoreboard::type_id::create("scb", this);
+    noc2d_subscriber_h=noc2d_subscriber::type_id::create("apn_subscriber_h",this);
+    if (!uvm_config_db#(virtual dut_if)::get(this, "", "vif", vif)) begin
+      `uvm_fatal("build phase", "No virtual interface specified for this env instance")
     end
+    uvm_config_db#(virtual dut_if)::set( this, "agt", "vif", vif);
   endfunction
-  
-  virtual task run_phase(uvm_phase phase);
-    super.run_phase(phase);
-    
-    this.vif.master_cb.psel    <= 0;
-    this.vif.master_cb.penable <= 0;
 
-    forever begin
-      apb4_transaction tr;
-      @ (this.vif.master_cb);
-      //First get an item from sequencer
-      seq_item_port.get_next_item(tr);
-      @ (this.vif.master_cb);
-      uvm_report_info("APB4_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
-      //Decode the APB4 Command and call either the read/write function
-      case (tr.pwrite)
-        apb4_transaction::READ:  drive_read(tr.addr, tr.data);  
-        apb4_transaction::WRITE: drive_write(tr.addr, tr.data);
-      endcase
-      //Handshake DONE back to sequencer
-      seq_item_port.item_done();
-    end
-  endtask
-
-  virtual protected task drive_read(input bit [31:0] addr, output logic [31:0] data);
-    this.vif.master_cb.paddr   <= addr;
-    this.vif.master_cb.pwrite  <= 0;
-    this.vif.master_cb.psel    <= 1;
-    @ (this.vif.master_cb);
-    this.vif.master_cb.penable <= 1;
-    @ (this.vif.master_cb);
-    data = this.vif.master_cb.prdata;
-    this.vif.master_cb.psel    <= 0;
-    this.vif.master_cb.penable <= 0;
-  endtask
-
-  virtual protected task drive_write(input bit [31:0] addr, input bit [31:0] data);
-    this.vif.master_cb.paddr   <= addr;
-    this.vif.master_cb.pwdata  <= data;
-    this.vif.master_cb.pwrite  <= 1;
-    this.vif.master_cb.psel    <= 1;
-    @ (this.vif.master_cb);
-    this.vif.master_cb.penable <= 1;
-    @ (this.vif.master_cb);
-    this.vif.master_cb.psel    <= 0;
-    this.vif.master_cb.penable <= 0;
-  endtask
+  function void connect_phase(uvm_phase phase);
+    super.connect_phase(phase);
+    agt.mon.ap.connect(scb.mon_export);
+    agt.mon.ap.connect(noc2d_subscriber_h.analysis_export);
+  endfunction
 endclass
