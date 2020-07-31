@@ -41,12 +41,14 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-interface dut_if;
-  parameter FLIT_WIDTH = 32;
-  parameter CHANNELS   = 1;
+interface dut_if #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 1,
 
-  parameter X = 2;
-  parameter Y = 2;
+  parameter X = 2,
+  parameter Y = 2
+)
+  ();
 
   parameter NODES = X*Y;
 

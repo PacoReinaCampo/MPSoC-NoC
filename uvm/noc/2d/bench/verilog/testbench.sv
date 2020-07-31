@@ -59,6 +59,25 @@ import uvm_pkg::*;
 `include "noc2d_test.svh"
 
 module test;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Constants
+  //
+
+  parameter FLIT_WIDTH = 32;
+  parameter CHANNELS   = 1;
+
+  parameter X = 2;
+  parameter Y = 2;
+
+  localparam NODES = X*Y;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Variables
+  //
+
   logic clk;
   logic rst;
 
@@ -71,6 +90,11 @@ module test;
   logic [NODES-1:0][CHANNELS-1:0]                 out_last;
   logic [NODES-1:0][CHANNELS-1:0]                 out_valid;
   logic [NODES-1:0][CHANNELS-1:0]                 out_ready;
+
+  //////////////////////////////////////////////////////////////////
+  //
+  // Module Body
+  //
 
   dut_if noc2d_if();
 

@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,37 +41,43 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_env extends uvm_env;
-  `uvm_component_utils(apb4_env);
+class noc2d_agent extends uvm_agent;
+  //Agent will have the sequencer, driver and monitor components for the NoC2D interface
+  noc2d_sequencer sqr;
+  noc2d_driver drv;
+  noc2d_monitor mon;
 
-  //ENV class will have agent as its sub component
-  apb4_agent agt;
-  apb4_scoreboard scb;
-  apb4_subscriber apb4_subscriber_h;
-
-  //virtual interface for APB4 interface
   virtual dut_if vif;
+
+  `uvm_component_utils_begin(noc2d_agent)
+  `uvm_field_object(sqr, UVM_ALL_ON)
+  `uvm_field_object(drv, UVM_ALL_ON)
+  `uvm_field_object(mon, UVM_ALL_ON)
+  `uvm_component_utils_end
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
   endfunction
 
-  //Build phase
-  //Construct agent and get virtual interface handle from test and pass it down to agent
-  function void build_phase(uvm_phase phase);
-    super.build_phase(phase);
-    agt = apb4_agent::type_id::create("agt", this);
-    scb = apb4_scoreboard::type_id::create("scb", this);
-    apb4_subscriber_h=apb4_subscriber::type_id::create("apn_subscriber_h",this);
+  //Build phase of agent - construct sequencer, driver and monitor
+  //get handle to virtual interface from env (parent) config_db
+  //and pass handle down to srq/driver/monitor
+  virtual function void build_phase(uvm_phase phase);
+    sqr = noc2d_sequencer::type_id::create("sqr", this);
+    drv = noc2d_driver::type_id::create("drv", this);
+    mon = noc2d_monitor::type_id::create("mon", this);
+
     if (!uvm_config_db#(virtual dut_if)::get(this, "", "vif", vif)) begin
-      `uvm_fatal("build phase", "No virtual interface specified for this env instance")
+      `uvm_fatal("build phase", "No virtual interface specified for this agent instance")
     end
-    uvm_config_db#(virtual dut_if)::set( this, "agt", "vif", vif);
+    uvm_config_db#(virtual dut_if)::set( this, "sqr", "vif", vif);
+    uvm_config_db#(virtual dut_if)::set( this, "drv", "vif", vif);
+    uvm_config_db#(virtual dut_if)::set( this, "mon", "vif", vif);
   endfunction
 
-  function void connect_phase(uvm_phase phase);
-    super.connect_phase(phase);
-    agt.mon.ap.connect(scb.mon_export);
-    agt.mon.ap.connect(apb4_subscriber_h.analysis_export);
+  //Connect - driver and sequencer port to export
+  virtual function void connect_phase(uvm_phase phase);
+    drv.seq_item_port.connect(sqr.seq_item_export);
+    uvm_report_info("NoC2D_AGENT", "connect_phase, Connected driver to sequencer");
   endfunction
 endclass

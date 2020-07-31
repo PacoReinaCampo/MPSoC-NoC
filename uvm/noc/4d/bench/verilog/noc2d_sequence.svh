@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,36 +41,21 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_test extends uvm_test;
-  //Register with factory
-  `uvm_component_utils(apb4_test);
+class noc2d_sequence extends uvm_sequence#(noc2d_transaction);
+  `uvm_object_utils(noc2d_sequence)
 
-  apb4_env env;
-  virtual dut_if vif;
-
-  function new(string name = "apb4_test", uvm_component parent = null);
-    super.new(name, parent);
+  function new (string name = "");
+    super.new(name);
   endfunction
 
-  //Build phase - Construct the env class using factory
-  //Get the virtual interface handle from Test and then set it config db for the env component
-  function void build_phase(uvm_phase phase);
-    env = apb4_env::type_id::create("env", this);
-
-    if (!uvm_config_db#(virtual dut_if)::get(this, "", "vif", vif)) begin
-      `uvm_fatal("build_phase", "No virtual interface specified for this test instance")
-    end 
-    uvm_config_db#(virtual dut_if)::set( this, "env", "vif", vif);
-  endfunction
-
-  //Run phase - Create an apb4_sequence and start it on the apb4_sequencer
-  task run_phase( uvm_phase phase );
-    apb4_sequence apb4_seq;
-    apb4_seq = apb4_sequence::type_id::create("apb4_seq");
-    phase.raise_objection( this, "Starting apb4_base_seqin main phase" );
-    $display("%t Starting sequence apb4_seq run_phase",$time);
-    apb4_seq.start(env.agt.sqr);
-    #100ns;
-    phase.drop_objection( this , "Finished apb4_seq in main phase" );
+  task body();
+    noc2d_transaction rw_trans;
+    //create 10 random NoC2D read/write transaction and send to driver
+    repeat (80) begin
+      rw_trans=new();
+      start_item(rw_trans);
+      assert(rw_trans.randomize());
+      finish_item(rw_trans);
+    end
   endtask
 endclass

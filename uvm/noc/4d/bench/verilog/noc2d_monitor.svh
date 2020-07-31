@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,21 +41,59 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_sequence extends uvm_sequence#(apb4_transaction);
-  `uvm_object_utils(apb4_sequence)
+class noc2d_monitor extends uvm_monitor;
+  virtual dut_if vif;
 
-  function new (string name = "");
-    super.new(name);
+  //Analysis port -parameterized to noc2d_rw transaction
+  ///Monitor writes transaction objects to this port once detected on interface
+  uvm_analysis_port#(noc2d_transaction) ap;
+
+  `uvm_component_utils(noc2d_monitor)
+
+  function new(string name, uvm_component parent);
+    super.new(name, parent);
+    ap = new("ap", this);
   endfunction
 
-  task body();
-    apb4_transaction rw_trans;
-    //create 10 random APB4 read/write transaction and send to driver
-    repeat (80) begin
-      rw_trans=new();
-      start_item(rw_trans);
-      assert(rw_trans.randomize());
-      finish_item(rw_trans);
+  //Build Phase - Get handle to virtual if from agent/config_db
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    if (!uvm_config_db#(virtual dut_if)::get(this, "", "vif", vif)) begin
+      `uvm_error("build_phase", "No virtual interface specified for this monitor instance")
+    end
+  endfunction
+
+  virtual task run_phase(uvm_phase phase);
+    super.run_phase(phase);
+    forever begin
+      noc2d_transaction tr;
+      // Wait for a SETUP cycle
+      do begin
+        @ (this.vif.monitor_cb);
+      end
+      while (this.vif.monitor_cb.psel !== 1'b1 || this.vif.monitor_cb.penable !== 1'b0);
+      //create a transaction object
+      tr = noc2d_transaction::type_id::create("tr", this);
+
+      //populate fields based on values seen on interface
+      tr.pwrite = (this.vif.monitor_cb.pwrite) ? noc2d_transaction::WRITE : noc2d_transaction::READ;
+      tr.addr = this.vif.monitor_cb.paddr;
+
+      @ (this.vif.monitor_cb);
+      if (this.vif.monitor_cb.penable !== 1'b1) begin
+        `uvm_error("NoC2D", "NoC2D protocol violation: SETUP cycle not followed by ENABLE cycle");
+      end
+
+      if (tr.pwrite == noc2d_transaction::READ) begin
+        tr.data = this.vif.monitor_cb.prdata;
+      end
+      else if (tr.pwrite == noc2d_transaction::WRITE) begin
+        tr.data = this.vif.monitor_cb.pwdata;
+      end
+
+      uvm_report_info("NoC2D_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      //Write to analysis port
+      ap.write(tr);
     end
   endtask
 endclass

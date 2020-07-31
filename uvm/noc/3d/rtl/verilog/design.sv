@@ -41,91 +41,70 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-interface dut_if;
-  logic        prst;
-  logic        pclk;
-  logic [31:0] paddr;
-  logic        psel;
-  logic        penable;
-  logic        pwrite;
-  logic [31:0] pwdata;
-  logic        pready;
-  logic [31:0] prdata;
-  
+interface dut_if #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 1,
+
+  parameter X = 2,
+  parameter Y = 2
+)
+  ();
+
+  parameter NODES = X*Y;
+
+  logic clk;
+  logic rst;
+
+  logic [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_last;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_valid;
+  logic [NODES-1:0][CHANNELS-1:0]                 in_ready;
+
+  logic [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_last;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_valid;
+  logic [NODES-1:0][CHANNELS-1:0]                 out_ready;
+
   //Master Clocking block - used for Drivers
-  clocking master_cb @(posedge pclk);
-    output paddr;
-    output psel;
-    output penable;
-    output pwrite;
-    output pwdata;
-    input  prdata;
+  clocking master_cb @(posedge clk);
+    output in_flit;
+    output in_last;
+    output in_valid;
+    input  in_ready;
+
+    input  out_flit;
+    input  out_last;
+    input  out_valid;
+    output out_ready;
   endclocking: master_cb
 
   //Slave Clocking Block - used for any Slave BFMs
-  clocking slave_cb @(posedge pclk);
-    input  paddr;
-    input  psel;
-    input  penable;
-    input  pwrite;
-    input  pwdata;
-    output prdata;
+  clocking slave_cb @(posedge clk);
+    input  in_flit;
+    input  in_last;
+    input  in_valid;
+    output in_ready;
+
+    output out_flit;
+    output out_last;
+    output out_valid;
+    input  out_ready;
   endclocking: slave_cb
 
   //Monitor Clocking block - For sampling by monitor components
-  clocking monitor_cb @(posedge pclk);
-    input paddr;
-    input psel;
-    input penable;
-    input pwrite;
-    input prdata;
-    input pwdata;
+  clocking monitor_cb @(posedge clk);
+    input in_flit;
+    input in_last;
+    input in_valid;
+    input in_ready;
+
+    input out_flit;
+    input out_last;
+    input out_valid;
+    input out_ready;
   endclocking: monitor_cb
 
   modport master(clocking master_cb);
   modport slave(clocking slave_cb);
   modport passive(clocking monitor_cb);
 endinterface
-
-module apb4_slave(dut_if dif);
-  logic [31:0] mem [0:256];
-  logic [ 1:0] apb4_st;
-
-  const logic [1:0] SETUP=0;
-  const logic [1:0] W_ENABLE=1;
-  const logic [1:0] R_ENABLE=2;
-  
-  always @(posedge dif.pclk or negedge dif.prst) begin
-    if (dif.prst==0) begin
-      apb4_st <=0;
-      dif.prdata <=0;
-      dif.pready <=1;
-      for(int i=0;i<256;i++) mem[i]=i;
-    end
-    else begin
-      case (apb4_st)
-        SETUP: begin
-          dif.prdata <= 0;
-          if (dif.psel && !dif.penable) begin
-            if (dif.pwrite) begin
-              apb4_st <= W_ENABLE;
-            end
-            else begin
-              apb4_st <= R_ENABLE;
-              dif.prdata <= mem[dif.paddr];
-            end
-          end
-        end
-        W_ENABLE: begin
-          if (dif.psel && dif.penable && dif.pwrite) begin
-            mem[dif.paddr] <= dif.pwdata;
-          end
-          apb4_st <= SETUP;
-        end
-        R_ENABLE: begin
-          apb4_st <= SETUP;
-        end
-      endcase
-    end
-  end
-endmodule

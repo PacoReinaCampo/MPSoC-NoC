@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              AMBA4 APB-Lite Bus Interface                                  //
+//              Network on Chip 2D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,8 +41,8 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-class apb4_transaction extends uvm_sequence_item;
-  `uvm_object_utils(apb4_transaction)
+class noc2d_transaction extends uvm_sequence_item;
+  `uvm_object_utils(noc2d_transaction)
 
   //typedef for READ/WRITE transaction type
   typedef enum {READ, WRITE} kind_e;
@@ -55,7 +55,7 @@ class apb4_transaction extends uvm_sequence_item;
   constraint c1{addr[31:0]>=32'd0; addr[31:0] <32'd256;};
   constraint c2{data[31:0]>=32'd0; data[31:0] <32'd256;};
 
-  function new (string name = "apb4_transaction");
+  function new (string name = "noc2d_transaction");
     super.new(name);
   endfunction
 
