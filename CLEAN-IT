@@ -11,6 +11,10 @@ rm -rf sim/verilog/uvm/noc/2d/msim/transcript
 rm -rf sim/verilog/uvm/noc/3d/msim/transcript
 rm -rf sim/verilog/uvm/noc/4d/msim/transcript
 
+rm -rf sim/mixed/uvm/noc/2d/msim/transcript
+rm -rf sim/mixed/uvm/noc/3d/msim/transcript
+rm -rf sim/mixed/uvm/noc/4d/msim/transcript
+
 rm -rf sim/mixed/regression/msim/work
 rm -rf sim/verilog/regression/msim/work
 rm -rf sim/vhdl/regression/msim/work
@@ -23,6 +27,10 @@ rm -rf sim/verilog/uvm/bus/wb/msim/work
 rm -rf sim/verilog/uvm/noc/2d/msim/work
 rm -rf sim/verilog/uvm/noc/3d/msim/work
 rm -rf sim/verilog/uvm/noc/4d/msim/work
+
+rm -rf sim/mixed/uvm/noc/2d/msim/work
+rm -rf sim/mixed/uvm/noc/3d/msim/work
+rm -rf sim/mixed/uvm/noc/4d/msim/work
 
 rm -rf sim/verilog/regression/iverilog/system.vvp
 
