@@ -5,8 +5,8 @@ rm -rf sim/vhdl/regression/msim/transcript
 rm -rf sim/verilog/uvm/bus/ahb3/msim/transcript
 rm -rf sim/verilog/uvm/bus/apb4/msim/transcript
 rm -rf sim/verilog/uvm/bus/axi4/msim/transcript
-
 rm -rf sim/verilog/uvm/bus/wb/msim/transcript
+
 rm -rf sim/verilog/uvm/noc/2d/msim/transcript
 rm -rf sim/verilog/uvm/noc/3d/msim/transcript
 rm -rf sim/verilog/uvm/noc/4d/msim/transcript

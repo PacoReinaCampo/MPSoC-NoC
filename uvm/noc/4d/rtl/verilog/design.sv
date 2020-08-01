@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV / OR1K / MSP430 CPU                               //
 //              General Purpose Input Output Bridge                           //
-//              Network on Chip 2D Interface                                  //
+//              Network on Chip 4D Interface                                  //
 //              Universal Verification Methodology                            //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,14 +43,21 @@
 
 interface dut_if #(
   parameter FLIT_WIDTH = 32,
-  parameter CHANNELS   = 1,
+  parameter CHANNELS   = 7,
 
+  parameter ENABLE_VCHANNELS = 1,
+
+  parameter T = 2,
   parameter X = 2,
-  parameter Y = 2
+  parameter Y = 2,
+  parameter Z = 2,
+
+  parameter BUFFER_SIZE_IN  = 4,
+  parameter BUFFER_SIZE_OUT = 4,
+
+  parameter NODES = T*X*Y*Z
 )
   ();
-
-  parameter NODES = X*Y;
 
   logic clk;
   logic rst;

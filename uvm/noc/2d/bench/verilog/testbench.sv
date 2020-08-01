@@ -66,10 +66,15 @@ module test;
   //
 
   parameter FLIT_WIDTH = 32;
-  parameter CHANNELS   = 1;
+  parameter CHANNELS   = 7;
+
+  parameter ENABLE_VCHANNELS = 1;
 
   parameter X = 2;
   parameter Y = 2;
+
+  parameter BUFFER_SIZE_IN  = 4;
+  parameter BUFFER_SIZE_OUT = 4;
 
   localparam NODES = X*Y;
 
@@ -98,7 +103,34 @@ module test;
 
   dut_if noc2d_if();
 
-  noc_mesh2d dut(.dif(noc2d_if));
+  noc_mesh2d #(
+    .FLIT_WIDTH       (FLIT_WIDTH),
+    .CHANNELS         (CHANNELS),
+
+    .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
+
+    .X                (X),
+    .Y                (Y),
+
+    .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
+    .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT),
+
+    .NODES            (NODES)
+  )
+  dut (
+    .clk       ( noc2d_if.clk ),
+    .rst       ( noc2d_if.rst ),
+
+    .in_flit   ( noc2d_if.in_flit  ),
+    .in_last   ( noc2d_if.in_last  ),
+    .in_valid  ( noc2d_if.in_valid ),
+    .in_ready  ( noc2d_if.in_ready ),
+
+    .out_flit  ( noc2d_if.out_flit  ),
+    .out_last  ( noc2d_if.out_last  ),
+    .out_valid ( noc2d_if.out_valid ),
+    .out_ready ( noc2d_if.out_ready )
+  );
 
   initial begin
     noc2d_if.clk=0;

@@ -153,15 +153,15 @@ architecture RTL of noc_mesh4d is
   -- Those are direction codings that match the wiring indices
   -- above. The router is configured to use those to select the
   -- proper output port.
-  constant DIR_LOCAL : std_logic_vector(6 downto 0) := "000000001";
-  constant DIR_FWARD : std_logic_vector(6 downto 0) := "000000010";
-  constant DIR_UP    : std_logic_vector(6 downto 0) := "000000100";
-  constant DIR_NORTH : std_logic_vector(6 downto 0) := "000001000";
-  constant DIR_EAST  : std_logic_vector(6 downto 0) := "000010000";
-  constant DIR_BWARD : std_logic_vector(6 downto 0) := "000100000";
-  constant DIR_DOWN  : std_logic_vector(6 downto 0) := "001000000";
-  constant DIR_SOUTH : std_logic_vector(6 downto 0) := "010000000";
-  constant DIR_WEST  : std_logic_vector(6 downto 0) := "100000000";
+  constant DIR_LOCAL : std_logic_vector(8 downto 0) := "000000001";
+  constant DIR_FWARD : std_logic_vector(8 downto 0) := "000000010";
+  constant DIR_UP    : std_logic_vector(8 downto 0) := "000000100";
+  constant DIR_NORTH : std_logic_vector(8 downto 0) := "000001000";
+  constant DIR_EAST  : std_logic_vector(8 downto 0) := "000010000";
+  constant DIR_BWARD : std_logic_vector(8 downto 0) := "000100000";
+  constant DIR_DOWN  : std_logic_vector(8 downto 0) := "001000000";
+  constant DIR_SOUTH : std_logic_vector(8 downto 0) := "010000000";
+  constant DIR_WEST  : std_logic_vector(8 downto 0) := "100000000";
 
   -- Number of physical channels between routers. This is essentially
   -- the number of flits (and last) between the routers.

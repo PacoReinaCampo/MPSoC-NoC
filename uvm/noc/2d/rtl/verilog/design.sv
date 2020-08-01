@@ -43,14 +43,19 @@
 
 interface dut_if #(
   parameter FLIT_WIDTH = 32,
-  parameter CHANNELS   = 1,
+  parameter CHANNELS   = 7,
+
+  parameter ENABLE_VCHANNELS = 1,
 
   parameter X = 2,
-  parameter Y = 2
+  parameter Y = 2,
+
+  parameter BUFFER_SIZE_IN  = 4,
+  parameter BUFFER_SIZE_OUT = 4,
+
+  parameter NODES = X*Y
 )
   ();
-
-  parameter NODES = X*Y;
 
   logic clk;
   logic rst;

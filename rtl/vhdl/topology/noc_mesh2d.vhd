@@ -147,11 +147,11 @@ architecture RTL of noc_mesh2d is
   -- Those are direction codings that match the wiring indices
   -- above. The router is configured to use those to select the
   -- proper output port.
-  constant DIR_LOCAL : std_logic_vector(6 downto 0) := "00001";
-  constant DIR_NORTH : std_logic_vector(6 downto 0) := "00010";
-  constant DIR_EAST  : std_logic_vector(6 downto 0) := "00100";
-  constant DIR_SOUTH : std_logic_vector(6 downto 0) := "01000";
-  constant DIR_WEST  : std_logic_vector(6 downto 0) := "10000";
+  constant DIR_LOCAL : std_logic_vector(4 downto 0) := "00001";
+  constant DIR_NORTH : std_logic_vector(4 downto 0) := "00010";
+  constant DIR_EAST  : std_logic_vector(4 downto 0) := "00100";
+  constant DIR_SOUTH : std_logic_vector(4 downto 0) := "01000";
+  constant DIR_WEST  : std_logic_vector(4 downto 0) := "10000";
 
   -- Number of physical channels between routers. This is essentially
   -- the number of flits (and last) between the routers.
