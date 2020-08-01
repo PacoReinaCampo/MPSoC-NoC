@@ -156,7 +156,7 @@ begin
 --
 -- Module Body
 --
-  generating_0 : for i in 0 to CHANNELS - 1 generate
+  generating_0 : for i in 0 to INPUTS - 1 generate
     -- The input stages
     router_input : noc_router_input
       generic map (
@@ -188,7 +188,7 @@ begin
   -- The switching logic
   generating_1 : for o in 0 to OUTPUTS - 1 generate
     generating_2 : for v in 0 to VCHANNELS - 1 generate
-      generating_3 : for i in 0 to CHANNELS - 1 generate
+      generating_3 : for i in 0 to INPUTS - 1 generate
         switch_out_flit  (o)(v)(i) <= switch_in_flit   (i)(v);
         switch_out_last  (o)(v)(i) <= switch_in_last   (i)(v);
         switch_out_valid (o)(v)(i) <= switch_in_valid  (i)(v)(o);

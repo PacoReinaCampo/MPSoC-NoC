@@ -139,6 +139,11 @@ architecture RTL of noc_mesh4d is
   -- Constants
   --
 
+  --Commons
+  constant VCHANNELS : integer := 9;
+  constant OUTPUTS   : integer := 9;
+  constant INPUTS    : integer := 9;
+
   -- Those are indexes into the wiring arrays
   constant LOCAL : integer := 0;
   constant FWARD : integer := 1;

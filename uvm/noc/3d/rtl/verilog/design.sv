@@ -42,7 +42,7 @@
  */
 
 interface dut_if #(
-  parameter FLIT_WIDTH = 32,
+  parameter FLIT_WIDTH = 34,
   parameter CHANNELS   = 7,
 
   parameter ENABLE_VCHANNELS = 1,

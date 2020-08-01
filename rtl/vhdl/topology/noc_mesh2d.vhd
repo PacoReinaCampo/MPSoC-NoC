@@ -137,6 +137,11 @@ architecture RTL of noc_mesh2d is
   -- Constants
   --
 
+  --Commons
+  constant VCHANNELS : integer := 5;
+  constant OUTPUTS   : integer := 5;
+  constant INPUTS    : integer := 5;
+
   -- Those are indexes into the wiring arrays
   constant LOCAL : integer := 0;
   constant NORTH : integer := 1;

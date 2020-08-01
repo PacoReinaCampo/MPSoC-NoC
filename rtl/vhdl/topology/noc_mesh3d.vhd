@@ -138,6 +138,11 @@ architecture RTL of noc_mesh3d is
   -- Constants
   --
 
+  --Commons
+  constant VCHANNELS : integer := 7;
+  constant OUTPUTS   : integer := 7;
+  constant INPUTS    : integer := 7;
+
   -- Those are indexes into the wiring arrays
   constant LOCAL : integer := 0;
   constant UP    : integer := 1;

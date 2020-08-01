@@ -52,17 +52,6 @@ package mpsoc_noc_pkg is
 
   --////////////////////////////////////////////////////////////////
   --
-  -- Constants
-  --
-  constant FLIT_WIDTH : integer := 34;
-  constant NODES      : integer := 8;
-  constant CHANNELS   : integer := 7;
-  constant PCHANNELS  : integer := 1;
-  constant VCHANNELS  : integer := 7;
-  constant OUTPUTS    : integer := 7;
-
-  --////////////////////////////////////////////////////////////////
-  --
   -- Types
   --
   type std_logic_matrix is array (natural range <>) of std_logic_vector;

@@ -65,8 +65,8 @@ module test;
   // Constants
   //
 
-  parameter FLIT_WIDTH = 32;
-  parameter CHANNELS   = 7;
+  parameter FLIT_WIDTH = 34;
+  parameter CHANNELS   = 9;
 
   parameter ENABLE_VCHANNELS = 1;
 
