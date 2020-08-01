@@ -12,4 +12,4 @@
 ../../../../rtl/vhdl/router/noc_router_output.vhd
 ../../../../rtl/vhdl/router/noc_router.vhd
 
-../../../../rtl/vhdl/topology/noc_mesh3d.vhd
+../../../../rtl/vhdl/topology/noc_mesh4d.vhd

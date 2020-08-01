@@ -53,21 +53,21 @@ use work.mpsoc_noc_pkg.all;
 
 entity noc_mesh4d is
   generic (
-    FLIT_WIDTH : integer := 32;
-    CHANNELS   : integer := 1;
+    FLIT_WIDTH : integer := 34;
+    CHANNELS   : integer := 9;
 
     ENABLE_VCHANNELS : integer := 1;
 
+    T : integer := 2;
     X : integer := 2;
     Y : integer := 2;
     Z : integer := 2;
-    T : integer := 2;
 
     BUFFER_SIZE_IN  : integer := 4;
     BUFFER_SIZE_OUT : integer := 4;
 
     NODES : integer := 16
-    );
+  );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -81,7 +81,7 @@ entity noc_mesh4d is
     out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
-    );
+  );
 end noc_mesh4d;
 
 architecture RTL of noc_mesh4d is
@@ -89,7 +89,7 @@ architecture RTL of noc_mesh4d is
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 9
-      );
+    );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -103,7 +103,7 @@ architecture RTL of noc_mesh4d is
       out_last  : out std_logic;
       out_valid : out std_logic_vector(CHANNELS-1 downto 0);
       out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-      );
+    );
   end component;
 
   component noc_router
@@ -115,7 +115,7 @@ architecture RTL of noc_mesh4d is
       BUFFER_SIZE_IN  : integer := 4;
       BUFFER_SIZE_OUT : integer := 4;
       DESTS           : integer := 8
-      );
+    );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -131,7 +131,7 @@ architecture RTL of noc_mesh4d is
       in_last  : in  std_logic_vector(INPUTS-1 downto 0);
       in_valid : in  std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0);
       in_ready : out std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0)
-      );
+    );
   end component;
 
   --////////////////////////////////////////////////////////////////
@@ -342,30 +342,30 @@ architecture RTL of noc_mesh4d is
   -- Arrays of wires between the routers. Each router has a
   -- pair of NoC wires per direction and below those are hooked
   -- up.
-  signal node_in_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_in_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
-  signal node_in_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
-  signal node_in_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal node_in_flit  : std_logic_4array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_in_last  : std_logic_3array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0);
+  signal node_in_valid : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
+  signal node_in_ready : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
 
-  signal node_out_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal node_out_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
-  signal node_out_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
-  signal node_out_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal node_out_flit  : std_logic_4array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal node_out_last  : std_logic_3array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0);
+  signal node_out_valid : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
+  signal node_out_ready : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
 
   -- First we just need to re-arrange the wires a bit
   -- because the array structure varies a bit here:
   -- The directions and channels and differently
   -- multiplexed here. Hence create some helper
   -- arrays.
-  signal phys_in_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal phys_in_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
-  signal phys_in_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
-  signal phys_in_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal phys_in_flit  : std_logic_4array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_in_last  : std_logic_3array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0);
+  signal phys_in_valid : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
+  signal phys_in_ready : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
 
-  signal phys_out_flit  : std_logic_4array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal phys_out_last  : std_logic_3array(NODES-1 downto 0)(6 downto 0)(PCHANNELS-1 downto 0);
-  signal phys_out_valid : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
-  signal phys_out_ready : std_logic_3array(NODES-1 downto 0)(6 downto 0)(CHANNELS-1 downto 0);
+  signal phys_out_flit  : std_logic_4array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal phys_out_last  : std_logic_3array(NODES-1 downto 0)(8 downto 0)(PCHANNELS-1 downto 0);
+  signal phys_out_valid : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
+  signal phys_out_ready : std_logic_3array(NODES-1 downto 0)(8 downto 0)(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
@@ -402,7 +402,7 @@ begin
                 out_last  => node_in_last (nodenum(xd, yd, zd, td))(LOCAL)(0),
                 out_valid => node_in_valid (nodenum(xd, yd, zd, td))(LOCAL),
                 out_ready => node_in_ready (nodenum(xd, yd, zd, td))(LOCAL)
-                );
+              );
 
             -- Replicate the flit to all output channels and the
             -- rest is just wiring
@@ -442,7 +442,7 @@ begin
                 out_last  => open,
                 out_valid => node_out_valid (nodenum(xd, yd, zd, td)),
                 out_ready => node_out_ready (nodenum(xd, yd, zd, td))
-                );
+              );
           elsif (ENABLE_VCHANNELS = 0) generate
             out_flit (nodenum(xd, yd, zd, td))  <= node_out_flit (nodenum(xd, yd, zd, td))(LOCAL);
             out_last (nodenum(xd, yd, zd, td))  <= node_out_last (nodenum(xd, yd, zd, td))(LOCAL);
@@ -506,7 +506,7 @@ begin
                   out_last  => open,
                   out_valid => phys_out_valid (nodenum(xd, yd, zd, td)),
                   out_ready => phys_out_ready (nodenum(xd, yd, zd, td))
-                  );
+                );
             end generate;
           end generate;
 
@@ -604,4 +604,5 @@ begin
         end generate;
       end generate;
     end generate;
-  end RTL;
+  end generate;
+end RTL;

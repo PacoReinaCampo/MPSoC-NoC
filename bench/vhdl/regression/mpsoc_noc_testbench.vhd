@@ -54,13 +54,14 @@ entity mpsoc_noc_testbench is
 end mpsoc_noc_testbench;
 
 architecture RTL of mpsoc_noc_testbench is
-  component noc_mesh3d
+  component noc_mesh4d
     generic (
-      FLIT_WIDTH       : integer := 32;
-      CHANNELS         : integer := 7;
+      FLIT_WIDTH       : integer := 34;
+      CHANNELS         : integer := 9;
 
       ENABLE_VCHANNELS : integer := 1;
 
+      T                : integer := 2;
       X                : integer := 2;
       Y                : integer := 2;
       Z                : integer := 2;
@@ -68,7 +69,7 @@ architecture RTL of mpsoc_noc_testbench is
       BUFFER_SIZE_IN   : integer := 4;
       BUFFER_SIZE_OUT  : integer := 4;
 
-      NODES            : integer := 8
+      NODES            : integer := 16
     );
     port (
       clk : in std_logic;
@@ -90,12 +91,13 @@ architecture RTL of mpsoc_noc_testbench is
   --
   -- Constants
   --
-  constant FLIT_WIDTH       : integer := 32;
-  constant CHANNELS         : integer := 7;
+  constant FLIT_WIDTH       : integer := 34;
+  constant CHANNELS         : integer := 9;
 
 
   constant ENABLE_VCHANNELS : integer := 1;
 
+  constant T                : integer := 2;
   constant X                : integer := 2;
   constant Y                : integer := 2;
   constant Z                : integer := 2;
@@ -103,7 +105,7 @@ architecture RTL of mpsoc_noc_testbench is
   constant BUFFER_SIZE_IN   : integer := 4;
   constant BUFFER_SIZE_OUT  : integer := 4;
 
-  constant NODES            : integer := 8;
+  constant NODES            : integer := 16;
 
   --////////////////////////////////////////////////////////////////
   --
@@ -129,13 +131,14 @@ begin
   --
 
   --DUT
-  u_mesh : noc_mesh3d
+  u_mesh : noc_mesh4d
   generic map (
     FLIT_WIDTH       => FLIT_WIDTH,
     CHANNELS         => CHANNELS,
 
     ENABLE_VCHANNELS => ENABLE_VCHANNELS,
 
+    T                => T,
     X                => X,
     Y                => Y,
     Z                => Z,
