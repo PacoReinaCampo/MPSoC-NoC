@@ -36,4 +36,4 @@ rm -rf sim/verilog/regression/iverilog/system.vvp
 
 rm -rf sim/verilog/regression/iverilog/*.tap
 
-rm -rf sim/verilog/regression/vtor/obj_dir
+rm -rf sim/verilog/regression/verilator/obj_dir
