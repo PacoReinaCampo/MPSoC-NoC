@@ -12,4 +12,4 @@
 
 ../../../../rtl/verilog/topology/noc_mesh4d.sv
 
-../../../../bench/verilog/regression/mpsoc_noc_testbench.sv
+../../../../bench/verilog/tests/mpsoc_noc_testbench.sv

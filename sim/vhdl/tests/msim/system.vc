@@ -14,4 +14,4 @@
 
 ../../../../rtl/vhdl/topology/noc_mesh4d.vhd
 
-../../../../bench/vhdl/regression/mpsoc_noc_testbench.vhd
+../../../../bench/vhdl/tests/mpsoc_noc_testbench.vhd
