@@ -1,5 +1,5 @@
 ---
-title:  Network on Chip for a Multi-Processor System on Chip
+title: Network on Chip for a Multi-Processor System on Chip
 author: QueenField
 geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 ---
