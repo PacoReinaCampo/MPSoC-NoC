@@ -319,7 +319,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 ### 2.1.1. Functionality
 
-#### 2.1.1.1. Organization
+#### 2.1.1.1. Structure
 
 #### 2.1.1.2. Pipeline
 
@@ -337,7 +337,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 ### 2.2.1. Functionality
 
-#### 2.2.1.1. Organization
+#### 2.2.1.1. Structure
 
 #### 2.2.1.2. Pipeline
 
@@ -355,7 +355,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 ### 2.3.1. Functionality
 
-#### 2.3.1.1. Organization
+#### 2.3.1.1. Structure
 
 | Core                               | Module description                          |
 | ---------------------------------- | ------------------------------------------- |
