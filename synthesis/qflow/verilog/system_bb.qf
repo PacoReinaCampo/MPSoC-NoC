@@ -1,0 +1,15 @@
+rm -rf system_ahb3
+
+mkdir system_ahb3
+mkdir system_ahb3/mpsoc_spram
+mkdir system_ahb3/mpsoc_spram/source
+mkdir system_ahb3/mpsoc_spram/synthesis
+mkdir system_ahb3/mpsoc_spram/layout
+
+cp rtl/verilog/ram/mpsoc_spram.sv            system_ahb3/mpsoc_spram/source
+cp rtl/verilog/ram/mpsoc_ram_1r1w.sv         system_ahb3/mpsoc_spram/source
+cp rtl/verilog/ram/mpsoc_ram_1r1w_generic.sv system_ahb3/mpsoc_spram/source
+
+cd system_ahb3/mpsoc_spram
+
+qflow -T osu018 synthesize place route mpsoc_spram

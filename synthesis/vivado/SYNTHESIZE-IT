@@ -1,3 +1,0 @@
-export PATH=/opt/riscv32i/bin:${PATH}
-
-make synth_system

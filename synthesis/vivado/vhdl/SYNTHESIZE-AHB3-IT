@@ -1,0 +1,4 @@
+export VIVADO=/opt/Xilinx/Vivado/2020.2/bin/vivado
+
+make clean
+make implementation_ahb3
