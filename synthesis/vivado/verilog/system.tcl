@@ -42,13 +42,25 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ahb3_spram.sv
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w.sv
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w_generic.sv
+read_verilog -sv ../../../rtl/verilog/core/arb_rr.sv
+read_verilog -sv ../../../rtl/verilog/core/noc_buffer.sv
+read_verilog -sv ../../../rtl/verilog/core/noc_demux.sv
+read_verilog -sv ../../../rtl/verilog/core/noc_mux.sv
+read_verilog -sv ../../../rtl/verilog/core/noc_vchannel_mux.sv
 
-read_xdc system_ahb3.xdc
+read_verilog -sv ../../../rtl/verilog/router/noc_router_input.sv
+read_verilog -sv ../../../rtl/verilog/router/noc_router_lookup_slice.sv
+read_verilog -sv ../../../rtl/verilog/router/noc_router_lookup.sv
+read_verilog -sv ../../../rtl/verilog/router/noc_router_output.sv
+read_verilog -sv ../../../rtl/verilog/router/noc_router.sv
 
-synth_design -part xc7z020-clg484-1 -include_dirs ../../../rtl/verilog/ahb3/pkg -top mpsoc_ahb3_spram
+read_verilog -sv ../../../rtl/verilog/topology/noc_mesh2d.sv
+
+read_verilog -sv mpsoc_noc_wrapper.sv
+
+read_xdc system.xdc
+
+synth_design -part xc7z020-clg484-1 -top mpsoc_noc_wrapper
 
 opt_design
 place_design
@@ -57,5 +69,5 @@ route_design
 report_utilization
 report_timing
 
-write_verilog -force system_ahb3.v
-write_bitstream -force system_ahb3.bit
+write_verilog -force system.v
+write_bitstream -force system.bit

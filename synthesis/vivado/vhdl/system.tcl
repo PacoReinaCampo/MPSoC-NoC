@@ -42,13 +42,27 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ahb3_spram.sv
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w.sv
-read_verilog -sv ../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w_generic.sv
+read_vhdl -vhdl2008 ../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
 
-read_xdc system_ahb3.xdc
+read_vhdl -vhdl2008 ../../../rtl/vhdl/core/arb_rr.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/core/noc_buffer.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/core/noc_demux.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/core/noc_mux.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/core/noc_vchannel_mux.vhd
 
-synth_design -part xc7z020-clg484-1 -include_dirs ../../../rtl/verilog/ahb3/pkg -top mpsoc_ahb3_spram
+read_vhdl -vhdl2008 ../../../rtl/vhdl/router/noc_router_input.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/router/noc_router_lookup_slice.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/router/noc_router_lookup.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/router/noc_router_output.vhd
+read_vhdl -vhdl2008 ../../../rtl/vhdl/router/noc_router.vhd
+
+read_vhdl -vhdl2008 ../../../rtl/vhdl/topology/noc_mesh2d.vhd
+
+read_vhdl -vhdl2008 mpsoc_noc_wrapper.vhd
+
+read_xdc system.xdc
+
+synth_design -part xc7z020-clg484-1 -top mpsoc_noc_wrapper
 
 opt_design
 place_design
@@ -57,5 +71,5 @@ route_design
 report_utilization
 report_timing
 
-write_verilog -force system_ahb3.v
-write_bitstream -force system_ahb3.bit
+write_vhdl -force system.vhd
+write_bitstream -force system.bit

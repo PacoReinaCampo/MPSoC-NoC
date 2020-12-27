@@ -42,20 +42,8 @@
 ##                                                                               ##
 ###################################################################################
 
-implementation_axi4:
-	$(VIVADO) -nojournal -log system_axi4.log -mode batch -source system_axi4.tcl
-	rm -rf .Xil usage_statistics_webtalk.*
-
-implementation_ahb3:
-	$(VIVADO) -nojournal -log system_ahb3.log -mode batch -source system_ahb3.tcl
-	rm -rf .Xil usage_statistics_webtalk.*
-
-implementation_wb:
-	$(VIVADO) -nojournal -log system_wb.log -mode batch -source system_wb.tcl
-	rm -rf .Xil usage_statistics_webtalk.*
-
-implementation_bb:
-	$(VIVADO) -nojournal -log system_bb.log -mode batch -source system_bb.tcl
+implementation:
+	$(VIVADO) -nojournal -log system.log -mode batch -source system.tcl
 	rm -rf .Xil usage_statistics_webtalk.*
 
 clean:
