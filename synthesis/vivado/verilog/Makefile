@@ -43,7 +43,7 @@
 ###################################################################################
 
 implementation:
-	$(VIVADO) -nojournal -log system.log -mode batch -source system.tcl
+	vivado -nojournal -log system.log -mode batch -source system.tcl
 	rm -rf .Xil usage_statistics_webtalk.*
 
 clean:
