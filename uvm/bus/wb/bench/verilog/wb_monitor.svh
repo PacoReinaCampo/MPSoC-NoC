@@ -89,7 +89,7 @@ class wb_monitor extends uvm_monitor;
         tr.data = this.vif.monitor_cb.dat_i;
       end
 
-      uvm_report_info("WB_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("WB_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end

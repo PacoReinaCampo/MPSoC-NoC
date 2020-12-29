@@ -69,7 +69,7 @@ class apb4_driver extends uvm_driver#(apb4_transaction);
       //First get an item from sequencer
       seq_item_port.get_next_item(tr);
       @ (this.vif.master_cb);
-      uvm_report_info("APB4_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("APB4_DRIVER ", $sformatf("Got Transaction %s",tr.convert2string()));
       //Decode the APB4 Command and call either the read/write function
       case (tr.pwrite)
         apb4_transaction::READ:  drive_read(tr.addr, tr.data);  

@@ -71,27 +71,28 @@ class axi4_monitor extends uvm_monitor;
       do begin
         @ (this.vif.monitor_cb);
       end
-      while (this.vif.monitor_cb.psel !== 1'b1 || this.vif.monitor_cb.penable !== 1'b0);
+      while (this.vif.monitor_cb.dw_strb !== 1'b1 || this.vif.monitor_cb.aw_len !== 1'b0 || this.vif.monitor_cb.ar_len !== 1'b0);
       //create a transaction object
       tr = axi4_transaction::type_id::create("tr", this);
 
       //populate fields based on values seen on interface
-      tr.pwrite = (this.vif.monitor_cb.pwrite) ? axi4_transaction::WRITE : axi4_transaction::READ;
-      tr.addr = this.vif.monitor_cb.paddr;
+      tr.dw_valid = (this.vif.monitor_cb.dw_valid) ? axi4_transaction::WRITE : axi4_transaction::READ;
+      tr.ar_valid = (this.vif.monitor_cb.ar_valid) ? axi4_transaction::WRITE : axi4_transaction::READ;
+      tr.addr = this.vif.monitor_cb.aw_addr;
 
       @ (this.vif.monitor_cb);
-      if (this.vif.monitor_cb.penable !== 1'b1) begin
+      if (this.vif.monitor_cb.aw_len !== 1'b1 || this.vif.monitor_cb.ar_len !== 1'b1) begin
         `uvm_error("AXI4", "AXI4 protocol violation: SETUP cycle not followed by ENABLE cycle");
       end
 
-      if (tr.pwrite == axi4_transaction::READ) begin
-        tr.data = this.vif.monitor_cb.prdata;
+      if (tr.ar_valid == axi4_transaction::READ) begin
+        tr.data = this.vif.monitor_cb.dr_data;
       end
-      else if (tr.pwrite == axi4_transaction::WRITE) begin
-        tr.data = this.vif.monitor_cb.pwdata;
+      else if (tr.dw_valid == axi4_transaction::WRITE) begin
+        tr.data = this.vif.monitor_cb.dw_data;
       end
 
-      uvm_report_info("AXI4_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("AXI4_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end

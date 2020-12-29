@@ -62,7 +62,7 @@ class ahb3_subscriber extends uvm_subscriber#(ahb3_transaction);
   endfunction
   
   function void write(ahb3_transaction t);
-    `uvm_info("AHB3_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+    `uvm_info("AHB3_SUBSCRIBER", $sformatf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

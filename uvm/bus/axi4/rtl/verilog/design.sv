@@ -265,28 +265,29 @@ module axi4_slave(dut_if dif);
   
   always @(posedge dif.clk or negedge dif.rst) begin
     if (dif.rst==0) begin
-      axi4_st <=0;
-      dif.prdata <=0;
-      dif.pready <=1;
+      axi4_st      <=0;
+      dif.dr_data  <=0;
+      dif.dr_ready <=1;
+      dif.b_ready  <=1;
       for(int i=0;i<256;i++) mem[i]=i;
     end
     else begin
       case (axi4_st)
         SETUP: begin
-          dif.prdata <= 0;
-          if (dif.psel && !dif.penable) begin
-            if (dif.pwrite) begin
+          dif.dr_data <= 0;
+          if (dif.dw_strb && !dif.aw_len && !dif.ar_len) begin
+            if (dif.dw_valid || dif.ar_valid) begin
               axi4_st <= W_ENABLE;
             end
             else begin
               axi4_st <= R_ENABLE;
-              dif.prdata <= mem[dif.paddr];
+              dif.dr_data <= mem[dif.ar_addr];
             end
           end
         end
         W_ENABLE: begin
-          if (dif.psel && dif.penable && dif.pwrite) begin
-            mem[dif.paddr] <= dif.pwdata;
+          if (dif.dw_strb && dif.aw_len && dif.ar_len && dif.dw_valid && dif.ar_valid) begin
+            mem[dif.aw_addr] <= dif.dw_data;
           end
           axi4_st <= SETUP;
         end

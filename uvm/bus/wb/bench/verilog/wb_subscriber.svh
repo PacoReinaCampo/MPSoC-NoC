@@ -62,7 +62,7 @@ class wb_subscriber extends uvm_subscriber#(wb_transaction);
   endfunction
   
   function void write(wb_transaction t);
-    `uvm_info("WB_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+    `uvm_info("WB_SUBSCRIBER", $sformatf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

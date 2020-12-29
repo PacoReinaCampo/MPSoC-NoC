@@ -60,6 +60,6 @@ class ahb3_transaction extends uvm_sequence_item;
   endfunction
 
   function string convert2string();
-    return $psprintf("hwrite=%s haddr=%0h data=%0h",hwrite,addr,data);
+    return $sformatf("hwrite=%s haddr=%0h data=%0h",hwrite,addr,data);
   endfunction
 endclass

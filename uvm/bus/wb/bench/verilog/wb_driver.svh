@@ -68,7 +68,7 @@ class wb_driver extends uvm_driver#(wb_transaction);
       //First get an item from sequencer
       seq_item_port.get_next_item(tr);
       @ (this.vif.master_cb);
-      uvm_report_info("WB_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("WB_DRIVER ", $sformatf("Got Transaction %s",tr.convert2string()));
       //Decode the WB Command and call either the read/write function
       case (tr.we_i)
         wb_transaction::READ:  drive_read(tr.addr, tr.data);  

@@ -91,7 +91,7 @@ class apb4_monitor extends uvm_monitor;
         tr.data = this.vif.monitor_cb.pwdata;
       end
 
-      uvm_report_info("APB4_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("APB4_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end

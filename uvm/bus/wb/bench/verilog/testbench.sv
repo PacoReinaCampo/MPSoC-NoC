@@ -88,9 +88,9 @@ module test;
   end
 
   initial begin
-    wb_if.prst=0;
+    wb_if.rst=0;
     repeat (1) @(posedge wb_if.clk);
-    wb_if.prst=1;
+    wb_if.rst=1;
   end
 
   initial begin

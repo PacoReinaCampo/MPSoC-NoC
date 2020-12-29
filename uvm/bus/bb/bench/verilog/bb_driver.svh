@@ -68,7 +68,7 @@ class bb_driver extends uvm_driver#(bb_transaction);
       //First get an item from sequencer
       seq_item_port.get_next_item(tr);
       @ (this.vif.master_cb);
-      uvm_report_info("BB_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("BB_DRIVER ", $sformatf("Got Transaction %s",tr.convert2string()));
       //Decode the BB Command and call either the read/write function
       case (tr.per_we)
         bb_transaction::READ:  drive_read(tr.addr, tr.data);  

@@ -122,7 +122,6 @@ module wb_slave(dut_if dif);
     if (dif.rst==0) begin
       wb_st <=0;
       dif.dat_o <=0;
-      dif.pready <=1;
       for(int i=0;i<256;i++) mem[i]=i;
     end
     else begin

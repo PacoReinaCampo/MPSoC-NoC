@@ -60,6 +60,6 @@ class bb_transaction extends uvm_sequence_item;
   endfunction
 
   function string convert2string();
-    return $psprintf("per_we=%s per_addr=%0h data=%0h",per_we,addr,data);
+    return $sformatf("per_we=%s per_addr=%0h data=%0h",per_we,addr,data);
   endfunction
 endclass

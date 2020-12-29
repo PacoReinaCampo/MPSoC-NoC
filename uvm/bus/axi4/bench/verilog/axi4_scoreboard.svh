@@ -74,13 +74,32 @@ class axi4_scoreboard extends uvm_scoreboard;
       wait(exp_queue.size() > 0);
       expdata = exp_queue.pop_front();
       
-      if(expdata.pwrite == axi4_transaction::WRITE) begin
+      if(expdata.dw_valid == axi4_transaction::WRITE) begin
         sc_mem[expdata.addr] = expdata.data;
         `uvm_info("AXI4_SCOREBOARD",$sformatf("------ :: WRITE DATA       :: ------"),UVM_LOW)
         `uvm_info("",$sformatf("Addr: %0h",expdata.addr),UVM_LOW)
         `uvm_info("",$sformatf("Data: %0h",expdata.data),UVM_LOW)        
       end
-      else if(expdata.pwrite == axi4_transaction::READ) begin
+      else if(expdata.dw_valid == axi4_transaction::READ) begin
+        if(sc_mem[expdata.addr] == expdata.data) begin
+          `uvm_info("AXI4_SCOREBOARD",$sformatf("------ :: READ DATA Match :: ------"),UVM_LOW)
+          `uvm_info("",$sformatf("Addr: %0h",expdata.addr),UVM_LOW)
+          `uvm_info("",$sformatf("Expected Data: %0h Actual Data: %0h",sc_mem[expdata.addr],expdata.data),UVM_LOW)
+        end
+        else begin
+          `uvm_error("AXI4_SCOREBOARD","------ :: READ DATA MisMatch :: ------")
+          `uvm_info("",$sformatf("Addr: %0h",expdata.addr),UVM_LOW)
+          `uvm_info("",$sformatf("Expected Data: %0h Actual Data: %0h",sc_mem[expdata.addr],expdata.data),UVM_LOW)
+        end
+      end
+      
+      if(expdata.ar_valid == axi4_transaction::WRITE) begin
+        sc_mem[expdata.addr] = expdata.data;
+        `uvm_info("AXI4_SCOREBOARD",$sformatf("------ :: WRITE DATA       :: ------"),UVM_LOW)
+        `uvm_info("",$sformatf("Addr: %0h",expdata.addr),UVM_LOW)
+        `uvm_info("",$sformatf("Data: %0h",expdata.data),UVM_LOW)        
+      end
+      else if(expdata.ar_valid == axi4_transaction::READ) begin
         if(sc_mem[expdata.addr] == expdata.data) begin
           `uvm_info("AXI4_SCOREBOARD",$sformatf("------ :: READ DATA Match :: ------"),UVM_LOW)
           `uvm_info("",$sformatf("Addr: %0h",expdata.addr),UVM_LOW)

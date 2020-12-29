@@ -62,7 +62,7 @@ class axi4_subscriber extends uvm_subscriber#(axi4_transaction);
   endfunction
   
   function void write(axi4_transaction t);
-    `uvm_info("AXI4_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+    `uvm_info("AXI4_SUBSCRIBER", $sformatf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

@@ -62,7 +62,7 @@ class apb4_subscriber extends uvm_subscriber#(apb4_transaction);
   endfunction
   
   function void write(apb4_transaction t);
-    `uvm_info("APB4_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+    `uvm_info("APB4_SUBSCRIBER", $sformatf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

@@ -71,7 +71,7 @@ class ahb3_monitor extends uvm_monitor;
       do begin
         @ (this.vif.monitor_cb);
       end
-      while (this.vif.monitor_cb.hsel !== 1'b1 || this.vif.monitor_cb.penable !== 1'b0);
+      while (this.vif.monitor_cb.hsel !== 1'b1);
       //create a transaction object
       tr = ahb3_transaction::type_id::create("tr", this);
 
@@ -80,9 +80,7 @@ class ahb3_monitor extends uvm_monitor;
       tr.addr = this.vif.monitor_cb.haddr;
 
       @ (this.vif.monitor_cb);
-      if (this.vif.monitor_cb.penable !== 1'b1) begin
-        `uvm_error("AHB3", "AHB3 protocol violation: SETUP cycle not followed by ENABLE cycle");
-      end
+      `uvm_error("AHB3", "AHB3 protocol violation: SETUP cycle not followed by ENABLE cycle");
 
       if (tr.hwrite == ahb3_transaction::READ) begin
         tr.data = this.vif.monitor_cb.hrdata;
@@ -91,7 +89,7 @@ class ahb3_monitor extends uvm_monitor;
         tr.data = this.vif.monitor_cb.hwdata;
       end
 
-      uvm_report_info("AHB3_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("AHB3_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end

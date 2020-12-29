@@ -60,6 +60,6 @@ class apb4_transaction extends uvm_sequence_item;
   endfunction
 
   function string convert2string();
-    return $psprintf("pwrite=%s paddr=%0h data=%0h",pwrite,addr,data);
+    return $sformatf("pwrite=%s paddr=%0h data=%0h",pwrite,addr,data);
   endfunction
 endclass

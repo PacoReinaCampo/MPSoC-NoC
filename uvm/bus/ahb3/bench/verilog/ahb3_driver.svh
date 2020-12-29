@@ -60,8 +60,7 @@ class ahb3_driver extends uvm_driver#(ahb3_transaction);
   virtual task run_phase(uvm_phase phase);
     super.run_phase(phase);
     
-    this.vif.master_cb.hsel    <= 0;
-    this.vif.master_cb.penable <= 0;
+    this.vif.master_cb.hsel <= 0;
 
     forever begin
       ahb3_transaction tr;
@@ -69,7 +68,7 @@ class ahb3_driver extends uvm_driver#(ahb3_transaction);
       //First get an item from sequencer
       seq_item_port.get_next_item(tr);
       @ (this.vif.master_cb);
-      uvm_report_info("AHB3_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("AHB3_DRIVER ", $sformatf("Got Transaction %s",tr.convert2string()));
       //Decode the AHB3 Command and call either the read/write function
       case (tr.hwrite)
         ahb3_transaction::READ:  drive_read(tr.addr, tr.data);  
@@ -81,26 +80,20 @@ class ahb3_driver extends uvm_driver#(ahb3_transaction);
   endtask
 
   virtual protected task drive_read(input bit [31:0] addr, output logic [31:0] data);
-    this.vif.master_cb.haddr   <= addr;
-    this.vif.master_cb.hwrite  <= 0;
-    this.vif.master_cb.hsel    <= 1;
-    @ (this.vif.master_cb);
-    this.vif.master_cb.penable <= 1;
+    this.vif.master_cb.haddr  <= addr;
+    this.vif.master_cb.hwrite <= 0;
+    this.vif.master_cb.hsel   <= 1;
     @ (this.vif.master_cb);
     data = this.vif.master_cb.hrdata;
-    this.vif.master_cb.hsel    <= 0;
-    this.vif.master_cb.penable <= 0;
+    this.vif.master_cb.hsel   <= 0;
   endtask
 
   virtual protected task drive_write(input bit [31:0] addr, input bit [31:0] data);
-    this.vif.master_cb.haddr   <= addr;
-    this.vif.master_cb.hwdata  <= data;
-    this.vif.master_cb.hwrite  <= 1;
-    this.vif.master_cb.hsel    <= 1;
+    this.vif.master_cb.haddr  <= addr;
+    this.vif.master_cb.hwdata <= data;
+    this.vif.master_cb.hwrite <= 1;
+    this.vif.master_cb.hsel   <= 1;
     @ (this.vif.master_cb);
-    this.vif.master_cb.penable <= 1;
-    @ (this.vif.master_cb);
-    this.vif.master_cb.hsel    <= 0;
-    this.vif.master_cb.penable <= 0;
+    this.vif.master_cb.hsel   <= 0;
   endtask
 endclass

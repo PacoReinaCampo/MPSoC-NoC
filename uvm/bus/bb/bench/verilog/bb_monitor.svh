@@ -91,7 +91,7 @@ class bb_monitor extends uvm_monitor;
         tr.data = this.vif.monitor_cb.per_dout;
       end
 
-      uvm_report_info("BB_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("BB_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end
