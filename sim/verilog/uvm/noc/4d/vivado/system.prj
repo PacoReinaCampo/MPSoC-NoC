@@ -1,0 +1,17 @@
+sv work ../../../../../../uvm/noc/2d/bench/verilog/testbench.sv
+
+sv work ../../../../../../uvm/noc/2d/rtl/verilog/design.sv
+
+sv work ../../../../../../rtl/verilog/topology/noc_mesh4d.sv
+
+sv work ../../../../../../rtl/verilog/router/noc_router_input.sv
+sv work ../../../../../../rtl/verilog/router/noc_router_lookup_slice.sv
+sv work ../../../../../../rtl/verilog/router/noc_router_lookup.sv
+sv work ../../../../../../rtl/verilog/router/noc_router_output.sv
+sv work ../../../../../../rtl/verilog/router/noc_router.sv
+
+sv work ../../../../../../rtl/verilog/core/arb_rr.sv
+sv work ../../../../../../rtl/verilog/core/noc_buffer.sv
+sv work ../../../../../../rtl/verilog/core/noc_demux.sv
+sv work ../../../../../../rtl/verilog/core/noc_mux.sv
+sv work ../../../../../../rtl/verilog/core/noc_vchannel_mux.sv
