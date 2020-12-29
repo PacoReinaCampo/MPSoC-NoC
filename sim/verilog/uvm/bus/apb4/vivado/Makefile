@@ -45,7 +45,7 @@
 all: build simulate
 
 build:
-	xvlog -i ../../../../../uvm/src -prj system.prj
+	xvlog -i ../../../../../../uvm/src -prj system.prj
 
 simulate:
 	xelab test

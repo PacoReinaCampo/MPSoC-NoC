@@ -50,7 +50,7 @@ class noc4d_transaction extends uvm_sequence_item;
   rand bit [31:0] addr;  //Address
   rand bit [31:0] data;  //Data - For write or read response
 
-  rand kind_e pwrite;  //command type
+  rand kind_e out_ready;  //command type
 
   constraint c1{addr[31:0]>=32'd0; addr[31:0] <32'd256;};
   constraint c2{data[31:0]>=32'd0; data[31:0] <32'd256;};
@@ -60,6 +60,6 @@ class noc4d_transaction extends uvm_sequence_item;
   endfunction
 
   function string convert2string();
-    return $psprintf("pwrite=%s paddr=%0h data=%0h",pwrite,addr,data);
+    return $sformatf("out_ready=%s paddr=%0h data=%0h",out_ready,addr,data);
   endfunction
 endclass

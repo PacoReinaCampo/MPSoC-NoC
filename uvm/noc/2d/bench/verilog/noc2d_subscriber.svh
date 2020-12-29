@@ -62,7 +62,7 @@ class noc2d_subscriber extends uvm_subscriber#(noc2d_transaction);
   endfunction
   
   function void write(noc2d_transaction t);
-    `uvm_info("NoC2D_SUBSCRIBER", $psprintf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
+    `uvm_info("NoC2D_SUBSCRIBER", $sformatf("Subscriber received tx %s", t.convert2string()), UVM_NONE);
    
     addr = t.addr;
     data = t.data;

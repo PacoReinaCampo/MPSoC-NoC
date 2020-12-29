@@ -1,6 +1,6 @@
-sv work ../../../../../../uvm/noc/2d/bench/verilog/testbench.sv
+sv work ../../../../../../uvm/noc/4d/bench/verilog/testbench.sv
 
-sv work ../../../../../../uvm/noc/2d/rtl/verilog/design.sv
+sv work ../../../../../../uvm/noc/4d/rtl/verilog/design.sv
 
 sv work ../../../../../../rtl/verilog/topology/noc_mesh4d.sv
 

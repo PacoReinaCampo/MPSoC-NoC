@@ -71,27 +71,26 @@ class noc2d_monitor extends uvm_monitor;
       do begin
         @ (this.vif.monitor_cb);
       end
-      while (this.vif.monitor_cb.psel !== 1'b1 || this.vif.monitor_cb.penable !== 1'b0);
+      while (this.vif.monitor_cb.in_last !== 1'b1 || this.vif.monitor_cb.in_valid !== 1'b0);
       //create a transaction object
       tr = noc2d_transaction::type_id::create("tr", this);
 
       //populate fields based on values seen on interface
-      tr.pwrite = (this.vif.monitor_cb.pwrite) ? noc2d_transaction::WRITE : noc2d_transaction::READ;
-      tr.addr = this.vif.monitor_cb.paddr;
+      tr.out_ready = (this.vif.monitor_cb.out_ready) ? noc2d_transaction::WRITE : noc2d_transaction::READ;
 
       @ (this.vif.monitor_cb);
-      if (this.vif.monitor_cb.penable !== 1'b1) begin
+      if (this.vif.monitor_cb.in_valid !== 1'b1) begin
         `uvm_error("NoC2D", "NoC2D protocol violation: SETUP cycle not followed by ENABLE cycle");
       end
 
-      if (tr.pwrite == noc2d_transaction::READ) begin
-        tr.data = this.vif.monitor_cb.prdata;
+      if (tr.out_ready == noc2d_transaction::READ) begin
+        tr.data = this.vif.monitor_cb.out_flit;
       end
-      else if (tr.pwrite == noc2d_transaction::WRITE) begin
-        tr.data = this.vif.monitor_cb.pwdata;
+      else if (tr.out_ready == noc2d_transaction::WRITE) begin
+        tr.data = this.vif.monitor_cb.in_flit;
       end
 
-      uvm_report_info("NoC2D_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("NoC2D_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
       //Write to analysis port
       ap.write(tr);
     end
