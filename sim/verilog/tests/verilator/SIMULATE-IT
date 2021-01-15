@@ -1,2 +1,1 @@
-rm -rf obj_dir
-verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --cc -f system.vc --top-module mpsoc_noc_testbench
+make clean
