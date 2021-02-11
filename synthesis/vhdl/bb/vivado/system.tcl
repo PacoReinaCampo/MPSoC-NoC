@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-UART CPU                                                   ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -42,15 +42,16 @@
 ##                                                                               ##
 ###################################################################################
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/core/msp430_ram.vhd
-
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/pkg/msp430_pkg.vhd
 
-read_vhdl -vhdl2008 mpsoc_spram_synthesis.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/core/fuse/msp430_sync_cell.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/core/main/msp430_uart.vhd
+
+read_vhdl -vhdl2008 mpsoc_uart_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -top mpsoc_uart_synthesis
 
 opt_design
 place_design
@@ -59,4 +60,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit

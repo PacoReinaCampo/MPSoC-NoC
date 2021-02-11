@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-UARRT CPU                                                  ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -42,15 +42,18 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_ahb3_spram.sv
-read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w.sv
-read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_ram_1r1w_generic.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_bridge_apb2ahb.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_apb4_uart.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_fifo.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_interrupt.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_rx.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_tx.sv
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv mpsoc_uart_synthesis.sv
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/ahb3/pkg -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/ahb3/pkg -top mpsoc_uart_synthesis
 
 opt_design
 place_design
@@ -59,4 +62,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit

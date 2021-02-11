@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-UART CPU                                                   ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -43,13 +43,22 @@
 ###################################################################################
 
 # read design
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_spram.sv
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_ram_generic.sv
+verilog_defaults -add -I ../../../../rtl/verilog/wb/pkg
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_raminfr.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_peripheral_bridge.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_receiver.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_regs.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_rfifo.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_sync_flops.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_tfifo.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_transmitter.sv
+
+read_verilog -sv mpsoc_uart_synthesis.sv
 
 # elaborate design hierarchy
-hierarchy -check -top mpsoc_spram_synthesis
+hierarchy -check -top mpsoc_uart_synthesis
 
 # improve design
 proc; opt; fsm; opt; memory; opt
@@ -67,4 +76,4 @@ abc -liberty cmos_cells.lib
 clean
 
 # write synthesized design
-write_verilog system.v
+write_edif system.edif

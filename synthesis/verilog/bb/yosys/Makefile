@@ -48,4 +48,4 @@ synthesize:
 	yosys -s system.ys
 
 clean:
-	rm -rf *.v
+	rm -rf *.edif

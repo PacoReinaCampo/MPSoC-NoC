@@ -9,7 +9,7 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              MPSoC-SPRAM CPU                                                  ##
+##              MPSoC-UART CPU                                                   ##
 ##              Synthesis Test Makefile                                          ##
 ##                                                                               ##
 ###################################################################################
@@ -42,14 +42,21 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_ram_generic.sv
-read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_spram.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_raminfr.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_peripheral_bridge.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_receiver.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_regs.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_rfifo.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_sync_flops.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_tfifo.sv
+read_verilog -sv ../../../../rtl/verilog/wb/core/mpsoc_wb_uart_transmitter.sv
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv mpsoc_uart_synthesis.sv
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/wb/pkg -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/wb/pkg -top mpsoc_uart_synthesis
 
 opt_design
 place_design
@@ -58,4 +65,5 @@ route_design
 report_utilization
 report_timing
 
+write_edif -force system.edif
 write_bitstream -force system.bit

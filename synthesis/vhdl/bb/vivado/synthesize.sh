@@ -1,4 +1,4 @@
-export PATH=$PATH:/opt/Xilinx/Vivado/2020.2/bin/
+source ../../../../settings64_vivado.sh
 
 make clean
 make
