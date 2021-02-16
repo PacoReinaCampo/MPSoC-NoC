@@ -1,5 +1,5 @@
 @echo off
-call ../../../../../../settings64_ghdl.bat
+call ../../../../settings64_ghdl.bat
 
 ghdl -a --std=08 ../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
 ghdl -a --std=08 ../../../../rtl/vhdl/core/arb_rr.vhd
