@@ -1,4 +1,4 @@
--- Converted from pkg/mpsoc_noc_pkg.sv
+-- Converted from pkg/vhdl_pkg.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,14 +12,13 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Package                                                       //
+--              Hardware Description Language                                 //
+--              Bus Interface                                                 //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
--- Copyright (c) 2018-2019 by the author(s)
+-- Copyright (c) 2017-2018 by the author(s)
 -- *
 -- * Permission is hereby granted, free of charge, to any person obtaining a copy
 -- * of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +46,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
-package mpsoc_noc_pkg is
+package vhdl_pkg is
 
   --////////////////////////////////////////////////////////////////
   --
@@ -86,13 +86,15 @@ package mpsoc_noc_pkg is
   type xyz_std_logic_9array is array (natural range <>, natural range <>, natural range <>) of std_logic_9array;
 
   function to_stdlogic (input : boolean) return std_logic;
-  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function reduce_and (reduce_and_in : std_logic_vector) return std_logic;
+  function reduce_nand (reduce_nand_in : std_logic_vector) return std_logic;
   function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
+  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function reduce_xor (reduce_xor_in : std_logic_vector) return std_logic;
 
-  function ternary (a : integer; b : integer; selection : integer) return integer;
-end mpsoc_noc_pkg;
+end vhdl_pkg;
 
-package body mpsoc_noc_pkg is
+package body vhdl_pkg is
   --////////////////////////////////////////////////////////////////
   --
   -- Functions
@@ -108,16 +110,27 @@ package body mpsoc_noc_pkg is
     end if;
   end function to_stdlogic;
 
-  function reduce_or (
-    reduce_or_in : std_logic_vector
+  function reduce_and (
+    reduce_and_in : std_logic_vector
     ) return std_logic is
-    variable reduce_or_out : std_logic := '0';
+    variable reduce_and_out : std_logic := '0';
   begin
-    for i in reduce_or_in'range loop
-      reduce_or_out := reduce_or_out or reduce_or_in(i);
+    for i in reduce_and_in'range loop
+      reduce_and_out := reduce_and_out and reduce_and_in(i);
     end loop;
-    return reduce_or_out;
-  end reduce_or;
+    return reduce_and_out;
+  end reduce_and;
+
+  function reduce_nand (
+    reduce_nand_in : std_logic_vector
+  ) return std_logic is
+    variable reduce_nand_out : std_logic := '0';
+  begin
+    for i in reduce_nand_in'range loop
+      reduce_nand_out := reduce_nand_out nand reduce_nand_in(i);
+    end loop;
+    return reduce_nand_out;
+  end reduce_nand;
 
   function reduce_nor (
     reduce_nor_in : std_logic_vector
@@ -130,16 +143,26 @@ package body mpsoc_noc_pkg is
     return reduce_nor_out;
   end reduce_nor;
 
-  function ternary (
-    a : integer;
-    b : integer;
-    selection : integer
-    ) return integer is
+  function reduce_or (
+    reduce_or_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_or_out : std_logic := '0';
   begin
-    if selection > 0 then
-      return a;
-    else
-      return b;
-    end if;
-  end function ternary;
-end mpsoc_noc_pkg;
+    for i in reduce_or_in'range loop
+      reduce_or_out := reduce_or_out or reduce_or_in(i);
+    end loop;
+    return reduce_or_out;
+  end reduce_or;
+
+  function reduce_xor (
+    reduce_xor_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_xor_out : std_logic := '0';
+  begin
+    for i in reduce_xor_in'range loop
+      reduce_xor_out := reduce_xor_out xor reduce_xor_in(i);
+    end loop;
+    return reduce_xor_out;
+  end reduce_xor;
+
+end vhdl_pkg;
