@@ -1,4 +1,4 @@
--- Converted from bench/verilog/regression/mpsoc_noc_testbench.sv
+-- Converted from bench/verilog/regression/peripheral_noc_testbench.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -48,13 +48,13 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity mpsoc_noc_testbench is
-end mpsoc_noc_testbench;
+entity peripheral_noc_testbench is
+end peripheral_noc_testbench;
 
-architecture RTL of mpsoc_noc_testbench is
-  component noc_mesh4d
+architecture RTL of peripheral_noc_testbench is
+  component peripheral_noc_mesh4d
     generic (
       FLIT_WIDTH       : integer := 34;
       CHANNELS         : integer := 9;
@@ -114,15 +114,15 @@ architecture RTL of mpsoc_noc_testbench is
   signal clk : std_logic;
   signal rst : std_logic;
 
-  signal mpsoc_noc_out_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal mpsoc_noc_out_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal mpsoc_noc_out_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal mpsoc_noc_out_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_out_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal noc_out_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_out_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_out_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
-  signal mpsoc_noc_in_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
-  signal mpsoc_noc_in_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal mpsoc_noc_in_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
-  signal mpsoc_noc_in_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_in_flit  : std_logic_3array(NODES-1 downto 0)(CHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
+  signal noc_in_last  : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_in_valid : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
+  signal noc_in_ready : std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ begin
   --
 
   --DUT
-  u_mesh : noc_mesh4d
+  noc_mesh4d : peripheral_noc_mesh4d
   generic map (
     FLIT_WIDTH       => FLIT_WIDTH,
     CHANNELS         => CHANNELS,
@@ -152,14 +152,14 @@ begin
     rst => rst,
     clk => clk,
 
-    in_flit  => mpsoc_noc_in_flit,
-    in_last  => mpsoc_noc_in_last,
-    in_valid => mpsoc_noc_in_valid,
-    in_ready => mpsoc_noc_in_ready,
+    in_flit  => noc_in_flit,
+    in_last  => noc_in_last,
+    in_valid => noc_in_valid,
+    in_ready => noc_in_ready,
 
-    out_flit  => mpsoc_noc_out_flit,
-    out_last  => mpsoc_noc_out_last,
-    out_valid => mpsoc_noc_out_valid,
-    out_ready => mpsoc_noc_out_ready
+    out_flit  => noc_out_flit,
+    out_last  => noc_out_last,
+    out_valid => noc_out_valid,
+    out_ready => noc_out_ready
   );
 end RTL;

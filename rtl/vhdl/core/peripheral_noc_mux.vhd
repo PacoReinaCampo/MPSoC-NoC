@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/noc_mux.sv
+-- Converted from rtl/verilog/core/peripheral_noc_mux.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -50,9 +48,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_mux is
+entity peripheral_noc_mux is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 2
@@ -71,10 +69,10 @@ entity noc_mux is
     out_valid : out std_logic;
     out_ready : in  std_logic
   );
-end noc_mux;
+end peripheral_noc_mux;
 
-architecture RTL of noc_mux is
-  component arb_rr
+architecture RTL of peripheral_noc_mux is
+  component peripheral_arb_rr
     generic (
       N : integer := 2
     );
@@ -158,7 +156,7 @@ begin
     end if;
   end process;
 
-  arbitrer_rr : arb_rr
+  arb_rr : peripheral_arb_rr
     generic map (
       N => CHANNELS
     )

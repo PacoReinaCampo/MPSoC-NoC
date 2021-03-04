@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_noc_testbench;
+module peripheral_noc_testbench;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -69,15 +69,15 @@ module mpsoc_noc_testbench;
   wire clk;
   wire rst;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] mpsoc_noc_out_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_out_ready;
+  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_valid;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_ready;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] mpsoc_noc_in_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 mpsoc_noc_in_ready;
+  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_valid;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_ready;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -85,7 +85,7 @@ module mpsoc_noc_testbench;
   //
 
   //DUT
-  noc_mesh4d #(
+  peripheral_noc_mesh4d #(
     .FLIT_WIDTH       (FLIT_WIDTH),
     .CHANNELS         (CHANNELS),
 
@@ -101,18 +101,18 @@ module mpsoc_noc_testbench;
 
     .NODES            (NODES)
   )
-  mesh (
+  noc_mesh4d (
     .rst       ( rst ),
     .clk       ( clk ),
 
-    .in_flit   ( mpsoc_noc_in_flit  ),
-    .in_last   ( mpsoc_noc_in_last  ),
-    .in_valid  ( mpsoc_noc_in_valid ),
-    .in_ready  ( mpsoc_noc_in_ready ),
+    .in_flit   ( noc_out_flit  ),
+    .in_last   ( noc_out_last  ),
+    .in_valid  ( noc_out_valid ),
+    .in_ready  ( noc_out_ready ),
 
-    .out_flit  ( mpsoc_noc_out_flit  ),
-    .out_last  ( mpsoc_noc_out_last  ),
-    .out_valid ( mpsoc_noc_out_valid ),
-    .out_ready ( mpsoc_noc_out_ready )
+    .out_flit  ( noc_out_flit  ),
+    .out_last  ( noc_out_last  ),
+    .out_valid ( noc_out_valid ),
+    .out_ready ( noc_out_ready )
   );
 endmodule

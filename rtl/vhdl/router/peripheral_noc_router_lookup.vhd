@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 

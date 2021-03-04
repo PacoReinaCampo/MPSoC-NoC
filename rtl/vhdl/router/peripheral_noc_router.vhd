@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/router/noc_router.sv
+-- Converted from rtl/verilog/router/peripheral_noc_router.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -49,9 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_router is
+entity peripheral_noc_router is
   generic (
     FLIT_WIDTH      : integer := 32;
     VCHANNELS       : integer := 7;
@@ -77,10 +75,10 @@ entity noc_router is
     in_valid : in  std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0);
     in_ready : out std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0)
   );
-end noc_router;
+end peripheral_noc_router;
 
-architecture RTL of noc_router is
-  component noc_router_input
+architecture RTL of peripheral_noc_router is
+  component peripheral_noc_router_input
     generic (
       FLIT_WIDTH   : integer := 32;
       VCHANNELS    : integer := 7;
@@ -106,7 +104,7 @@ architecture RTL of noc_router is
     );
   end component;
 
-  component noc_router_output
+  component peripheral_noc_router_output
     generic (
       FLIT_WIDTH   : integer := 32;
       VCHANNELS    : integer := 7;
@@ -158,7 +156,7 @@ begin
 --
   generating_0 : for i in 0 to INPUTS - 1 generate
     -- The input stages
-    router_input : noc_router_input
+    noc_router_input : peripheral_noc_router_input
       generic map (
         FLIT_WIDTH   => FLIT_WIDTH,
         VCHANNELS    => VCHANNELS,
@@ -199,7 +197,7 @@ begin
 
   generating_4 : for o in 0 to OUTPUTS - 1 generate
     -- The output stages
-    router_output : noc_router_output
+    noc_router_output : peripheral_noc_router_output
       generic map (
         FLIT_WIDTH   => FLIT_WIDTH,
         VCHANNELS    => VCHANNELS,

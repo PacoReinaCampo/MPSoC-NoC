@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/noc_buffer.sv
+-- Converted from rtl/verilog/core/peripheral_noc_buffer.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -52,9 +50,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_buffer is
+entity peripheral_noc_buffer is
   generic (
     FLIT_WIDTH : integer := 32;
     DEPTH      : integer := 16;
@@ -79,9 +77,9 @@ entity noc_buffer is
 
     packet_size : out std_logic_vector(integer(log2(real(DEPTH))) downto 0)
   );
-end noc_buffer;
+end peripheral_noc_buffer;
 
-architecture RTL of noc_buffer is
+architecture RTL of peripheral_noc_buffer is
   --////////////////////////////////////////////////////////////////
   --
   -- Constants

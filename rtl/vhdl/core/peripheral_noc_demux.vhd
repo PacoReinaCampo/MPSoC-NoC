@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/noc_demux.sv
+-- Converted from rtl/verilog/core/peripheral_noc_demux.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -49,9 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_demux is
+entity peripheral_noc_demux is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 7;
@@ -72,7 +70,7 @@ entity noc_demux is
     out_valid : out std_logic_vector(CHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
   );
-end noc_demux;
+end peripheral_noc_demux;
 
 architecture RTL of noc_demux is
   --////////////////////////////////////////////////////////////////

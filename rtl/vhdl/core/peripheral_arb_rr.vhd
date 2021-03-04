@@ -1,4 +1,4 @@
--- Converted from rtl/verilog/core/arb_rr.sv
+-- Converted from rtl/verilog/core/peripheral_arb_rr.sv
 -- by verilog2vhdl - QueenField
 
 --//////////////////////////////////////////////////////////////////////////////
@@ -12,10 +12,8 @@
 --                  |_|                                                       //
 --                                                                            //
 --                                                                            //
---              MPSoC-RISCV CPU                                               //
---              Network on Chip                                               //
---              AMBA3 AHB-Lite Bus Interface                                  //
---              Wishbone Bus Interface                                        //
+--              Peripheral-NoC for MPSoC                                      //
+--              Network on Chip for MPSoC                                     //
 --                                                                            //
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity arb_rr is
+use work.vhdl_pkg.all;
+
+entity peripheral_arb_rr is
   generic (
     N : integer := 2
     );
@@ -59,37 +59,16 @@ entity arb_rr is
     gnt     : in  std_logic_vector(N-1 downto 0);
     nxt_gnt : out std_logic_vector(N-1 downto 0)
     );
-end arb_rr;
+end peripheral_arb_rr;
 
-architecture RTL of arb_rr is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Variables
-  --
-  type M_N_N is array (N-1 downto 0) of std_logic_vector(N-1 downto 0);
-
+architecture RTL of peripheral_arb_rr is
   --////////////////////////////////////////////////////////////////
   --
   -- Variables
   --
 
   -- Mask net
-  signal mask : M_N_N;
-
-  --//////////////////////////////////////////////////////////////
-  --
-  -- Functions
-  --
-  function reduce_nor (
-    reduce_nor_in : std_logic_vector
-  ) return std_logic is
-    variable reduce_nor_out : std_logic := '0';
-  begin
-    for i in reduce_nor_in'range loop
-      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
-    end loop;
-    return reduce_nor_out;
-  end reduce_nor;
+  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0;
 
 begin
   --////////////////////////////////////////////////////////////////
