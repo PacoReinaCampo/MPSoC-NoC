@@ -48,9 +48,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_router_input is
+entity peripheral_noc_router_input is
   generic (
     FLIT_WIDTH   : integer := 32;
     VCHANNELS    : integer := 1;
@@ -74,10 +74,10 @@ entity noc_router_input is
     out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
   );
-end noc_router_input;
+end peripheral_noc_router_input;
 
-architecture RTL of noc_router_input is
-  component noc_buffer
+architecture RTL of peripheral_noc_router_input is
+  component peripheral_noc_buffer
     generic (
       FLIT_WIDTH : integer := 32;
       DEPTH      : integer := 16
@@ -103,7 +103,7 @@ architecture RTL of noc_router_input is
     );
   end component;
 
-  component noc_router_lookup
+  component peripheral_noc_router_lookup
     generic (
       FLIT_WIDTH : integer := 32;
       DESTS      : integer := 1;
@@ -142,7 +142,7 @@ architecture RTL of noc_router_input is
 --
 begin
   generating_0 : for v in 0 to VCHANNELS - 1 generate
-    U_buffer : noc_buffer
+    U_buffer : peripheral_noc_buffer
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DEPTH      => BUFFER_DEPTH
@@ -164,7 +164,7 @@ begin
         packet_size => open
       );
 
-    router_lookup : noc_router_lookup
+    router_lookup : peripheral_noc_router_lookup
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DESTS      => DESTS,

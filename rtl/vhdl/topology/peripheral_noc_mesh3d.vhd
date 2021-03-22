@@ -47,9 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_mesh3d is
+entity peripheral_noc_mesh3d is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 1;
@@ -79,10 +79,10 @@ entity noc_mesh3d is
     out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
     );
-end noc_mesh3d;
+end peripheral_noc_mesh3d;
 
-architecture RTL of noc_mesh3d is
-  component noc_vchannel_mux
+architecture RTL of peripheral_noc_mesh3d is
+  component peripheral_noc_vchannel_mux
     generic (
       FLIT_WIDTH : integer := 34;
       CHANNELS   : integer := 7
@@ -103,7 +103,7 @@ architecture RTL of noc_mesh3d is
       );
   end component;
 
-  component noc_router
+  component peripheral_noc_router
     generic (
       FLIT_WIDTH      : integer := 32;
       VCHANNELS       : integer := 7;
@@ -338,7 +338,7 @@ begin
       generating_2 : for xd in 0 to X - 1 generate
         generating_3 : if (ENABLE_VCHANNELS = 1) generate
           -- Mux inputs to virtual channels
-          vchannel_mux : noc_vchannel_mux
+          vchannel_mux : peripheral_noc_vchannel_mux
             generic map (
               FLIT_WIDTH => FLIT_WIDTH,
               CHANNELS   => CHANNELS
@@ -371,7 +371,7 @@ begin
 
           -- Instantiate the router. We call a function to
           -- generate the routing table
-          router : noc_router
+          router : peripheral_noc_router
             generic map (
               FLIT_WIDTH      => FLIT_WIDTH,
               VCHANNELS       => CHANNELS,
@@ -435,7 +435,7 @@ begin
 
               -- Instantiate the router. We call a function to
               -- generate the routing table
-              router : noc_router
+              router : peripheral_noc_router
               generic map (
                 FLIT_WIDTH      => FLIT_WIDTH,
                 VCHANNELS       => 1,

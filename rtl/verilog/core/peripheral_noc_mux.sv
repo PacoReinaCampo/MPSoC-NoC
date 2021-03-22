@@ -41,7 +41,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_mux #(
+module peripheral_noc_mux #(
   parameter FLIT_WIDTH = 32,
   parameter CHANNELS   = 2
 )
@@ -128,7 +128,7 @@ module noc_mux #(
     end
   end
 
-  arb_rr #(
+  peripheral_arbiter_rr #(
     .N (CHANNELS)
   )
   arbiter_rr (

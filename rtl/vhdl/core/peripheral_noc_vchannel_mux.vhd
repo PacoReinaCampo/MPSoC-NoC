@@ -47,9 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_vchannel_mux is
+entity peripheral_noc_vchannel_mux is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 7
@@ -68,10 +68,10 @@ entity noc_vchannel_mux is
     out_valid : out std_logic_vector(CHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
   );
-end noc_vchannel_mux;
+end peripheral_noc_vchannel_mux;
 
-architecture RTL of noc_vchannel_mux is
-  component arb_rr
+architecture RTL of peripheral_noc_vchannel_mux is
+  component peripheral_arbiter_rr
     generic (
       N : integer := 2
     );
@@ -115,7 +115,7 @@ begin
     end if;
   end process;
 
-  arbiter_rr : arb_rr
+  arbiter_rr : peripheral_arbiter_rr
     generic map (
       N => CHANNELS
     )

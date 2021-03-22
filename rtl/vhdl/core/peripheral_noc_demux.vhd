@@ -72,7 +72,7 @@ entity peripheral_noc_demux is
   );
 end peripheral_noc_demux;
 
-architecture RTL of noc_demux is
+architecture RTL of peripheral_noc_demux is
   --////////////////////////////////////////////////////////////////
   --
   -- Constants

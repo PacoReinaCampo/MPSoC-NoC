@@ -48,9 +48,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_router_output is
+entity peripheral_noc_router_output is
   generic (
     FLIT_WIDTH   : integer := 32;
     VCHANNELS    : integer := 7;
@@ -71,10 +71,10 @@ entity noc_router_output is
     out_valid : out std_logic_vector(VCHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(VCHANNELS-1 downto 0)
   );
-end noc_router_output;
+end peripheral_noc_router_output;
 
-architecture RTL of noc_router_output is
-  component noc_mux
+architecture RTL of peripheral_noc_router_output is
+  component peripheral_noc_mux
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 7
@@ -95,7 +95,7 @@ architecture RTL of noc_router_output is
     );
   end component;
 
-  component noc_buffer
+  component peripheral_noc_buffer
     generic (
       FLIT_WIDTH : integer := 32;
       DEPTH      : integer := 16
@@ -121,7 +121,7 @@ architecture RTL of noc_router_output is
     );
   end component;
 
-  component noc_vchannel_mux
+  component peripheral_noc_vchannel_mux
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 7
@@ -162,7 +162,7 @@ begin
   -- Module Body
   --
   generating_0 : for v in 0 to VCHANNELS - 1 generate
-    mux : noc_mux
+    mux : peripheral_noc_mux
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         CHANNELS   => INPUTS
@@ -182,7 +182,7 @@ begin
         out_ready => buffer_ready (v)
       );
 
-    u_buffer : noc_buffer
+    u_buffer : peripheral_noc_buffer
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DEPTH      => BUFFER_DEPTH
@@ -206,7 +206,7 @@ begin
   end generate;
 
   generating_1 : if (VCHANNELS > 1) generate
-    vchannel_mux : noc_vchannel_mux
+    vchannel_mux : peripheral_noc_vchannel_mux
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         CHANNELS   => VCHANNELS

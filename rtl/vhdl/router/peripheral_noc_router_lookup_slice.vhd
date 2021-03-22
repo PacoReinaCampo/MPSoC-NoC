@@ -47,9 +47,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.mpsoc_noc_pkg.all;
+use work.vhdl_pkg.all;
 
-entity noc_router_lookup_slice is
+entity peripheral_noc_router_lookup_slice is
   generic (
     FLIT_WIDTH : integer := 32;
     OUTPUTS    : integer := 7
@@ -68,9 +68,9 @@ entity noc_router_lookup_slice is
     out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
     out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
   );
-end noc_router_lookup_slice;
+end peripheral_noc_router_lookup_slice;
 
-architecture RTL of noc_router_lookup_slice is
+architecture RTL of peripheral_noc_router_lookup_slice is
   --////////////////////////////////////////////////////////////////
   --
   -- Variables

@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_router_output #(
+module peripheral_noc_router_output #(
   parameter FLIT_WIDTH   = 32,
   parameter VCHANNELS    = 7,
   parameter INPUTS       = 7,
@@ -83,7 +83,7 @@ module noc_router_output #(
   //
   generate
     for (v = 0; v < VCHANNELS; v=v+1) begin
-      noc_mux #(
+      peripheral_noc_mux #(
         .FLIT_WIDTH (FLIT_WIDTH),
         .CHANNELS   (INPUTS)
       )
@@ -102,7 +102,7 @@ module noc_router_output #(
        .out_ready (buffer_ready [v])
       );
 
-      noc_buffer #(
+      peripheral_noc_buffer #(
         .FLIT_WIDTH (FLIT_WIDTH),
         .DEPTH      (BUFFER_DEPTH)
       )
@@ -125,7 +125,7 @@ module noc_router_output #(
     end
 
     if (VCHANNELS > 1) begin : vc_mux
-      noc_vchannel_mux #(
+      peripheral_noc_vchannel_mux #(
         .FLIT_WIDTH (FLIT_WIDTH),
         .CHANNELS   (VCHANNELS)
       )

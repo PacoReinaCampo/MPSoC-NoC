@@ -42,7 +42,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_buffer #(
+module peripheral_noc_buffer #(
   parameter FLIT_WIDTH = 32,
   parameter DEPTH      = 16,  // must be a power of 2
   parameter FULLPACKET = 0,

@@ -72,7 +72,7 @@ entity peripheral_noc_mux is
 end peripheral_noc_mux;
 
 architecture RTL of peripheral_noc_mux is
-  component peripheral_arb_rr
+  component peripheral_arbiter_rr
     generic (
       N : integer := 2
     );
@@ -156,7 +156,7 @@ begin
     end if;
   end process;
 
-  arb_rr : peripheral_arb_rr
+  arb_rr : peripheral_arbiter_rr
     generic map (
       N => CHANNELS
     )

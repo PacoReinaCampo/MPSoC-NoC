@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_vchannel_mux #(
+module peripheral_noc_vchannel_mux #(
   parameter FLIT_WIDTH = 32,
   parameter CHANNELS   = 7
 )
@@ -86,7 +86,7 @@ module noc_vchannel_mux #(
     end
   end
 
-  arb_rr #(
+  peripheral_arbiter_rr #(
     .N (CHANNELS)
   )
   arbiter_rr (

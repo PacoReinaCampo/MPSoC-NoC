@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_router_lookup #(
+module peripheral_noc_router_lookup #(
   parameter FLIT_WIDTH = 32,
   parameter DEST_WIDTH = 5,
   parameter DESTS      = 1,
@@ -93,7 +93,7 @@ module noc_router_lookup #(
   // directly serves as flow control valid
 
   // Register slice at the output.
-  noc_router_lookup_slice #(
+  peripheral_noc_router_lookup_slice #(
     .FLIT_WIDTH (FLIT_WIDTH),
     .OUTPUTS    (OUTPUTS)
   )

@@ -40,12 +40,12 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module arb_rr #(
+module peripheral_arbiter_rr #(
   parameter N = 2
 )
   (
     input  [N-1:0] req,
-    input 	   en,
+    input          en,
     input  [N-1:0] gnt,
     output [N-1:0] nxt_gnt
   );

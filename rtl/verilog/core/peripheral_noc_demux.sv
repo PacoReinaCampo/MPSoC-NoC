@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_demux #(
+module peripheral_noc_demux #(
   parameter        FLIT_WIDTH = 32,
   parameter        CHANNELS   = 7,
   parameter [63:0] MAPPING    = 'x

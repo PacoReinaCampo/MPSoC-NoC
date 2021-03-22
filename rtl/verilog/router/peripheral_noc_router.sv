@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_router #(
+module peripheral_noc_router #(
   parameter FLIT_WIDTH      = 32,
   parameter VCHANNELS       = 1,
   parameter INPUTS          = 'x,
@@ -97,7 +97,7 @@ module noc_router #(
   generate
     for (i = 0; i < INPUTS; i=i+1) begin : inputs
       // The input stages
-      noc_router_input #(
+      peripheral_noc_router_input #(
         .FLIT_WIDTH   (FLIT_WIDTH),
         .VCHANNELS    (VCHANNELS),
         .DESTS        (DESTS),
@@ -137,7 +137,7 @@ module noc_router #(
 
     for (o = 0; o < OUTPUTS; o=o+1) begin :  outputs
       // The output stages
-      noc_router_output #(
+      peripheral_noc_router_output #(
         .FLIT_WIDTH   (FLIT_WIDTH),
         .VCHANNELS    (VCHANNELS),
         .INPUTS       (INPUTS),

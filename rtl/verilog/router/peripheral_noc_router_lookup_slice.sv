@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_router_lookup_slice #(
+module peripheral_noc_router_lookup_slice #(
   parameter FLIT_WIDTH = 32,
   parameter OUTPUTS    = 7
 )
