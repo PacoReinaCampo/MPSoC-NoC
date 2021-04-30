@@ -69,10 +69,10 @@ module peripheral_noc_testbench;
   wire clk;
   wire rst;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_ready;
+  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_in_flit;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_last;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_valid;
+  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_ready;
 
   wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
   wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
@@ -105,10 +105,10 @@ module peripheral_noc_testbench;
     .rst       ( rst ),
     .clk       ( clk ),
 
-    .in_flit   ( noc_out_flit  ),
-    .in_last   ( noc_out_last  ),
-    .in_valid  ( noc_out_valid ),
-    .in_ready  ( noc_out_ready ),
+    .in_flit   ( noc_in_flit  ),
+    .in_last   ( noc_in_last  ),
+    .in_valid  ( noc_in_valid ),
+    .in_ready  ( noc_in_ready ),
 
     .out_flit  ( noc_out_flit  ),
     .out_last  ( noc_out_last  ),

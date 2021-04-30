@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module noc_mesh4d #(
+module peripheral_noc_mesh4d #(
   parameter FLIT_WIDTH = 32,
   parameter CHANNELS   = 1,
 
@@ -255,11 +255,11 @@ module noc_mesh4d #(
           for (x = 0; x < X; x=x+1) begin : xdir
             if (ENABLE_VCHANNELS) begin
               // Mux inputs to virtual channels
-              noc_vchannel_mux #(
+              peripheral_noc_vchannel_mux #(
                 .FLIT_WIDTH (FLIT_WIDTH),
                 .CHANNELS   (CHANNELS)
               )
-              u_vc_mux (
+              noc_vchannel_mux (
                 .clk (clk),
                 .rst (rst),
 
@@ -285,7 +285,7 @@ module noc_mesh4d #(
 
               // Instantiate the router. We call a function to
               // generate the routing table
-              noc_router #(
+              peripheral_noc_router #(
                 .FLIT_WIDTH      (FLIT_WIDTH),
                 .VCHANNELS       (CHANNELS),
                 .INPUTS          (9),
@@ -294,7 +294,7 @@ module noc_mesh4d #(
                 .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
                 .DESTS           (NODES)
               )
-              u_router (
+              noc_router (
                 .clk (clk),
                 .rst (rst),
 
@@ -348,14 +348,14 @@ module noc_mesh4d #(
 
                 // Instantiate the router. We call a function to
                 // generate the routing table
-                noc_router #(
+                peripheral_noc_router #(
                   .FLIT_WIDTH (FLIT_WIDTH),
                   .VCHANNELS  (1),
                   .INPUTS     (9),
                   .OUTPUTS    (9),
                   .DESTS      (NODES)
                 )
-                u_router (
+                noc_router (
                   .clk (clk),
                   .rst (rst),
 

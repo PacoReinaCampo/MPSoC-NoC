@@ -1,17 +1,17 @@
 ../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
 
-../../../../rtl/vhdl/core/arb_rr.vhd
-../../../../rtl/vhdl/core/noc_buffer.vhd
-../../../../rtl/vhdl/core/noc_demux.vhd
-../../../../rtl/vhdl/core/noc_mux.vhd
-../../../../rtl/vhdl/core/noc_vchannel_mux.vhd
+../../../../rtl/vhdl/core/peripheral_arbiter_rr.vhd
+../../../../rtl/vhdl/core/peripheral_noc_buffer.vhd
+../../../../rtl/vhdl/core/peripheral_noc_demux.vhd
+../../../../rtl/vhdl/core/peripheral_noc_mux.vhd
+../../../../rtl/vhdl/core/peripheral_noc_vchannel_mux.vhd
 
-../../../../rtl/vhdl/router/noc_router_input.vhd
-../../../../rtl/vhdl/router/noc_router_lookup_slice.vhd
-../../../../rtl/vhdl/router/noc_router_lookup.vhd
-../../../../rtl/vhdl/router/noc_router_output.vhd
-../../../../rtl/vhdl/router/noc_router.vhd
+../../../../rtl/vhdl/router/peripheral_noc_router_input.vhd
+../../../../rtl/vhdl/router/peripheral_noc_router_lookup_slice.vhd
+../../../../rtl/vhdl/router/peripheral_noc_router_lookup.vhd
+../../../../rtl/vhdl/router/peripheral_noc_router_output.vhd
+../../../../rtl/vhdl/router/peripheral_noc_router.vhd
 
-../../../../rtl/vhdl/topology/noc_mesh4d.vhd
+../../../../rtl/vhdl/topology/peripheral_noc_mesh4d.vhd
 
-../../../../bench/vhdl/tests/mpsoc_noc_testbench.vhd
+../../../../bench/vhdl/tests/peripheral_noc_testbench.vhd
