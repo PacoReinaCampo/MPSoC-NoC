@@ -68,7 +68,7 @@ architecture RTL of peripheral_arbiter_rr is
   --
 
   -- Mask net
-  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0;
+  signal mask : std_logic_matrix(N-1 downto 0)(N-1 downto 0);
 
 begin
   --////////////////////////////////////////////////////////////////

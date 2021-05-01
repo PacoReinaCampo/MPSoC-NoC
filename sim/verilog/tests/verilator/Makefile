@@ -1,7 +1,7 @@
 all: build simulate
 
 build:
-	verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --cc -f system.vc --top-module mpsoc_noc_testbench
+	verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --cc -f system.vc --top-module peripheral_noc_testbench
 
 simulate:
 

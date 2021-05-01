@@ -1,4 +1,4 @@
-../../../../rtl/vhdl/pkg/mpsoc_noc_pkg.vhd
+../../../../rtl/vhdl/pkg/vhdl_pkg.vhd
 
 ../../../../rtl/vhdl/core/peripheral_arbiter_rr.vhd
 ../../../../rtl/vhdl/core/peripheral_noc_buffer.vhd

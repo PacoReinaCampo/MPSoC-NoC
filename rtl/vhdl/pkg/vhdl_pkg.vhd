@@ -91,6 +91,7 @@ package vhdl_pkg is
   function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
   function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
   function reduce_xor (reduce_xor_in : std_logic_vector) return std_logic;
+  function ternary (a : integer; b : integer; selection : integer) return integer;
 
 end vhdl_pkg;
 
@@ -164,5 +165,18 @@ package body vhdl_pkg is
     end loop;
     return reduce_xor_out;
   end reduce_xor;
+
+  function ternary (
+    a : integer;
+    b : integer;
+    selection : integer
+    ) return integer is
+  begin
+    if selection > 0 then
+      return a;
+    else
+      return b;
+    end if;
+  end function ternary;
 
 end vhdl_pkg;

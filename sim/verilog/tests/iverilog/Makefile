@@ -1,7 +1,7 @@
 all: build simulate
 
 build:
-	iverilog -g2012 -o system.vvp -c system.vc -s mpsoc_noc_testbench
+	iverilog -g2012 -o system.vvp -c system.vc -s peripheral_noc_testbench
 
 simulate:
 	vvp system.vvp
