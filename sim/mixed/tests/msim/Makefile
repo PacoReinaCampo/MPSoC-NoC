@@ -6,7 +6,7 @@ build:
 	vcom -2008 -f system.vhdl.vc
 
 simulate:
-	vsim -c -do run.do work.mpsoc_noc_testbench
+	vsim -c -do run.do work.peripheral_noc_testbench
 
 clean:
 	rm -rf work transcript
