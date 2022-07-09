@@ -1,0 +1,2 @@
+└── tests
+    └── peripheral_noc_testbench.sv
