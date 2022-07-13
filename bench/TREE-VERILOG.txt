@@ -1,2 +1,4 @@
 └── tests
     └── peripheral_noc_testbench.sv
+
+1 directory, 1 file
