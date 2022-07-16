@@ -1114,7 +1114,7 @@ qemu-system-riscv64 -nographic -machine virt \
 
 # 5. ORGANIZATION
 
-## 5.1. Requeriments
+## 5.1. Requirements
 
 ### 5.1.1. Structural UML diagrams
 
@@ -1146,29 +1146,34 @@ qemu-system-riscv64 -nographic -machine virt \
 ### 5.3.1. VHDL
 ### 5.3.2. Verilog
 
-## 5.4. Design
+## 5.4. Validation
 
 ### 5.4.1. VHDL
 ### 5.4.2. Verilog
 
-## 5.5. Verification
+## 5.5. Design
 
-### 5.5.1. OSVVM-VHDL
+### 5.5.1. VHDL
+### 5.5.2. Verilog
 
-#### 5.5.1.1. OSVVM Checker
-#### 5.5.1.2. OSVVM Stimulus
-#### 5.5.1.3. OSVVM Testbench
+## 5.6. Verification
 
-### 5.5.2. UVM-Verilog
+### 5.6.1. OSVVM-VHDL
 
-#### 5.5.2.1. UVM Agent
-#### 5.5.2.2. UVM Driver
-#### 5.5.2.3. UVM Enviroment
-#### 5.5.2.4. UVM Monitor
-#### 5.5.2.5. UVM Scoreboard
-#### 5.5.2.6. UVM Sequence
-#### 5.5.2.7. UVM Sequencer
-#### 5.5.2.8. UVM Subscriber
-#### 5.5.2.9. UVM Test
-#### 5.5.2.10. UVM Testbench
-#### 5.5.2.11. UVM Transaction
+#### 5.6.1.1. OSVVM Checker
+#### 5.6.1.2. OSVVM Stimulus
+#### 5.6.1.3. OSVVM Testbench
+
+### 5.6.2. UVM-Verilog
+
+#### 5.6.2.1. UVM Agent
+#### 5.6.2.2. UVM Driver
+#### 5.6.2.3. UVM Enviroment
+#### 5.6.2.4. UVM Monitor
+#### 5.6.2.5. UVM Scoreboard
+#### 5.6.2.6. UVM Sequence
+#### 5.6.2.7. UVM Sequencer
+#### 5.6.2.8. UVM Subscriber
+#### 5.6.2.9. UVM Test
+#### 5.6.2.10. UVM Testbench
+#### 5.6.2.11. UVM Transaction

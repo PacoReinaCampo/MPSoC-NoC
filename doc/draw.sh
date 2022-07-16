@@ -1,0 +1,14 @@
+dot -Tsvg graphviz/behavioral/activity/activity.dot > graphviz/behavioral/activity/activity.svg
+dot -Tsvg graphviz/behavioral/communication/communication.dot > graphviz/behavioral/communication/communication.svg
+dot -Tsvg graphviz/behavioral/interaction/interaction.dot > graphviz/behavioral/interaction/interaction.svg
+dot -Tsvg graphviz/behavioral/sequence/sequence.dot > graphviz/behavioral/sequence/sequence.svg
+dot -Tsvg graphviz/behavioral/state/state.dot > graphviz/behavioral/state/state.svg
+dot -Tsvg graphviz/behavioral/timing/timing.dot > graphviz/behavioral/timing/timing.svg
+dot -Tsvg graphviz/behavioral/use/use.dot > graphviz/behavioral/use/use.svg
+dot -Tsvg graphviz/structural/class/class.dot > graphviz/structural/class/class.svg
+dot -Tsvg graphviz/structural/component/component.dot > graphviz/structural/component/component.svg
+dot -Tsvg graphviz/structural/composite/composite.dot > graphviz/structural/composite/composite.svg
+dot -Tsvg graphviz/structural/deployment/deployment.dot > graphviz/structural/deployment/deployment.svg
+dot -Tsvg graphviz/structural/object/object.dot > graphviz/structural/object/object.svg
+dot -Tsvg graphviz/structural/package/package.dot > graphviz/structural/package/package.svg
+dot -Tsvg graphviz/structural/profile/profile.dot > graphviz/structural/profile/profile.svg
