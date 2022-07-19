@@ -35,15 +35,12 @@ geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 #### 0.0.8.1 Previously Developed Hardware
 #### 0.0.8.2 Commercial Components Usage
 
-## 0.1. Best Practices
+## 0.1. BEST PRACTICES
 
 ### 0.1.1. HARDWARE
-
 ### 0.1.2. SOFTWARE
 
-# 1. METODOLOGY
-
-## 1.1. OPEN SOURCE PHILOSOPHY
+## 0.1. OPEN SOURCE PHILOSOPHY
 
 **For Windows Users!**
 
@@ -57,35 +54,35 @@ sudo apt update
 sudo apt upgrade
 ```
 
-### 1.2.1. Open Source Hardware
+### 0.2.1. Open Source Hardware
 
-#### 1.2.1.1. MSP430 Processing Unit
+#### 0.2.1.1. MSP430 Processing Unit
 
-#### 1.2.1.2. OpenRISC Processing Unit
+#### 0.2.1.2. OpenRISC Processing Unit
 
-#### 1.2.1.3. RISC-V Processing Unit
+#### 0.2.1.3. RISC-V Processing Unit
 
-### 1.2.2. Open Source Software
+### 0.2.2. Open Source Software
 
-#### 1.2.2.1. MSP430 GNU Compiler Collection
+#### 0.2.2.1. MSP430 GNU Compiler Collection
 
-#### 1.2.2.2. OpenRISC GNU Compiler Collection
+#### 0.2.2.2. OpenRISC GNU Compiler Collection
 
-#### 1.2.2.3. RISC-V GNU Compiler Collection
+#### 0.2.2.3. RISC-V GNU Compiler Collection
 
-## 1.2. RISC-V ISA
+## 0.2. RISC-V ISA
 
-### 1.2.1. ISA Bases
+### 0.2.1. ISA Bases
 
-#### 1.2.2.1. RISC-V 32
+#### 0.2.2.1. RISC-V 32
 
-#### 1.2.2.2. RISC-V 64
+#### 0.2.2.2. RISC-V 64
 
-#### 1.2.2.3. RISC-V 128
+#### 0.2.2.3. RISC-V 128
 
-### 1.2.2. ISA Extensions
+### 0.2.2. ISA Extensions
 
-#### 1.2.2.1. Base Integer Instruction Set
+#### 0.2.2.1. Base Integer Instruction Set
 
 **RV32I : Base Integer Instruction Set (32 bit)**
 
@@ -151,7 +148,7 @@ sudo apt upgrade
 |SRLW  RD, RS1,RS2 |0000000 |RS24:0|RS14:0|101  |RD4:0 |0111011 |
 |SRAW  RD, RS1,RS2 |0100000 |RS24:0|RS14:0|101  |RD4:0 |0111011 |
 
-#### 1.2.2.2. Standard Extension for Integer Multiply and Divide
+#### 0.2.2.2. Standard Extension for Integer Multiply and Divide
 
 **RV32M : Standard Extension for Integer Multiply and Divide (32 bit)**
 
@@ -176,7 +173,7 @@ sudo apt upgrade
 | REMW RD,RS1,RS2   |0000001 |RS24:0|RS14:0|110  |RD4:0 |0111011 |
 | REMUW RD,RS1,RS2  |0000001 |RS24:0|RS14:0|111  |RD4:0 |0111011 |
 
-#### 1.2.2.3. Standard Extension for Atomic Instructions
+#### 0.2.2.3. Standard Extension for Atomic Instructions
 
 **RV32A : Standard Extension for Atomic Instructions (32 bit)**
 
@@ -210,7 +207,7 @@ sudo apt upgrade
 | AMOMINU.D AQRL,RD,RS2,RS1|11000AQRL|RS24:0|RS14:0|011  |RD4:0 |0101111 |
 | AMOMAXU.D AQRL,RD,RS2,RS1|11100AQRL|RS24:0|RS14:0|011  |RD4:0 |0101111 |
 
-#### 1.2.2.4. Standard Extension for Single-Precision Floating-Point
+#### 0.2.2.4. Standard Extension for Single-Precision Floating-Point
 
 **RV32F : Standard Extension for Single-Precision Floating-Point (32 bit)**
 
@@ -252,7 +249,7 @@ sudo apt upgrade
 | FCVT.S.L RM,RD,FRS1           |1101000  |00010 |FRS1  |RM   |FRD   |1010011 |
 | FCVT.S.LU RM,RD,FRS1          |1101000  |00011 |FRS1  |RM   |FRD   |1010011 |
 
-#### 1.2.2.5. Standard Extension for Double-Precision Floating-Point
+#### 0.2.2.5. Standard Extension for Double-Precision Floating-Point
 
 **RV32D : Standard Extension for Double-Precision Floating-Point (32 bit)**
 
@@ -294,59 +291,125 @@ sudo apt upgrade
 | FMV.X.D RD,FRS1               |1110001  |00000 |FRS1  |000  |RD    |1010011 |
 | FMV.D.X RD,FRS1               |1111001  |00000 |RS1   |000  |FRD   |1010011 |
 
-### 1.2.3. ISA Modes
+### 0.2.3. ISA Modes
 
-#### 1.2.3.1. RISC-V User
+#### 0.2.3.1. RISC-V User
 
-#### 1.2.3.2. RISC-V Supervisor
+#### 0.2.3.2. RISC-V Supervisor
 
-#### 1.2.3.3. RISC-V Hypervisor
+#### 0.2.3.3. RISC-V Hypervisor
 
-#### 1.2.3.4. RISC-V Machine
+#### 0.2.3.4. RISC-V Machine
 
-## 1.3. OpenRISC ISA
+## 0.3. OpenRISC ISA
 
-### 1.3.1. ISA Bases
+### 0.3.1. ISA Bases
 
-#### 1.3.2.1. OpenRISC 32
+#### 0.3.2.1. OpenRISC 32
 
-#### 1.3.2.2. OpenRISC 64
+#### 0.3.2.2. OpenRISC 64
 
-#### 1.3.2.3. OpenRISC 128
+#### 0.3.2.3. OpenRISC 128
 
-### 1.3.2. ISA Extensions
+### 0.3.2. ISA Extensions
 
-### 1.3.3. ISA Modes
+### 0.3.3. ISA Modes
 
-#### 1.3.3.1. OpenRISC User
+#### 0.3.3.1. OpenRISC User
 
-#### 1.3.3.2. OpenRISC Supervisor
+#### 0.3.3.2. OpenRISC Supervisor
 
-#### 1.3.3.3. OpenRISC Hypervisor
+#### 0.3.3.3. OpenRISC Hypervisor
 
-#### 1.3.3.4. OpenRISC Machine
+#### 0.3.3.4. OpenRISC Machine
 
-## 1.4. MSP430 ISA
+## 0.4. MSP430 ISA
 
-### 1.4.1. ISA Bases
+### 0.4.1. ISA Bases
 
-#### 1.4.2.1. MSP430 32
+#### 0.4.2.1. MSP430 32
 
-#### 1.4.2.2. MSP430 64
+#### 0.4.2.2. MSP430 64
 
-#### 1.4.2.3. MSP430 128
+#### 0.4.2.3. MSP430 128
 
-### 1.4.2. ISA Extensions
+### 0.4.2. ISA Extensions
 
-### 1.4.3. ISA Modes
+### 0.4.3. ISA Modes
 
-#### 1.4.3.1. MSP430 User
+#### 0.4.3.1. MSP430 User
 
-#### 1.4.3.2. MSP430 Supervisor
+#### 0.4.3.2. MSP430 Supervisor
 
-#### 1.4.3.3. MSP430 Hypervisor
+#### 0.4.3.3. MSP430 Hypervisor
 
-#### 1.4.3.4. MSP430 Machine
+#### 0.4.3.4. MSP430 Machine
+
+# 1. METODOLOGY
+
+## 1.1. Requirements
+
+### 1.1.1. Structural UML diagrams
+
+#### 1.1.1.1. Class diagram
+#### 1.1.1.2. Component diagram
+#### 1.1.1.3. Composite diagram
+#### 1.1.1.4. Deployment diagram
+#### 1.1.1.5. Object diagram
+#### 1.1.1.6. Package diagram
+#### 1.1.1.7. Profile diagram
+
+### 1.1.2. Behavioral UML diagrams
+
+#### 1.1.2.1. Activity diagram
+#### 1.1.2.2. Communication diagram
+#### 1.1.2.3. Interaction diagram
+#### 1.1.2.4. Sequence diagram
+#### 1.1.2.5. State diagram
+#### 1.1.2.6. Timing diagram
+#### 1.1.2.7. Use diagram
+
+## 1.2. Source
+
+### 1.2.1. MatLab Language
+### 1.2.2. Rust Language
+
+## 1.3. Model
+
+### 1.3.1. VHDL
+### 1.3.2. Verilog
+
+## 1.4. Validation
+
+### 1.4.1. VHDL
+### 1.4.2. Verilog
+
+## 1.5. Design
+
+### 1.5.1. VHDL
+### 1.5.2. Verilog
+
+## 1.6. Verification
+
+### 1.6.1. OSVVM-VHDL
+
+#### 1.6.1.1. OSVVM Checker
+#### 1.6.1.2. OSVVM Stimulus
+#### 1.6.1.3. OSVVM Testbench
+
+### 1.6.2. UVM-Verilog
+
+#### 1.6.2.1. UVM Agent
+#### 1.6.2.2. UVM Driver
+#### 1.6.2.3. UVM Enviroment
+#### 1.6.2.4. UVM Monitor
+#### 1.6.2.5. UVM Scoreboard
+#### 1.6.2.6. UVM Sequence
+#### 1.6.2.7. UVM Sequencer
+#### 1.6.2.8. UVM Subscriber
+#### 1.6.2.9. UVM Test
+#### 1.6.2.10. UVM Testbench
+#### 1.6.2.11. UVM Transaction
 
 # 2. PROJECTS
 
@@ -1111,69 +1174,3 @@ qemu-system-riscv64 -nographic -machine virt \
 #### 4.2.4.1. GNU Debian
 
 #### 4.2.4.2. GNU Fedora
-
-# 5. ORGANIZATION
-
-## 5.1. Requirements
-
-### 5.1.1. Structural UML diagrams
-
-#### 5.1.1.1. Class diagram
-#### 5.1.1.2. Component diagram
-#### 5.1.1.3. Composite diagram
-#### 5.1.1.4. Deployment diagram
-#### 5.1.1.5. Object diagram
-#### 5.1.1.6. Package diagram
-#### 5.1.1.7. Profile diagram
-
-### 5.1.2. Behavioral UML diagrams
-
-#### 5.1.2.1. Activity diagram
-#### 5.1.2.2. Communication diagram
-#### 5.1.2.3. Interaction diagram
-#### 5.1.2.4. Sequence diagram
-#### 5.1.2.5. State diagram
-#### 5.1.2.6. Timing diagram
-#### 5.1.2.7. Use diagram
-
-## 5.2. Source
-
-### 5.2.1. MatLab Language
-### 5.2.2. Rust Language
-
-## 5.3. Model
-
-### 5.3.1. VHDL
-### 5.3.2. Verilog
-
-## 5.4. Validation
-
-### 5.4.1. VHDL
-### 5.4.2. Verilog
-
-## 5.5. Design
-
-### 5.5.1. VHDL
-### 5.5.2. Verilog
-
-## 5.6. Verification
-
-### 5.6.1. OSVVM-VHDL
-
-#### 5.6.1.1. OSVVM Checker
-#### 5.6.1.2. OSVVM Stimulus
-#### 5.6.1.3. OSVVM Testbench
-
-### 5.6.2. UVM-Verilog
-
-#### 5.6.2.1. UVM Agent
-#### 5.6.2.2. UVM Driver
-#### 5.6.2.3. UVM Enviroment
-#### 5.6.2.4. UVM Monitor
-#### 5.6.2.5. UVM Scoreboard
-#### 5.6.2.6. UVM Sequence
-#### 5.6.2.7. UVM Sequencer
-#### 5.6.2.8. UVM Subscriber
-#### 5.6.2.9. UVM Test
-#### 5.6.2.10. UVM Testbench
-#### 5.6.2.11. UVM Transaction
