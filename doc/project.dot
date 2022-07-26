@@ -1,0 +1,24 @@
+digraph Project {
+  // Introduction
+  graph [rankdir = LR, splines=ortho];
+  node[shape=record];
+
+  // Blocks
+  Requirements[label="Requirements \n(UML)"];
+  Source[label="Source \n(ADA/C)"];
+  Model[label="Model \n(VHDL/Verilog)"];
+  Validation[label="Validation \n(VHDL/Verilog)"];
+  Design[label="Design \n(VHDL/Verilog)"];
+  Verification[label="Verification \n(VHDL/Verilog)"];
+
+  // Sequence
+  Requirements -> Source;
+  Source -> Model;
+  Model -> Validation;
+  Validation -> Design;
+  Design -> Verification;
+
+  // Feedback
+  Validation -> Model;
+  Verification -> Design;
+}
