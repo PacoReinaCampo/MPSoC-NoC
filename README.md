@@ -4,6 +4,8 @@ author: QueenField
 geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 ---
 
+![QueenField](../icon.jpg)
+
 # 0. INTRODUCTION
 
 ## 0.0. DO-254
@@ -38,9 +40,217 @@ geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 ## 0.1. BEST PRACTICES
 
 ### 0.1.1. HARDWARE
+
+```
+cd synthesis/yosys
+source SYNTHESIZE-IT
+```
+
+#### 0.1.1.1. ASIC
+
+type:
+```
+cd synthesis/qflow
+source FLOW-IT
+```
+
+#### 0.1.1.2. FPGA
+
+type:
+```
+cd synthesis/symbiflow
+source FLOW-IT
+```
+
 ### 0.1.2. SOFTWARE
 
-## 0.1. OPEN SOURCE PHILOSOPHY
+#### 0.1.2.3. MSP430
+
+#### 0.1.2.3. OpenRISC
+
+#### 0.1.2.3. RISC-V
+
+##### 0.1.2.3.1. RISC-V Tests
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+rm -rf tests
+rm -rf riscv-tests
+
+mkdir tests
+mkdir tests/dump
+mkdir tests/hex
+
+git clone --recursive https://github.com/riscv/riscv-tests
+cd riscv-tests
+
+autoconf
+./configure --prefix=/opt/riscv-elf-gcc/bin
+make
+
+cd isa
+
+source ../../elf2hex.sh
+
+mv *.dump ../../tests/dump
+mv *.hex ../../tests/hex
+
+cd ..
+
+make clean
+```
+
+elf2hex.sh:
+```
+riscv64-unknown-elf-objcopy -O ihex rv32mi-p-breakpoint rv32mi-p-breakpoint.hex
+riscv64-unknown-elf-objcopy -O ihex rv32mi-p-csr rv32mi-p-csr.hex
+...
+riscv64-unknown-elf-objcopy -O ihex rv64um-v-remw rv64um-v-remw.hex
+```
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+spike rv32mi-p-breakpoint
+spike rv32mi-p-csr
+...
+spike rv64um-v-remw
+```
+
+##### 0.1.2.3.2. RISC-V Bare Metal
+
+type:
+```
+rm -rf hello_c.elf
+rm -rf hello_c.hex
+
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+riscv64-unknown-elf-gcc -o hello_c.elf hello_c.c
+riscv64-unknown-elf-objcopy -O ihex hello_c.elf hello_c.hex
+```
+
+C Language:
+```c
+#include <stdio.h>
+
+int main() {
+  printf("Hello QueenField!\n");
+  return 0;
+}
+```
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+spike pk hello_c.elf
+```
+
+type:
+```
+rm -rf hello_cpp.elf
+rm -rf hello_cpp.hex
+
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+riscv64-unknown-elf-g++ -o hello_cpp.elf hello_cpp.cpp
+riscv64-unknown-elf-objcopy -O ihex hello_cpp.elf hello_cpp.hex
+```
+
+C++ Language:
+```cpp
+#include <iostream>
+
+int main() {
+  std::cout << "Hello QueenField!\n";
+  return 0;
+}
+```
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+spike pk hello_cpp.elf
+```
+
+type:
+```
+rm -rf hello_go.elf
+rm -rf hello_go.hex
+
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+export PATH=/opt/riscv-go/bin:${PATH}
+
+GOOS=linux GOARCH=riscv64 go build -o hello_go.elf hello_go.go
+riscv64-unknown-elf-objcopy -O ihex hello_go.elf hello_go.hex
+```
+
+Go Language:
+```go
+package main
+
+import "fmt"
+func main() {
+  fmt.Println("Hello QueenField!")
+}
+```
+
+##### 0.1.2.3.3. RISC-V Operating System
+
+###### 0.1.2.3.3.1. GNU Linux
+
+**Building BusyBox**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+git clone --recursive https://git.busybox.net/busybox
+
+cd busybox
+make CROSS_COMPILE=riscv64-unknown-linux-gnu- defconfig
+make CROSS_COMPILE=riscv64-unknown-linux-gnu-
+```
+
+**Building Linux**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+git clone --recursive https://github.com/torvalds/linux
+
+cd linux
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- defconfig
+make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
+```
+
+**Running Linux**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+qemu-system-riscv64 -nographic -machine virt \
+-kernel Image -append "root=/dev/vda ro console=ttyS0" \
+-drive file=busybox,format=raw,id=hd0 \
+-device virtio-blk-device,drive=hd0
+```
+
+###### 0.1.2.3.3.2. GNU Hurd
+
+##### 0.1.2.3.4. RISC-V Distribution
+
+###### 0.1.2.3.4.1. GNU Debian
+
+###### 0.1.2.3.4.2. GNU Fedora
+
+## 0.2. OPEN SOURCE PHILOSOPHY
 
 **For Windows Users!**
 
@@ -70,19 +280,21 @@ sudo apt upgrade
 
 #### 0.2.2.3. RISC-V GNU Compiler Collection
 
-## 0.2. RISC-V ISA
+## 0.3. INSTRUCTION SET ARCHITECTURE
 
-### 0.2.1. ISA Bases
+### 0.3.1. RISC-V ISA
 
-#### 0.2.2.1. RISC-V 32
+#### 0.3.1.1. ISA Bases
 
-#### 0.2.2.2. RISC-V 64
+##### 0.3.1.1.1. RISC-V 32
 
-#### 0.2.2.3. RISC-V 128
+##### 0.3.1.1.2. RISC-V 64
 
-### 0.2.2. ISA Extensions
+##### 0.3.1.1.3. RISC-V 128
 
-#### 0.2.2.1. Base Integer Instruction Set
+#### 0.3.1.2. ISA Extensions
+
+##### 0.3.1.2.1. Base Integer Instruction Set
 
 **RV32I : Base Integer Instruction Set (32 bit)**
 
@@ -148,7 +360,7 @@ sudo apt upgrade
 |SRLW  RD, RS1,RS2 |0000000 |RS24:0|RS14:0|101  |RD4:0 |0111011 |
 |SRAW  RD, RS1,RS2 |0100000 |RS24:0|RS14:0|101  |RD4:0 |0111011 |
 
-#### 0.2.2.2. Standard Extension for Integer Multiply and Divide
+##### 0.3.1.2.2. Standard Extension for Integer Multiply and Divide
 
 **RV32M : Standard Extension for Integer Multiply and Divide (32 bit)**
 
@@ -173,7 +385,7 @@ sudo apt upgrade
 | REMW RD,RS1,RS2   |0000001 |RS24:0|RS14:0|110  |RD4:0 |0111011 |
 | REMUW RD,RS1,RS2  |0000001 |RS24:0|RS14:0|111  |RD4:0 |0111011 |
 
-#### 0.2.2.3. Standard Extension for Atomic Instructions
+##### 0.3.1.2.3. Standard Extension for Atomic Instructions
 
 **RV32A : Standard Extension for Atomic Instructions (32 bit)**
 
@@ -207,7 +419,7 @@ sudo apt upgrade
 | AMOMINU.D AQRL,RD,RS2,RS1|11000AQRL|RS24:0|RS14:0|011  |RD4:0 |0101111 |
 | AMOMAXU.D AQRL,RD,RS2,RS1|11100AQRL|RS24:0|RS14:0|011  |RD4:0 |0101111 |
 
-#### 0.2.2.4. Standard Extension for Single-Precision Floating-Point
+##### 0.3.1.2.4. Standard Extension for Single-Precision Floating-Point
 
 **RV32F : Standard Extension for Single-Precision Floating-Point (32 bit)**
 
@@ -249,7 +461,7 @@ sudo apt upgrade
 | FCVT.S.L RM,RD,FRS1           |1101000  |00010 |FRS1  |RM   |FRD   |1010011 |
 | FCVT.S.LU RM,RD,FRS1          |1101000  |00011 |FRS1  |RM   |FRD   |1010011 |
 
-#### 0.2.2.5. Standard Extension for Double-Precision Floating-Point
+##### 0.3.1.2.5. Standard Extension for Double-Precision Floating-Point
 
 **RV32D : Standard Extension for Double-Precision Floating-Point (32 bit)**
 
@@ -291,59 +503,59 @@ sudo apt upgrade
 | FMV.X.D RD,FRS1               |1110001  |00000 |FRS1  |000  |RD    |1010011 |
 | FMV.D.X RD,FRS1               |1111001  |00000 |RS1   |000  |FRD   |1010011 |
 
-### 0.2.3. ISA Modes
+#### 0.3.1.3. ISA Modes
 
-#### 0.2.3.1. RISC-V User
+##### 0.3.1.3.1. RISC-V User
 
-#### 0.2.3.2. RISC-V Supervisor
+##### 0.3.1.3.2. RISC-V Supervisor
 
-#### 0.2.3.3. RISC-V Hypervisor
+##### 0.3.1.3.3. RISC-V Hypervisor
 
-#### 0.2.3.4. RISC-V Machine
+##### 0.3.1.3.4. RISC-V Machine
 
-## 0.3. OpenRISC ISA
+### 0.3.2. OpenRISC ISA
 
-### 0.3.1. ISA Bases
+#### 0.3.2.1. ISA Bases
 
-#### 0.3.2.1. OpenRISC 32
+##### 0.3.2.2.1. OpenRISC 32
 
-#### 0.3.2.2. OpenRISC 64
+##### 0.3.2.2.2. OpenRISC 64
 
-#### 0.3.2.3. OpenRISC 128
+##### 0.3.2.2.3. OpenRISC 128
 
-### 0.3.2. ISA Extensions
+#### 0.3.2.2. ISA Extensions
 
-### 0.3.3. ISA Modes
+#### 0.3.2.3. ISA Modes
 
-#### 0.3.3.1. OpenRISC User
+##### 0.3.2.3.1. OpenRISC User
 
-#### 0.3.3.2. OpenRISC Supervisor
+##### 0.3.2.3.2. OpenRISC Supervisor
 
-#### 0.3.3.3. OpenRISC Hypervisor
+##### 0.3.2.3.3. OpenRISC Hypervisor
 
-#### 0.3.3.4. OpenRISC Machine
+##### 0.3.2.3.4. OpenRISC Machine
 
-## 0.4. MSP430 ISA
+### 0.3.3. MSP430 ISA
 
-### 0.4.1. ISA Bases
+#### 0.3.3.1. ISA Bases
 
-#### 0.4.2.1. MSP430 32
+##### 0.3.3.2.1. MSP430 32
 
-#### 0.4.2.2. MSP430 64
+##### 0.3.3.2.2. MSP430 64
 
-#### 0.4.2.3. MSP430 128
+##### 0.3.3.2.3. MSP430 128
 
-### 0.4.2. ISA Extensions
+#### 0.3.3.2. ISA Extensions
 
-### 0.4.3. ISA Modes
+#### 0.3.3.3. ISA Modes
 
-#### 0.4.3.1. MSP430 User
+##### 0.3.3.3.1. MSP430 User
 
-#### 0.4.3.2. MSP430 Supervisor
+##### 0.3.3.3.2. MSP430 Supervisor
 
-#### 0.4.3.3. MSP430 Hypervisor
+##### 0.3.3.3.3. MSP430 Hypervisor
 
-#### 0.4.3.4. MSP430 Machine
+##### 0.3.3.3.4. MSP430 Machine
 
 # 1. METODOLOGY
 
@@ -486,9 +698,103 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 ### 2.3.4. Interruptions
 
-# 3. WORKFLOW
+# 3. ORGANIZATION
 
-## 3.1. HARDWARE
+## 3.1. Mechanics
+
+## 3.2. Information
+
+### 3.2.1. Bit
+
+### 3.2.2. Logic Gate
+
+#### 3.2.2.1. YES/NOT Gate
+
+#### 3.2.2.2. AND/NAND Gate
+
+#### 3.2.2.3. OR/NOR Gate
+
+#### 3.2.2.4. XOR/XNOR Gate
+
+### 3.2.3. Combinational Logic
+
+#### 3.2.3.1. Arithmetic Circuits
+
+#### 3.2.3.2. Logic Circuits
+
+### 3.2.4. Finite State Machine
+
+### 3.2.5. Pushdown Automaton
+
+## 3.3. Neural Network
+
+### 3.3.1. Feedforward Neural Network
+
+### 3.3.2. Long Short Term Memory Neural Network
+
+### 3.3.3. Transformer Neural Network
+
+## 3.4. Turing Machine
+
+### 3.4.1. Neural Turing Machine
+
+#### 3.4.1.1. Feedforward Neural Turing Machine
+
+#### 3.4.1.2. LSTM Neural Turing Machine
+
+#### 3.4.1.3. Transformer Neural Turing Machine
+
+### 3.4.2. Differentiable Neural Computer
+
+#### 3.4.2.1. Feedforward Differentiable Neural Computer
+
+#### 3.4.2.2. LSTM Differentiable Neural Computer
+
+#### 3.4.2.3. Transformer Differentiable Neural Computer
+
+## 3.5. Computer Architecture
+
+### 3.5.1. von Neumann Architecture
+
+#### 3.5.1.1. Control Unit
+
+#### 3.5.1.2. ALU
+
+#### 3.5.1.3. Memory Unit
+
+#### 3.5.1.4. I/O Unit
+
+### 3.5.2. Harvard Architecture
+
+#### 3.5.2.1. Control Unit
+
+#### 3.5.2.2. ALU
+
+#### 3.5.2.3.Memory Unit
+
+#### 3.5.2.4.I/O Unit
+
+## 3.6. Advanced Computer Architecture
+
+### 3.6.1. Processing Unit
+
+#### 3.6.1.1. SISD
+
+#### 3.6.1.2. SIMD
+
+#### 3.6.1.3. MISD
+
+#### 3.6.1.4. MIMD
+
+### 3.6.2. System on Chip
+
+#### 3.6.2.1. Bus on Chip
+
+#### 3.6.2.2. Network on Chip
+
+### 3.6.3. Multi-Processor System on Chip
+
+# 4. HARDWARE WORKFLOW
 
 **1. System Level (SystemC/SystemVerilog)**
 
@@ -512,25 +818,50 @@ On the Physical Gate Level only gates are used that are physically available on 
 
 A Switch Level representation of a circuit is a netlist utilizing single transistors as cells. Switch Level modeling is possible in Verilog and VHDL, but is seldom used in modern designs, as in modern digital ASIC or FPGA flows the physical gates are considered the atomic build blocks of the logic circuit.
 
-### 3.1.1. Front-End Open Source Tools
+1. Settings → Apps → Apps & features → Related settings, Programs and
+Features → Turn Windows features on or off → Windows Subsystem for
+Linux
 
-#### 3.1.1.1. Modeling System Level of Hardware
+2. Microsoft Store → INSTALL UBUNTU
 
-*A System Description Language Editor is a computer tool allows to generate software code. A System Description Language is a formal language, which comprises a Programming Language (input), producing a Hardware Description (output). Programming languages are used in computer programming to implement algorithms. The description of a programming language is  split into the two components of syntax (form) and semantics (meaning).*
+Front-End and Back-End Library
+type:
+```
+sudo apt update
+sudo apt upgrade
 
-**SystemVerilog System Description Language Editor**
+sudo apt install bison cmake flex freeglut3-dev libcairo2-dev libgsl-dev \
+libncurses-dev libx11-dev m4 python-tk python3-tk swig tcl tcl-dev tk-dev tcsh
+```
+
+Synthesizer Library
+type:
+```
+sudo apt update
+sudo apt upgrade
+```
+
+```
+sudo apt -y install build-essential clang bison flex \
+libreadline-dev gawk tcl-dev libffi-dev git make gnat \
+graphviz xdot pkg-config python3 libboost-system-dev \
+libboost-python-dev libboost-filesystem-dev zlib1g-dev
+```
+
+## 4.1. FRONT-END OPEN SOURCE TOOLS
+
+### 4.1.1. Modeling System Level of Hardware
+
+*A System Description Language Editor is a computer tool that allows to generate software code. A System Description Language is a formal language, which comprises a Programming Language (input), producing a Hardware Description (output). Programming languages are used in computer programming to implement algorithms. The description of a programming language is  split into the two components of syntax (form) and semantics (meaning).*
+
+**System Description Language Editor**
 
 type:
 ```
-git clone --recursive https://github.com/emacs-mirror/emacs
-
-cd emacs
-./configure
-make
-sudo make install
+git clone https://github.com/emacs-mirror/emacs
 ```
 
-#### 3.1.1.2. Simulating System Level of Hardware
+### 4.1.2. Simulating System Level of Hardware
 
 *A System Description Language Simulator (translator) is a computer program that translates computer code written in a Programming Language (the source language) into a Hardware Description Language (the target language). The compiler is primarily used for programs that translate source code from a high-level programming language to a low-level language to create an executable program.*
 
@@ -538,7 +869,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive http://git.veripool.org/git/verilator
+git clone http://git.veripool.org/git/verilator
 
 cd verilator
 autoconf
@@ -548,21 +879,21 @@ sudo make install
 ```
 
 ```
-cd sim/verilog/tests/wb/verilator
+cd sim/verilog/regression/wb/vtor
 source SIMULATE-IT
 ```
 
 ```
-cd sim/verilog/tests/ahb3/verilator
+cd sim/verilog/regression/ahb3/vtor
 source SIMULATE-IT
 ```
 
 ```
-cd sim/verilog/tests/axi4/verilator
+cd sim/verilog/regression/axi4/vtor
 source SIMULATE-IT
 ```
 
-#### 3.1.1.3. Verifying System Level of Hardware
+### 4.1.3. Verifying System Level of Hardware
 
 *A UVM standard improves interoperability and reduces the cost of repurchasing and rewriting IP for each new project or Electronic Design Automation tool. It also makes it easier to reuse verification components. The UVM Class Library provides generic utilities, such as component hierarchy, Transaction Library Model or configuration database, which enable the user to create virtually any structure wanted for the testbench.*
 
@@ -570,49 +901,56 @@ source SIMULATE-IT
 
 type:
 ```
-git clone --recursive https://github.com/QueenField/UVM
+git clone https://github.com/QueenField/UVM
 ```
 
-```
-cd sim/verilog/pu/riscv/wb/msim
-source SIMULATE-IT
-```
-
-```
-cd sim/verilog/pu/riscv/ahb3/msim
-source SIMULATE-IT
-```
-
-```
-cd sim/verilog/pu/riscv/axi4/msim
-source SIMULATE-IT
-```
-
-#### 3.1.1.4. Describing Register Transfer Level of Hardware
+### 4.1.4. Describing Register Transfer Level of Hardware
 
 *A Hardware Description Language Editor is any editor that allows to generate hardware code. Hardware Description Language is a specialized computer language used to describe the structure and behavior of digital logic circuits. It allows for the synthesis of a HDL into a netlist, which can then be synthesized, placed and routed to produce the set of masks used to create an integrated circuit.*
 
-**VHDL/Verilog Hardware Description Language Editor**
+**Hardware Description Language Editor**
 
 type:
 ```
-git clone --recursive https://github.com/emacs-mirror/emacs
+git clone https://github.com/emacs-mirror/emacs
+```
 
-cd emacs
-./configure
+### 4.1.5. Simulating Register Transfer Level of Hardware
+
+*A Hardware Description Language Simulator uses mathematical models to replicate the behavior of an actual hardware device. Simulation software allows for modeling of circuit operation and is an invaluable analysis tool. Simulating a circuit’s behavior before actually building it can greatly improve design efficiency by making faulty designs known as such, and providing insight into the behavior of electronics circuit designs.*
+
+**VHDL Hardware Description Language Simulator**
+
+type:
+```
+git clone https://github.com/ghdl/ghdl
+
+cd ghdl
+./configure --prefix=/usr/local
 make
 sudo make install
 ```
 
-#### 3.1.1.5. Simulating Register Transfer Level of Hardware
+```
+cd sim/vhdl/regression/wb/ghdl
+source SIMULATE-IT
+```
 
-*A Hardware Description Language Simulator uses mathematical models to replicate the behavior of an actual hardware device. Simulation software allows for modeling of circuit operation and is an invaluable analysis tool. Simulating a circuit’s behavior before actually building it can greatly improve design efficiency by making faulty designs known as such, and providing insight into the behavior of electronics circuit designs.*
+```
+cd sim/vhdl/regression/ahb3/ghdl
+source SIMULATE-IT
+```
+
+```
+cd sim/vhdl/regression/axi4/ghdl
+source SIMULATE-IT
+```
 
 **Verilog Hardware Description Language Simulator**
 
 type:
 ```
-git clone --recursive https://github.com/steveicarus/iverilog
+git clone https://github.com/steveicarus/iverilog
 
 cd iverilog
 sh autoconf.sh
@@ -622,48 +960,21 @@ sudo make install
 ```
 
 ```
-cd sim/verilog/tests/wb/iverilog
+cd sim/verilog/regression/wb/iverilog
 source SIMULATE-IT
 ```
 
 ```
-cd sim/verilog/tests/ahb3/iverilog
+cd sim/verilog/regression/ahb3/iverilog
 source SIMULATE-IT
 ```
 
 ```
-cd sim/verilog/tests/axi4/iverilog
+cd sim/verilog/regression/axi4/iverilog
 source SIMULATE-IT
 ```
 
-**VHDL Hardware Description Language Simulator**
-
-type:
-```
-git clone --recursive https://github.com/ghdl/ghdl
-
-cd ghdl
-./configure --prefix=/usr/local
-make
-sudo make install
-```
-
-```
-cd sim/vhdl/tests/wb/ghdl
-source SIMULATE-IT
-```
-
-```
-cd sim/vhdl/tests/ahb3/ghdl
-source SIMULATE-IT
-```
-
-```
-cd sim/vhdl/tests/axi4/ghdl
-source SIMULATE-IT
-```
-
-#### 3.1.1.6. Synthesizing Register Transfer Level of Hardware
+### 4.1.6. Synthesizing Register Transfer Level of Hardware
 
 *A Hardware Description Language Synthesizer turns a RTL implementation into a Logical Gate Level implementation. Logical design is a step in the standard design cycle in which the functional design of an electronic circuit is converted into the representation which captures logic operations, arithmetic operations, control flow, etc. In EDA parts of the logical design is automated using  synthesis tools based on the behavioral description of the circuit.*
 
@@ -671,25 +982,36 @@ source SIMULATE-IT
 
 type:
 ```
-git clone --recursive https://github.com/YosysHQ/yosys
+git clone https://github.com/YosysHQ/yosys
 
 cd yosys
 make
 sudo make install
 ```
 
+```
+cd synthesis/yosys
+source SYNTHESIZE-IT
+```
+
 **VHDL Hardware Description Language Synthesizer**
 
-type:
+type for Plugin:
 ```
-git clone --recursive https://github.com/ghdl/ghdl-yosys-plugin
+git clone https://github.com/ghdl/ghdl-yosys-plugin
+
 cd ghdl-yosys-plugin
 make GHDL=/usr/local
 sudo yosys-config --exec mkdir -p --datdir/plugins
 sudo yosys-config --exec cp "ghdl.so" --datdir/plugins/ghdl.so
 ```
 
-#### 3.1.1.7. Optimizing Register Transfer Level of Hardware
+```
+cd synthesis/yosys
+source SYNTHESIZE-IT
+```
+
+### 4.1.7. Optimizing Register Transfer Level of Hardware
 
 *A Hardware Description Language Optimizer finds an equivalent representation of the specified logic circuit under specified constraints (minimum area, pre-specified delay). This tool combines scalable logic optimization based on And-Inverter Graphs (AIGs), optimal-delay DAG-based technology mapping for look-up tables and standard cells, and innovative algorithms for sequential synthesis and verification.*
 
@@ -697,14 +1019,19 @@ sudo yosys-config --exec cp "ghdl.so" --datdir/plugins/ghdl.so
 
 type:
 ```
-git clone --recursive https://github.com/YosysHQ/yosys
+git clone https://github.com/YosysHQ/yosys
 
 cd yosys
 make
 sudo make install
 ```
 
-#### 3.1.1.8. Verifying Register Transfer Level of Hardware
+```
+cd synthesis/yosys
+source SYNTHESIZE-IT
+```
+
+### 4.1.8. Verifying Register Transfer Level of Hardware
 
 *A Hardware Description Language Verifier proves or disproves the correctness of intended algorithms underlying a hardware system with respect to a certain formal specification or property, using formal methods of mathematics. Formal verification uses modern techniques (SAT/SMT solvers, BDDs, etc.) to prove correctness by essentially doing an exhaustive search through the entire possible input space (formal proof).*
 
@@ -712,22 +1039,27 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/YosysHQ/SymbiYosys
+git clone https://github.com/YosysHQ/SymbiYosys
 ```
 
-### 3.1.2. Back-End Open Source Tools
+## 4.2. BACK-END OPEN SOURCE TOOLS
 
-**I. Back-End Workflow Qflow for ASICs**
+**Library**
 
 type:
 ```
+sudo apt update
+sudo apt upgrade
+
 sudo apt install bison cmake flex freeglut3-dev libcairo2-dev libgsl-dev \
 libncurses-dev libx11-dev m4 python-tk python3-tk swig tcl tcl-dev tk-dev tcsh
 ```
 
+**Back-End Workflow Qflow**
+
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/qflow
+git clone https://github.com/RTimothyEdwards/qflow
 
 cd qflow
 ./configure
@@ -735,7 +1067,12 @@ make
 sudo make install
 ```
 
-#### 3.1.2.1. Planning Switch Level of Hardware
+```
+mkdir qflow
+cd qflow
+```
+
+### 4.2.1. Planning Switch Level of Hardware
 
 *A Floor-Planner of an Integrated Circuit (IC) is a schematic representation of tentative placement of its major functional blocks. In modern electronic design process floor-plans are created during the floor-planning design stage, an early stage in the hierarchical approach to Integrated Circuit design. Depending on the design methodology being followed, the actual definition of a floor-plan may differ.*
 
@@ -743,7 +1080,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/magic
+git clone https://github.com/RTimothyEdwards/magic
 
 cd magic
 ./configure
@@ -751,7 +1088,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.2. Placing Switch Level of Hardware
+### 4.2.2. Placing Switch Level of Hardware
 
 *A Standard Cell Placer takes a given synthesized circuit netlist together with a technology library and produces a valid placement layout. The layout is optimized according to the aforementioned objectives and ready for cell resizing and buffering, a step essential for timing and signal integrity satisfaction. Physical design flow are iterated a number of times until design closure is achieved.*
 
@@ -759,7 +1096,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/rubund/graywolf
+git clone https://github.com/rubund/graywolf
 
 cd graywolf
 mkdir build
@@ -769,7 +1106,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.3. Timing Switch Level of Hardware
+### 4.2.3. Timing Switch Level of Hardware
 
 *A Standard Cell Timing-Analizer is a simulation method of computing the expected timing of a digital circuit without requiring a simulation of the full circuit. High-performance integrated circuits have traditionally been characterized by the clock frequency at which they operate. Measuring the ability of a circuit to operate at the specified speed requires an ability to measure, during the design process, its delay at numerous steps.*
 
@@ -777,7 +1114,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/The-OpenROAD-Project/OpenSTA
+git clone https://github.com/The-OpenROAD-Project/OpenSTA
 
 cd OpenSTA
 mkdir build
@@ -787,7 +1124,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.4. Routing Switch Level of Hardware
+### 4.2.4. Routing Switch Level of Hardware
 
 *A Standard Cell Router takes pre-existing polygons consisting of pins on cells, and pre-existing wiring called pre-routes. Each of these polygons are associated with a net. The primary task of the router is to create geometries such that all terminals assigned to the same net are connected, no terminals assigned to different nets are connected, and all design rules are obeyed.*
 
@@ -795,7 +1132,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/qrouter
+git clone https://github.com/RTimothyEdwards/qrouter
 
 cd qrouter
 ./configure
@@ -803,7 +1140,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.5. Simulating Switch Level of Hardware
+### 4.2.5. Simulating Switch Level of Hardware
 
 *A Standard Cell Simulator treats transistors as ideal switches. Extracted capacitance and lumped resistance values are used to make the switch a little bit more realistic than the ideal, using the RC time constants to predict the relative timing of events. This simulator represents a circuit in terms of its exact transistor structure but describes the electrical behavior in a highly idealized way.*
 
@@ -811,7 +1148,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/irsim
+git clone https://github.com/RTimothyEdwards/irsim
 
 cd irsim
 ./configure
@@ -819,7 +1156,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.6. Verifying Switch Level of Hardware LVS
+### 4.2.6. Verifying Switch Level of Hardware LVS
 
 *A Standard Cell Verifier compares netlists, a process known as LVS (Layout vs. Schematic). This step ensures that the geometry that has been laid out matches the expected circuit. The greatest need for LVS is in large analog or mixed-signal circuits that cannot be simulated in reasonable time. LVS can be done faster than simulation, and provides feedback that makes it easier to find errors.*
 
@@ -827,7 +1164,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/netgen
+git clone https://github.com/RTimothyEdwards/netgen
 
 cd netgen
 ./configure
@@ -835,7 +1172,12 @@ make
 sudo make install
 ```
 
-#### 3.1.2.7. Checking Switch Level of Hardware DRC
+```
+cd synthesis/qflow
+source FLOW-IT
+```
+
+### 4.2.7. Checking Switch Level of Hardware DRC
 
 *A Standard Cell Checker is a geometric constraint imposed on Printed Circuit Board (PCB) and Integrated Circuit (IC) designers to ensure their designs function properly, reliably, and can be produced with acceptable yield. Design Rules for production are developed by hardware engineers based on the capability of their processes to realize design intent. Design Rule Checking (DRC) is used to ensure that designers do not violate design rules.*
 
@@ -843,7 +1185,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/magic
+git clone https://github.com/RTimothyEdwards/magic
 
 cd magic
 ./configure
@@ -851,7 +1193,7 @@ make
 sudo make install
 ```
 
-#### 3.1.2.8. Printing Switch Level of Hardware GDS
+### 4.2.8. Printing Switch Level of Hardware GDS
 
 *A Standard Cell Editor allows to print a set of standard cells. The standard cell methodology is an abstraction, whereby a low-level VLSI layout is encapsulated into a logical representation. A standard cell is a group of transistor and interconnect structures that provides a boolean logic function (AND, OR, XOR, XNOR, inverters) or a storage function (flipflop or latch).*
 
@@ -859,7 +1201,7 @@ sudo make install
 
 type:
 ```
-git clone --recursive https://github.com/RTimothyEdwards/magic
+git clone https://github.com/RTimothyEdwards/magic
 
 cd magic
 ./configure
@@ -867,11 +1209,9 @@ make
 sudo make install
 ```
 
-**II. Back-End Workflow Symbiflow for FPGAs**
+# 5. SOFTWARE WORKFLOW
 
-## 3.2. SOFTWARE
-
-### 3.2.1. Compilers
+## 5.1. BACK-END OPEN SOURCE TOOLS
 
 type:
 ```
@@ -880,7 +1220,19 @@ libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf \
 libtool patchutils bc zlib1g-dev libexpat-dev
 ```
 
-#### 3.2.1.1. RISC-V GNU C/C++
+### 5.1.1. MSP430
+
+#### 5.1.1.1. MSP430 GNU C/C++
+#### 5.1.1.2. MSP430 GNU Go
+
+### 5.1.2. OpenRISC
+
+#### 5.1.2.1. OpenRISC GNU C/C++
+#### 5.1.2.2. OpenRISC GNU Go
+
+### 5.1.3. RISC-V
+
+#### 5.1.3.1. RISC-V GNU C/C++
 
 type:
 ```
@@ -901,7 +1253,7 @@ sudo make clean
 sudo make linux
 ```
 
-#### 3.2.1.2. RISC-V GNU Go
+#### 5.1.3.2. RISC-V GNU Go
 
 type:
 ```
@@ -912,14 +1264,20 @@ cd ../..
 sudo mv riscv-go /opt
 ```
 
-### 3.2.2. Simulators
+## 5.2. FRONT-END OPEN SOURCE TOOLS
+
+### 5.2.1. MSP430
+
+### 5.2.2. OpenRISC
+
+### 5.2.3. RISC-V
 
 type:
 ```
 sudo apt install device-tree-compiler libglib2.0-dev libpixman-1-dev pkg-config
 ```
 
-#### 3.2.2.1. Spike (For Hardware Engineers)
+#### 5.2.3.1. Spike (For Hardware Engineers)
 
 **Building Proxy Kernel**
 
@@ -953,7 +1311,7 @@ make
 sudo make install
 ```
 
-#### 3.2.2.2. QEMU (For Software Engineers)
+#### 5.2.3.2. QEMU (For Software Engineers)
 
 type:
 ```
@@ -967,210 +1325,3 @@ cd qemu
 make
 sudo make install
 ```
-
-# 4. CONCLUSION
-
-## 4.1. HARDWARE
-
-```
-cd synthesis/yosys
-source SYNTHESIZE-IT
-```
-
-### 4.1.1. GSCL 45 nm ASIC
-
-type:
-```
-cd synthesis/qflow
-source FLOW-IT
-```
-
-### 4.1.2. Lattice iCE40 FPGA
-
-type:
-```
-cd synthesis/symbiflow
-source FLOW-IT
-```
-
-## 4.2. SOFTWARE
-
-### 4.2.1. RISC-V Tests
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-rm -rf tests
-rm -rf riscv-tests
-
-mkdir tests
-mkdir tests/dump
-mkdir tests/hex
-
-git clone --recursive https://github.com/riscv/riscv-tests
-cd riscv-tests
-
-autoconf
-./configure --prefix=/opt/riscv-elf-gcc/bin
-make
-
-cd isa
-
-source ../../elf2hex.sh
-
-mv *.dump ../../tests/dump
-mv *.hex ../../tests/hex
-
-cd ..
-
-make clean
-```
-
-elf2hex.sh:
-```
-riscv64-unknown-elf-objcopy -O ihex rv32mi-p-breakpoint rv32mi-p-breakpoint.hex
-riscv64-unknown-elf-objcopy -O ihex rv32mi-p-csr rv32mi-p-csr.hex
-...
-riscv64-unknown-elf-objcopy -O ihex rv64um-v-remw rv64um-v-remw.hex
-```
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-spike rv32mi-p-breakpoint
-spike rv32mi-p-csr
-...
-spike rv64um-v-remw
-```
-
-### 4.2.2. RISC-V Bare Metal
-
-type:
-```
-rm -rf hello_c.elf
-rm -rf hello_c.hex
-
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-riscv64-unknown-elf-gcc -o hello_c.elf hello_c.c
-riscv64-unknown-elf-objcopy -O ihex hello_c.elf hello_c.hex
-```
-
-C Language:
-```c
-#include <stdio.h>
-
-int main() {
-  printf("Hello QueenField!\n");
-  return 0;
-}
-```
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-spike pk hello_c.elf
-```
-
-type:
-```
-rm -rf hello_cpp.elf
-rm -rf hello_cpp.hex
-
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-riscv64-unknown-elf-g++ -o hello_cpp.elf hello_cpp.cpp
-riscv64-unknown-elf-objcopy -O ihex hello_cpp.elf hello_cpp.hex
-```
-
-C++ Language:
-```cpp
-#include <iostream>
-
-int main() {
-  std::cout << "Hello QueenField!\n";
-  return 0;
-}
-```
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-spike pk hello_cpp.elf
-```
-
-type:
-```
-rm -rf hello_go.elf
-rm -rf hello_go.hex
-
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-export PATH=/opt/riscv-go/bin:${PATH}
-
-GOOS=linux GOARCH=riscv64 go build -o hello_go.elf hello_go.go
-riscv64-unknown-elf-objcopy -O ihex hello_go.elf hello_go.hex
-```
-
-Go Language:
-```go
-package main
-
-import "fmt"
-func main() {
-  fmt.Println("Hello QueenField!")
-}
-```
-
-### 4.2.3. RISC-V Operating System
-
-#### 4.2.3.1. GNU Linux
-
-**Building BusyBox**
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-git clone --recursive https://git.busybox.net/busybox
-
-cd busybox
-make CROSS_COMPILE=riscv64-unknown-linux-gnu- defconfig
-make CROSS_COMPILE=riscv64-unknown-linux-gnu-
-```
-
-**Building Linux**
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-git clone --recursive https://github.com/torvalds/linux
-
-cd linux
-make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu- defconfig
-make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
-```
-
-**Running Linux**
-
-type:
-```
-export PATH=/opt/riscv-elf-gcc/bin:${PATH}
-
-qemu-system-riscv64 -nographic -machine virt \
--kernel Image -append "root=/dev/vda ro console=ttyS0" \
--drive file=busybox,format=raw,id=hd0 \
--device virtio-blk-device,drive=hd0
-```
-
-#### 4.2.3.2. GNU Hurd
-
-### 4.2.4. RISC-V Distribution
-
-#### 4.2.4.1. GNU Debian
-
-#### 4.2.4.2. GNU Fedora
