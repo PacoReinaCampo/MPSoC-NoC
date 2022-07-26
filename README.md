@@ -611,6 +611,8 @@ sudo apt upgrade
 
 ### 1.6.2. UVM-Verilog
 
+![UVM Diagram Overview](../bench/uvm-testbench.png)
+
 #### 1.6.2.1. UVM Agent
 #### 1.6.2.2. UVM Driver
 #### 1.6.2.3. UVM Enviroment
@@ -633,7 +635,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 #### 2.1.1.1. Structure
 
-#### 2.1.1.2. Pipeline
+#### 2.1.1.2. Behavior
 
 ### 2.1.2. Interface
 
@@ -651,7 +653,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 
 #### 2.2.1.1. Structure
 
-#### 2.2.1.2. Pipeline
+#### 2.2.1.2. Behavior
 
 ### 2.2.2. Interface
 
@@ -686,7 +688,7 @@ A Network on Chip (NoC) is a network-based communications subsystem on an integr
 | `.......noc_vchannel_mux`          | Network on Chip Virtual Channel Multiplexer |
 | `.........arb_rr`                  | Round-Robin Arbiter                         |
 
-#### 2.3.1.2. Pipeline
+#### 2.3.1.2. Behavior
 
 ### 2.3.2. Interface
 
