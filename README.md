@@ -64,9 +64,41 @@ source FLOW-IT
 
 ### 0.1.2. SOFTWARE
 
-#### 0.1.2.3. MSP430
+#### 0.1.2.1. MSP430
 
-#### 0.1.2.3. OpenRISC
+##### 0.1.2.1.1. MSP430 Tests
+
+##### 0.1.2.1.2. MSP430 Bare Metal
+
+##### 0.1.2.1.3. MSP430 Operating System
+
+###### 0.1.2.1.3.1. GNU Linux
+
+###### 0.1.2.1.3.2. GNU Hurd
+
+##### 0.1.2.1.4. MSP430 Distribution
+
+###### 0.1.2.1.4.1. GNU Debian
+
+###### 0.1.2.1.4.2. GNU Fedora
+
+#### 0.1.2.2. OpenRISC
+
+##### 0.1.2.2.1. OpenRISC Tests
+
+##### 0.1.2.2.2. OpenRISC Bare Metal
+
+##### 0.1.2.2.3. OpenRISC Operating System
+
+###### 0.1.2.2.3.1. GNU Linux
+
+###### 0.1.2.2.3.2. GNU Hurd
+
+##### 0.1.2.2.4. OpenRISC Distribution
+
+###### 0.1.2.2.4.1. GNU Debian
+
+###### 0.1.2.2.4.2. GNU Fedora
 
 #### 0.1.2.3. RISC-V
 
