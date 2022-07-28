@@ -59,7 +59,6 @@
 ├── process_assurance
 │   ├── process_assurance.md
 │   └── process_assurance.tex
-├── TEX-TREE.txt
 └── validation_and_verification_process
     ├── validation_process
     │   ├── validation_process.md
