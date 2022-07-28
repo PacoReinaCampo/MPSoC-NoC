@@ -1,0 +1,69 @@
+├── additional_considerations
+│   ├── commercial_components_Usage
+│   │   ├── commercial_components_Usage.md
+│   │   └── commercial_components_Usage.tex
+│   └── previously_developed_hardware
+│       ├── previously_developed_hardware.md
+│       └── previously_developed_hardware.tex
+├── certification_liaison_process
+│   ├── certification_liaison_process.md
+│   └── certification_liaison_process.tex
+├── configuration_management_process
+│   ├── configuration_management_process.md
+│   └── configuration_management_process.tex
+├── hardware_design_lifecycle_data
+│   ├── certification_authority
+│   │   ├── certification_authority.md
+│   │   └── certification_authority.tex
+│   ├── certification_reviews
+│   │   ├── certification_reviews.md
+│   │   └── certification_reviews.tex
+│   └── Scheduling_of_reviews
+│       ├── Scheduling_of_reviews.md
+│       └── Scheduling_of_reviews.tex
+├── hardware_design_process
+│   ├── conceptual_design_process
+│   │   ├── conceptual_design_process.md
+│   │   └── conceptual_design_process.tex
+│   ├── detailed_design_process
+│   │   ├── detailed_design_process.md
+│   │   └── detailed_design_process.tex
+│   ├── implementation_process
+│   │   ├── implementation_process.md
+│   │   └── implementation_process.tex
+│   ├── production_transition_process
+│   │   ├── production_transition_process.md
+│   │   └── production_transition_process.tex
+│   └── requirements_capture_process
+│       ├── requirements_capture_process.md
+│       └── requirements_capture_process.tex
+├── hardware_planning_process
+│   ├── hardware_configuration_management_plan
+│   │   ├── hardware_configuration_management_plan.md
+│   │   └── hardware_configuration_management_plan.tex
+│   ├── hardware_design_plan
+│   │   ├── hardware_design_plan.md
+│   │   └── hardware_design_plan.tex
+│   ├── hardware_process_assurance_plan
+│   │   ├── hardware_process_assurance_plan.md
+│   │   └── hardware_process_assurance_plan.tex
+│   ├── hardware_validation_plan
+│   │   ├── hardware_validation_plan.md
+│   │   └── hardware_validation_plan.tex
+│   ├── hardware_verification_plan
+│   │   ├── hardware_verification_plan.md
+│   │   └── hardware_verification_plan.tex
+│   └── plan_for_hardware_aspects_of_certification
+│       ├── plan_for_hardware_aspects_of_certification.md
+│       └── plan_for_hardware_aspects_of_certification.tex
+├── process_assurance
+│   ├── process_assurance.md
+│   └── process_assurance.tex
+├── TEX-TREE.txt
+└── validation_and_verification_process
+    ├── validation_process
+    │   ├── validation_process.md
+    │   └── validation_process.tex
+    └── verification_process
+        ├── verification_process.md
+        └── verification_process.tex
