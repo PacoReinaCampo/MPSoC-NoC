@@ -4,21 +4,28 @@ digraph Project {
   node[shape=record];
 
   // Blocks
-  Requirements[label="Requirements \n(UML)"];
-  Source[label="Source \n(ADA/C)"];
-  Model[label="Model \n(VHDL/Verilog)"];
-  Validation[label="Validation \n(VHDL/Verilog)"];
-  Design[label="Design \n(VHDL/Verilog)"];
-  Verification[label="Verification \n(VHDL/Verilog)"];
+  Requirements[label="Requirements \n(UML) [Dot]"];
+  Software[label="Software \n(Matlab/Rust) [Emacs]"];
+  Source[label="Source \n(ADA/C) [Emacs]"];
+  Model[label="Model \n(VHDL/Verilog) [Emacs]"];
+  Validation[label="Validation \n(VHDL/Verilog) [GHDL / Icarus Verilog]"];
+  Design[label="Design \n(VHDL/Verilog) [Emacs]"];
+  Verification[label="Verification \n(VHDL/Verilog) [GHDL / Icarus Verilog]"];
+  Certification[label="Certification \n(Tex) [Emacs]"];
+  Documentation[label="Documentation \n(Tex) [Emacs]"];
 
   // Sequence
-  Requirements -> Source;
+  Requirements -> Software;
+  Software -> Source;
   Source -> Model;
   Model -> Validation;
   Validation -> Design;
   Design -> Verification;
+  Verification -> Certification;
+  Certification -> Documentation;
 
   // Feedback
-  Validation -> Model;
-  Verification -> Design;
+  Validation -> Requirements;
+  Verification -> Requirements;
 }
+
