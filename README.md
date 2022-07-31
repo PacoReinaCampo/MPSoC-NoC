@@ -1311,7 +1311,7 @@ type:
 sudo apt install device-tree-compiler libglib2.0-dev libpixman-1-dev pkg-config
 ```
 
-#### 5.2.3.1. Spike (For Hardware Engineers)
+#### 5.2.3.1. Hardware Engineers Compiler: Spike
 
 **Building Proxy Kernel**
 
@@ -1345,7 +1345,7 @@ make
 sudo make install
 ```
 
-#### 5.2.3.2. QEMU (For Software Engineers)
+#### 5.2.3.2. Software Engineers Compiler: QEMU
 
 type:
 ```
