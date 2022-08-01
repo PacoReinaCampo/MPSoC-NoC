@@ -1,68 +1,129 @@
+.
 ├── additional_considerations
-│   ├── commercial_components_Usage
-│   │   ├── commercial_components_Usage.md
-│   │   └── commercial_components_Usage.tex
-│   └── previously_developed_hardware
-│       ├── previously_developed_hardware.md
-│       └── previously_developed_hardware.tex
+│   ├── commercial_components_usage
+│   │   ├── commercial_components_usage.md
+│   │   ├── commercial_components_usage.pdf
+│   │   └── commercial_components_usage.tex
+│   ├── previously_developed_hardware
+│   │   ├── previously_developed_hardware.md
+│   │   ├── previously_developed_hardware.pdf
+│   │   └── previously_developed_hardware.tex
+│   ├── product_service_Experience
+│   │   ├── product_service_Experience.md
+│   │   ├── product_service_Experience.pdf
+│   │   └── product_service_Experience.tex
+│   └── tool_assessment_and_qualification
+│       ├── tool_assessment_and_qualification.md
+│       ├── tool_assessment_and_qualification.pdf
+│       └── tool_assessment_and_qualification.tex
 ├── certification_liaison_process
-│   ├── certification_liaison_process.md
-│   └── certification_liaison_process.tex
+│   ├── compliance_substantiation
+│   │   ├── compliance_substantiation.md
+│   │   ├── compliance_substantiation.pdf
+│   │   └── compliance_substantiation.tex
+│   └── means_of_compliance_and_planning
+│       ├── means_of_compliance_and_planning.md
+│       ├── means_of_compliance_and_planning.pdf
+│       └── means_of_compliance_and_planning.tex
 ├── configuration_management_process
-│   ├── configuration_management_process.md
-│   └── configuration_management_process.tex
+│   ├── configuration_management_activities
+│   │   ├── configuration_management_activities.md
+│   │   ├── configuration_management_activities.pdf
+│   │   └── configuration_management_activities.tex
+│   ├── configuration_management_objectives
+│   │   ├── configuration_management_objectives.md
+│   │   ├── configuration_management_objectives.pdf
+│   │   └── configuration_management_objectives.tex
+│   └── data_control_categories
+│       ├── data_control_categories.md
+│       ├── data_control_categories.pdf
+│       └── data_control_categories.tex
 ├── hardware_design_lifecycle_data
 │   ├── certification_authority
 │   │   ├── certification_authority.md
+│   │   ├── certification_authority.pdf
 │   │   └── certification_authority.tex
 │   ├── certification_reviews
 │   │   ├── certification_reviews.md
+│   │   ├── certification_reviews.pdf
 │   │   └── certification_reviews.tex
-│   └── Scheduling_of_reviews
-│       ├── Scheduling_of_reviews.md
-│       └── Scheduling_of_reviews.tex
+│   └── scheduling_of_reviews
+│       ├── scheduling_of_reviews.md
+│       ├── scheduling_of_reviews.pdf
+│       └── scheduling_of_reviews.tex
 ├── hardware_design_process
+│   ├── acceptance_test
+│   │   ├── acceptance_test.md
+│   │   ├── acceptance_test.pdf
+│   │   └── acceptance_test.tex
 │   ├── conceptual_design_process
 │   │   ├── conceptual_design_process.md
+│   │   ├── conceptual_design_process.pdf
 │   │   └── conceptual_design_process.tex
 │   ├── detailed_design_process
 │   │   ├── detailed_design_process.md
+│   │   ├── detailed_design_process.pdf
 │   │   └── detailed_design_process.tex
 │   ├── implementation_process
 │   │   ├── implementation_process.md
+│   │   ├── implementation_process.pdf
 │   │   └── implementation_process.tex
 │   ├── production_transition_process
 │   │   ├── production_transition_process.md
+│   │   ├── production_transition_process.pdf
 │   │   └── production_transition_process.tex
-│   └── requirements_capture_process
-│       ├── requirements_capture_process.md
-│       └── requirements_capture_process.tex
+│   ├── requirements_capture_process
+│   │   ├── requirements_capture_process.md
+│   │   ├── requirements_capture_process.pdf
+│   │   └── requirements_capture_process.tex
+│   └── series_production
+│       ├── series_production.md
+│       ├── series_production.pdf
+│       └── series_production.tex
 ├── hardware_planning_process
 │   ├── hardware_configuration_management_plan
 │   │   ├── hardware_configuration_management_plan.md
+│   │   ├── hardware_configuration_management_plan.pdf
 │   │   └── hardware_configuration_management_plan.tex
 │   ├── hardware_design_plan
 │   │   ├── hardware_design_plan.md
+│   │   ├── hardware_design_plan.pdf
 │   │   └── hardware_design_plan.tex
 │   ├── hardware_process_assurance_plan
 │   │   ├── hardware_process_assurance_plan.md
+│   │   ├── hardware_process_assurance_plan.pdf
 │   │   └── hardware_process_assurance_plan.tex
 │   ├── hardware_validation_plan
 │   │   ├── hardware_validation_plan.md
+│   │   ├── hardware_validation_plan.pdf
 │   │   └── hardware_validation_plan.tex
 │   ├── hardware_verification_plan
 │   │   ├── hardware_verification_plan.md
+│   │   ├── hardware_verification_plan.pdf
 │   │   └── hardware_verification_plan.tex
 │   └── plan_for_hardware_aspects_of_certification
 │       ├── plan_for_hardware_aspects_of_certification.md
+│       ├── plan_for_hardware_aspects_of_certification.pdf
 │       └── plan_for_hardware_aspects_of_certification.tex
 ├── process_assurance
-│   ├── process_assurance.md
-│   └── process_assurance.tex
+│   ├── process_assurance_activities
+│   │   ├── process_assurance_activities.md
+│   │   ├── process_assurance_activities.pdf
+│   │   └── process_assurance_activities.tex
+│   └── process_assurance_objectives
+│       ├── process_assurance_objectives.md
+│       ├── process_assurance_objectives.pdf
+│       └── process_assurance_objectives.tex
 └── validation_and_verification_process
+    ├── validation_and_verification_methods
+    │   ├── validation_and_verification_methods.md
+    │   ├── validation_and_verification_methods.pdf
+    │   └── validation_and_verification_methods.tex
     ├── validation_process
     │   ├── validation_process.md
+    │   ├── validation_process.pdf
     │   └── validation_process.tex
     └── verification_process
         ├── verification_process.md
+        ├── verification_process.pdf
         └── verification_process.tex
