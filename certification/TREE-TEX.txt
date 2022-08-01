@@ -39,18 +39,9 @@
 │       ├── data_control_categories.pdf
 │       └── data_control_categories.tex
 ├── hardware_design_lifecycle_data
-│   ├── certification_authority
-│   │   ├── certification_authority.md
-│   │   ├── certification_authority.pdf
-│   │   └── certification_authority.tex
-│   ├── certification_reviews
-│   │   ├── certification_reviews.md
-│   │   ├── certification_reviews.pdf
-│   │   └── certification_reviews.tex
-│   └── scheduling_of_reviews
-│       ├── scheduling_of_reviews.md
-│       ├── scheduling_of_reviews.pdf
-│       └── scheduling_of_reviews.tex
+│   ├── hardware_design_lifecycle_data.md
+│   ├── hardware_design_lifecycle_data.pdf
+│   └── hardware_design_lifecycle_data.tex
 ├── hardware_design_process
 │   ├── acceptance_test
 │   │   ├── acceptance_test.md
