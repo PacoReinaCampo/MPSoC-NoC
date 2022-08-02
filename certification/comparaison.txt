@@ -1,14 +1,8 @@
-hardware_planning_process           · doc
-hardware_design_process     
- requirements_capture_process       · requirements
- conceptual_design_process          · src
- detailed_design_process            · model
- Implementation_process             · rtl
- production_transition_process      · synthesis
-validation_and_verification_process · osvvm/uvm
-configuration_management_process    · sim
-process_assurance                   · software
-certification_liaison_process       · certification
-hardware_design_lifecycle_data      · bench
-
-additional_considerations           · 
+COMPARAISON:   
+· requirements_capture_process       · requirements; doc
+· conceptual_design_process          · src; software
+· detailed_design_process            · model
+· Implementation_process             · rtl
+· production_transition_process      · sim
+· acceptance_test                    · bench; osvvm/uvm
+· series_production                  · synthesis; certification
