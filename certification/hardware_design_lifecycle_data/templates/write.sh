@@ -1,0 +1,16 @@
+pandoc hardware_accomplishment_summary.md -s -o hardware_accomplishment_summary.pdf
+pandoc hardware_archive_standards.md -s -o hardware_archive_standards.pdf
+pandoc hardware_configuration_management_plan.md -s -o hardware_configuration_management_plan.pdf
+pandoc hardware_design_data.md -s -o hardware_design_data.pdf
+pandoc hardware_design_plan.md -s -o hardware_design_plan.pdf
+pandoc hardware_design_standards.md -s -o hardware_design_standards.pdf
+pandoc hardware_process_assurance_plan.md -s -o hardware_process_assurance_plan.pdf
+pandoc hardware_requirements_data.md -s -o hardware_requirements_data.pdf
+pandoc hardware_requirements_standards.md -s -o hardware_requirements_standards.pdf
+pandoc hardware_validation_plan.md -s -o hardware_validation_plan.pdf
+pandoc hardware_validation_standards.md -s -o hardware_validation_standards.pdf
+pandoc hardware_verification_plan.md -s -o hardware_verification_plan.pdf
+pandoc hardware_verification_standards.md -s -o hardware_verification_standards.pdf
+pandoc plan_for_hardware_aspects_of_certification.md -s -o plan_for_hardware_aspects_of_certification.pdf
+pandoc test_and_analysis_results.md -s -o test_and_analysis_results.pdf
+pandoc test_cases_document.md -s -o test_cases_document.pdf
