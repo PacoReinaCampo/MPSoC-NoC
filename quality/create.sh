@@ -1,3 +1,14 @@
+rm -rf scope
+rm -rf normative_references
+rm -rf terms_and_definitions
+rm -rf context_of_the_organization
+rm -rf leadership
+rm -rf planning
+rm -rf support
+rm -rf operation
+rm -rf performance_evaluation
+rm -rf improvement
+
 mkdir scope
 mkdir normative_references
 mkdir terms_and_definitions
