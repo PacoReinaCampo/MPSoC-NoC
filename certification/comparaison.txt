@@ -1,6 +1,6 @@
 COMPARAISON:   
 · requirements_capture_process       · requirements; doc
-· conceptual_design_process          · src; software
+· conceptual_design_process          · software; src
 · detailed_design_process            · model
 · Implementation_process             · rtl
 · production_transition_process      · sim
