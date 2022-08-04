@@ -5,67 +5,6 @@
 
 # 0. INTRODUCTION
 
-## 0.0. DO-254
-
-### 0.0.1. PLANNING PROCESS
-#### 0.0.1.1. Planning Process Objectives
-#### 0.0.1.2. Planning Process Activities
-### 0.0.2. HARDWARE DESIGN PROCESS
-#### 0.0.2.1. Requirements Capture Process
-#### 0.0.2.2. Conceptual Design Process
-#### 0.0.2.3. Detailed Design Process
-#### 0.0.2.4. Implementation Process
-#### 0.0.2.5. Production Transition
-#### 0.0.2.6. Acceptance Test
-#### 0.0.2.7. Series Production
-### 0.0.3. VALIDATION AND VERIFICATION PROCESS
-#### 0.0.3.1. Validation Process
-#### 0.0.3.2. Verification Process
-#### 0.0.3.3. Validation and Verification Methods
-### 0.0.4. CONFIGURATION MANAGEMENT PROCESS
-#### 0.0.4.1. Configuration Management Objectives
-#### 0.0.4.2. Configuration Management Activities
-#### 0.0.4.3. Data Control Categories
-### 0.0.5. PROCESS ASSURANCE
-#### 0.0.5.1. Process Assurance Objectives
-#### 0.0.5.2. Process Assurance Activities
-### 0.0.6. CERTIFICATION LIAISON PROCESS
-#### 0.0.6.1. Means of Compliance and Planning
-#### 0.0.6.2. Compliance Substantiation
-### 0.0.7. HARDWARE DESIGN LIFECYCLE DATA
-#### 0.0.7.1. Hardware Plans
-##### 0.0.7.1.1. Plan for Hardware Aspects of Certification
-##### 0.0.7.1.2. Hardware Design Plan
-##### 0.0.7.1.3. Hardware Validation Plan
-##### 0.0.7.1.4. Hardware Verification Plan
-##### 0.0.7.1.5. Hardware Configuration Management Plan
-##### 0.0.7.1.6. Hardware Process Assurance Plan
-#### 0.0.7.2. Hardware Design Standards and Guidance
-##### 0.0.7.2.1. Requirements Standards
-##### 0.0.7.2.2. Hardware Design Standards
-##### 0.0.7.2.3. Validation and Verification Standards
-##### 0.0.7.2.4. Hardware Archive Standards
-#### 0.0.7.3. Hardware Design Data 
-##### 0.0.7.3.1. Hardware Requirements 
-##### 0.0.7.3.2. Hardware Design Representation Data
-###### 0.0.7.3.2.1. Conceptual Design Data 
-###### 0.0.7.3.2.2. Detailed Design Data 
-####### 0.0.7.3.2.2.1. Top-Level Drawing 
-####### 0.0.7.3.2.2.2. Assembly Drawings
-####### 0.0.7.3.2.2.3. Installation Control Drawings 
-####### 0.0.7.3.2.2.4. Hardware/Software Interface Data
-#### 0.0.7.4. Validation and Verification Data
-##### 0.0.7.4.1. Traceability Data
-##### 0.0.7.4.2. Review and Analysis Procedures
-##### 0.0.7.4.3. Review and Analysis Results
-##### 0.0.7.4.4. Test Procedures 
-##### 0.0.7.4.5. Test Results
-### 0.0.8. ADDITIONAL CONSIDERATIONS
-#### 0.0.8.1. Use of Previously Developed Hardware
-#### 0.0.8.2. Commercial Components Usage
-#### 0.0.8.3. Product Service Experience
-#### 0.0.8.4. Tool Assessment and Qualification
-
 ## 0.1. BEST PRACTICES
 
 ### 0.1.1. HARDWARE
@@ -1392,3 +1331,77 @@ cd qemu
 make
 sudo make install
 ```
+
+# 6. QUALITY ASSURANCE
+
+## 6.1. SCOPE
+## 6.2. NROMATIVE REFERENCE
+## 6.3. TERMS AND DEFINITIONS
+## 6.4. CONTEXT OF THE ORGANIZATION
+## 6.5. LEADERSHIP
+## 6.6. PLANNING
+## 6.7. SUPPORT
+## 6.8. OPERATION
+## 6.9. PERFORMANCE EVALUATION
+## 6.10. IMPROVEMENT
+
+# 7. DO-254
+
+## 7.1. PLANNING PROCESS
+### 7.1.1. Planning Process Objectives
+### 7.1.2. Planning Process Activities
+## 7.2. HARDWARE DESIGN PROCESS
+### 7.2.1. Requirements Capture Process
+### 7.2.2. Conceptual Design Process
+### 7.2.3. Detailed Design Process
+### 7.2.4. Implementation Process
+### 7.2.5. Production Transition
+### 7.2.6. Acceptance Test
+### 7.2.7. Series Production
+## 7.3. VALIDATION AND VERIFICATION PROCESS
+### 7.3.1. Validation Process
+### 7.3.2. Verification Process
+### 7.3.3. Validation and Verification Methods
+## 7.4. CONFIGURATION MANAGEMENT PROCESS
+### 7.4.1. Configuration Management Objectives
+### 7.4.2. Configuration Management Activities
+### 7.4.3. Data Control Categories
+## 7.5. PROCESS ASSURANCE
+### 7.5.1. Process Assurance Objectives
+### 7.5.2. Process Assurance Activities
+## 7.6. CERTIFICATION LIAISON PROCESS
+### 7.6.1. Means of Compliance and Planning
+### 7.6.2. Compliance Substantiation
+## 7.7. HARDWARE DESIGN LIFECYCLE DATA
+### 7.7.1. Hardware Plans
+#### 7.7.1.1. Plan for Hardware Aspects of Certification
+#### 7.7.1.2. Hardware Design Plan
+#### 7.7.1.3. Hardware Validation Plan
+#### 7.7.1.4. Hardware Verification Plan
+#### 7.7.1.5. Hardware Configuration Management Plan
+#### 7.7.1.6. Hardware Process Assurance Plan
+### 7.7.2. Hardware Design Standards and Guidance
+#### 7.7.2.1. Requirements Standards
+#### 7.7.2.2. Hardware Design Standards
+#### 7.7.2.3. Validation and Verification Standards
+#### 7.7.2.4. Hardware Archive Standards
+### 7.7.3. Hardware Design Data 
+#### 7.7.3.1. Hardware Requirements 
+#### 7.7.3.2. Hardware Design Representation Data
+##### 7.7.3.2.1. Conceptual Design Data 
+##### 7.7.3.2.2. Detailed Design Data 
+###### 7.7.3.2.2.1. Top-Level Drawing 
+###### 7.7.3.2.2.2. Assembly Drawings
+###### 7.7.3.2.2.3. Installation Control Drawings 
+###### 7.7.3.2.2.4. Hardware/Software Interface Data
+### 7.7.4. Validation and Verification Data
+#### 7.7.4.1. Traceability Data
+#### 7.7.4.2. Review and Analysis Procedures
+#### 7.7.4.3. Review and Analysis Results
+#### 7.7.4.4. Test Procedures 
+#### 7.7.4.5. Test Results
+## 7.8. ADDITIONAL CONSIDERATIONS
+### 7.8.1. Use of Previously Developed Hardware
+### 7.8.2. Commercial Components Usage
+### 7.8.3. Product Service Experience
+### 7.8.4. Tool Assessment and Qualification

@@ -1,2 +1,2 @@
 rm -f *.pdf
-pandoc ../BOOK.md -s -o MPSoC-DBG.pdf
+pandoc ../BOOK.md -s -o MPSoC-NoC.pdf
