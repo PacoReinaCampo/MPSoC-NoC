@@ -1,7 +1,7 @@
 # Network on Chip for a Multi-Processor System on Chip
 ## QueenField
 
-![QueenField](../icon.jpg)
+![QueenField](../master/icon.jpg)
 
 # 0. INTRODUCTION
 
@@ -242,6 +242,54 @@ qemu-system-riscv64 -nographic -machine virt \
 -device virtio-blk-device,drive=hd0
 ```
 
+**Running Linux RISC-V 32 bit with Buildroot**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+git clone --recursive https://github.com/buildroot/buildroot
+
+cd buildroot
+make qemu_riscv32_virt_defconfig
+make
+
+qemu-system-riscv32 \
+-M virt \
+-nographic \
+-bios output/images/fw_jump.elf \
+-kernel output/images/Image \
+-append "root=/dev/vda ro" \
+-drive file=output/images/rootfs.ext2,format=raw,id=hd0 \
+-device virtio-blk-device,drive=hd0 \
+-netdev user,id=net0 \
+-device virtio-net-device,netdev=net0
+```
+
+**Running Linux RISC-V 64 bit with Buildroot**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+git clone --recursive https://github.com/buildroot/buildroot
+
+cd buildroot
+make qemu_riscv64_virt_defconfig
+make
+
+qemu-system-riscv64 \
+-M virt \
+-nographic \
+-bios output/images/fw_jump.elf \
+-kernel output/images/Image \
+-append "root=/dev/vda ro" \
+-drive file=output/images/rootfs.ext2,format=raw,id=hd0 \
+-device virtio-blk-device,drive=hd0 \
+-netdev user,id=net0 \
+-device virtio-net-device,netdev=net0
+```
+
 ###### 0.1.2.3.3.2. GNU Hurd
 
 ##### 0.1.2.3.4. RISC-V Distribution
@@ -249,6 +297,27 @@ qemu-system-riscv64 -nographic -machine virt \
 ###### 0.1.2.3.4.1. GNU Debian
 
 ###### 0.1.2.3.4.2. GNU Fedora
+
+**Running Fedora**
+
+type:
+```
+export PATH=/opt/riscv-elf-gcc/bin:${PATH}
+
+qemu-system-riscv64 \
+-nographic \
+-machine virt \
+-smp 4 \
+-m 2G \
+-kernel Fedora-RISCV.elf \
+-bios none \
+-object rng-random,filename=/dev/urandom,id=rng0 \
+-device virtio-rng-device,rng=rng0 \
+-device virtio-blk-device,drive=hd0 \
+-drive file=Fedora-RISCV.raw,format=raw,id=hd0 \
+-device virtio-net-device,netdev=usernet \
+-netdev user,id=usernet,hostfwd=tcp::10000-:22
+```
 
 ## 0.2. OPEN SOURCE PHILOSOPHY
 
@@ -559,11 +628,11 @@ sudo apt upgrade
 
 # 1. METHODOLOGY
 
-![Project Workflow](../doc/project.svg)
+![Project Workflow](doc/project.svg)
 
 ## 1.1. Requirements
 
-![UML Diagrams Overview](../requirements/uml_diagrams_overview.svg)
+![UML Diagrams Overview](requirements/uml_diagrams_overview.svg)
 
 ### 1.1.1. Structural UML diagrams
 
@@ -615,7 +684,7 @@ sudo apt upgrade
 
 ### 1.6.2. UVM-Verilog
 
-![UVM Diagram Overview](../bench/uvm-testbench.png)
+![UVM Diagram Overview](bench/uvm-testbench.png)
 
 #### 1.6.2.1. UVM Agent
 #### 1.6.2.2. UVM Driver
