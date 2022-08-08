@@ -1404,17 +1404,84 @@ sudo make install
 # 6. QUALITY ASSURANCE
 
 ## 6.1. SCOPE
-## 6.2. NROMATIVE REFERENCE
+## 6.2. NORMATIVE REFERENCE
 ## 6.3. TERMS AND DEFINITIONS
 ## 6.4. CONTEXT OF THE ORGANIZATION
+### 6.4.1. Understanding the organization and itsontext
+### 6.4.2. Understanding the needs and expectations of interested parties
+### 6.4.3. Determining the scope of the quality management system
+### 6.4.4. Quality management system and its processes
 ## 6.5. LEADERSHIP
+### 6.5.1. Leadership and commitment
+#### 6.5.1.1. General
+#### 6.5.1.2. Customer focus
+### 6.5.2. Policy
+#### 6.5.2.1. Establishing the quality policy
+#### 6.5.2.2. Communicating the quality policy
+### 6.5.3. Organizational roles, responsibilities and authorities
 ## 6.6. PLANNING
+### 6.6.1. Actions to address risks and opportunities
+### 6.6.2. Quality objectives and planning to achieve them
+### 6.6.3. Planning of changes
 ## 6.7. SUPPORT
+### 6.7.1. Resources
+#### 6.7.1.1. General
+#### 6.7.1.2. People
+#### 6.7.1.3. Infrastructure
+#### 6.7.1.4. Environment for the operation of process
+#### 6.7.1.5. Monitoring and measuring resources
+##### 6.7.1.5.1. General
+##### 6.7.1.5.2. Measurement traceability
+#### 6.7.1.6. Organizational knowledge
+### 6.7.2. Competence
+### 6.7.3. Awareness
+### 6.7.4. Communication
+### 6.7.5. Documented information
+#### 6.7.5.1. General
+#### 6.7.5.2. Creating and updating
+#### 6.7.5.3. Control of documented information
 ## 6.8. OPERATION
+### 6.8.1. Operational planning and control
+### 6.8.2. Requirements for products and services
+#### 6.8.2.1. Customer communication
+#### 6.8.2.2. Determining the requirements for products and services
+#### 6.8.2.3. Review of the requirements for products and services
+#### 6.8.2.4. Changes to requirements for products and services
+### 6.8.3. Design and development of products and services
+#### 6.8.3.1. General
+#### 6.8.3.2. Design and development planning
+#### 6.8.3.3. Design and development inputs
+#### 6.8.3.4. Design and development controls
+#### 6.8.3.5. Design and development outputs
+### 6.8.4. Control of externally provided processes, products and services
+#### 6.8.4.1. General
+#### 6.8.4.2. Type and extent of control
+#### 6.8.4.3. Information for external providers
+### 6.8.5. Production and service provision
+#### 6.8.5.1. Control of production and service provision
+#### 6.8.5.2. Identification and traceability
+#### 6.8.5.3. Property belonging to customers or external providers
+#### 6.8.5.4. Preservation
+#### 6.8.5.5. Post-delivery activities
+#### 6.8.5.6. Control of changes
+### 6.8.6. Release of products and services
+### 6.8.7. Control of nonconforming outputs
 ## 6.9. PERFORMANCE EVALUATION
+### 6.9.1. Monitoring, measurement, analysis and evaluation
+#### 6.9.1.1. General
+#### 6.9.1.2. Customer satisfaction
+#### 6.9.1.3. Analysis and evaluation
+### 6.9.2. Internal audit
+### 6.9.3. Management review
+#### 6.9.3.1. General
+#### 6.9.3.2. Management review inputs
+#### 6.9.3.3. Management review outputs
 ## 6.10. IMPROVEMENT
+### 6.10.1. General
+### 6.10.2. Nonconformity and corrective action
+### 6.10.3. Continual improvement
 
-# 7. DO-254
+# 7. CERTIFICATION
 
 ## 7.1. PLANNING PROCESS
 ### 7.1.1. Planning Process Objectives
