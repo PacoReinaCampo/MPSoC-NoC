@@ -1,3 +1,4 @@
+verilog
 ├── core
 │   ├── peripheral_arbiter_rr.sv
 │   ├── peripheral_noc_buffer.sv
@@ -14,3 +15,5 @@
     ├── peripheral_noc_mesh2d.sv
     ├── peripheral_noc_mesh3d.sv
     └── peripheral_noc_mesh4d.sv
+
+3 directories, 13 files

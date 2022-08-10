@@ -1,32 +1,24 @@
-rm -rf scope
-rm -rf normative_references
-rm -rf terms_and_definitions
-rm -rf context_of_the_organization
-rm -rf leadership
-rm -rf planning
-rm -rf support
-rm -rf operation
-rm -rf performance_evaluation
-rm -rf improvement
+rm -rf tex
 
-mkdir scope
-mkdir normative_references
-mkdir terms_and_definitions
-mkdir context_of_the_organization
-mkdir leadership
-mkdir planning
-mkdir support
-mkdir operation
-mkdir performance_evaluation
-mkdir improvement
+mkdir  tex
+mkdir  tex/scope
+mkdir  tex/normative_references
+mkdir  tex/terms_and_definitions
+mkdir  tex/context_of_the_organization
+mkdir  tex/leadership
+mkdir  tex/planning
+mkdir  tex/support
+mkdir  tex/operation
+mkdir  tex/performance_evaluation
+mkdir  tex/improvement
 
-touch scope/scope.md
-touch normative_references/normative_references.md
-touch terms_and_definitions/terms_and_definitions.md
-touch context_of_the_organization/context_of_the_organization.md
-touch leadership/leadership.md
-touch planning/planning.md
-touch support/support.md
-touch operation/operation.md
-touch performance_evaluation/performance_evaluation.md
-touch improvement/improvement.md
+touch  tex/scope/scope.md
+touch  tex/normative_references/normative_references.md
+touch  tex/terms_and_definitions/terms_and_definitions.md
+touch  tex/context_of_the_organization/context_of_the_organization.md
+touch  tex/leadership/leadership.md
+touch  tex/planning/planning.md
+touch  tex/support/support.md
+touch  tex/operation/operation.md
+touch  tex/performance_evaluation/performance_evaluation.md
+touch  tex/improvement/improvement.md
