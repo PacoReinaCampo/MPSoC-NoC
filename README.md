@@ -703,22 +703,6 @@ sudo apt upgrade
 #### 1.7.2.10. UVM Testbench
 #### 1.7.2.11. UVM Transaction
 
-### 1.6.2. UVM-Verilog
-
-![UVM Diagram Overview](bench/uvm-testbench.png)
-
-#### 1.6.2.1. UVM Agent
-#### 1.6.2.2. UVM Driver
-#### 1.6.2.3. UVM Enviroment
-#### 1.6.2.4. UVM Monitor
-#### 1.6.2.5. UVM Scoreboard
-#### 1.6.2.6. UVM Sequence
-#### 1.6.2.7. UVM Sequencer
-#### 1.6.2.8. UVM Subscriber
-#### 1.6.2.9. UVM Test
-#### 1.6.2.10. UVM Testbench
-#### 1.6.2.11. UVM Transaction
-
 # 2. PROJECTS
 
 A Network on Chip (NoC) is a network-based communications subsystem on an integrated circuit, between modules in a System on a Chip (SoC). The modules on the IC are IP cores schematizing functions of the system, and are designed to be modular in the sense of network science. A NoC is based on a router packet switching network between SoC modules.
