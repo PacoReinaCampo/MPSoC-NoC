@@ -102,14 +102,14 @@ geometry: "left=3cm,right=2cm,top=3cm,bottom=2cm"
 ### [1.3.1. Ada Language]
 ### [1.3.2. C Language]
 ## [1.4. Model]
-### [1.4.1. VHDL]
-### [1.4.2. Verilog]
+### [1.4.1. VHDL Language]
+### [1.4.2. Verilog Language]
 ## [1.6. Validation]
-### [1.6.1. VHDL]
-### [1.6.2. Verilog]
+### [1.6.1. VHDL Language]
+### [1.6.2. Verilog Language]
 ## [1.6. Design]
-### [1.6.1. VHDL]
-### [1.6.2. Verilog]
+### [1.6.1. VHDL Language]
+### [1.6.2. Verilog Language]
 ## [1.7. Verification]
 ### [1.7.1. OSVVM-VHDL]
 #### [1.7.1.1. OSVVM Checker]
@@ -1036,18 +1036,18 @@ sudo apt upgrade
 
 ## 1.4. Model
 
-### 1.4.1. VHDL
-### 1.4.2. Verilog
+### 1.4.1. VHDL Language
+### 1.4.2. Verilog Language
 
 ## 1.6. Validation
 
-### 1.6.1. VHDL
-### 1.6.2. Verilog
+### 1.6.1. VHDL Language
+### 1.6.2. Verilog Language
 
 ## 1.6. Design
 
-### 1.6.1. VHDL
-### 1.6.2. Verilog
+### 1.6.1. VHDL Language
+### 1.6.2. Verilog Language
 
 ## 1.7. Verification
 
