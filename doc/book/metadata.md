@@ -1,8 +1,8 @@
 ---
-title: 'SoC-NTM (T-DNC/NTM-SoC)'
+title: 'MPSoC-NoC'
 subtitle: 'QueenField ![](../../icon.jpg)'
 
 author: Paco Reina Campo
 
-abstract: Neural Turing Machine for a MPSoC verified with UVM/OSVVM/FV.
+abstract: Network on Chip for a Multi-Processor System on Chip.
 ---
