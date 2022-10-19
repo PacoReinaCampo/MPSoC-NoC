@@ -1,6 +1,6 @@
 ---
 title: 'MPSoC-NoC'
-subtitle: 'QueenField ![](../../icon.jpg)'
+subtitle: 'QueenField ![](../../mpsoc-noc.svg){width=17cm}'
 
 author: Paco Reina Campo
 
