@@ -38,13 +38,9 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 module bench;
-  reg clk;
-  reg rst;
-
-  reg [7:0] ip1;
-  reg [7:0] ip2;
-
-  wire [8:0] out;
+  reg clk, rst;
+  reg [7:0] ip1, ip2;
+  wire [8:0]out;
   
   adder DUT (
     .clk(clk),
@@ -65,8 +61,8 @@ module bench;
 
     clk = 0;
 
-    ip1 = 0;
-    ip2 = 0;
+    ip1= 0;
+    ip2= 0;
 
     rst = 0;
     #2ns;
@@ -76,8 +72,8 @@ module bench;
     rst = 0;
     #10;
     
-    ip1 = 5;
-    ip2 = 2;
+    ip1= 5;
+    ip2= 2;
     #5;
     $display("End.");
     $finish;
