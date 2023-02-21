@@ -40,92 +40,61 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_demux #(
-  parameter        FLIT_WIDTH = 32,
-  parameter        CHANNELS   = 7,
-  parameter [63:0] MAPPING    = 'x
+module peripheral_arbiter_rr #(
+  parameter N = 2
 )
   (
-    input                                     clk,
-    input                                     rst,
-
-    input                    [FLIT_WIDTH-1:0] in_flit,
-    input                                     in_last,
-    input                                     in_valid,
-    output reg                                in_ready,
-
-    output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
-    output     [CHANNELS-1:0]                 out_last,
-    output reg [CHANNELS-1:0]                 out_valid,
-    input      [CHANNELS-1:0]                 out_ready
+    input  [N-1:0] req,
+    input          en,
+    input  [N-1:0] gnt,
+    output [N-1:0] nxt_gnt
   );
 
-  //////////////////////////////////////////////////////////////////
-  //
-  // Constants
-  //
-
-  // NoC packet header
-  // Mandatory fields
-  localparam CLASS_MSB = 26;
-  localparam CLASS_LSB = 24;
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg [CHANNELS-1:0] active;
-  reg [CHANNELS-1:0] nxt_active;
 
-  wire [         2:0] packet_class;
-  reg  [CHANNELS-1:0] select;
+  // Mask net
+  reg [N-1:0] mask [0:N-1];
 
-  //////////////////////////////////////////////////////////////////
+  integer i,j;
+
+  genvar k;
+
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  assign packet_class = in_flit[CLASS_MSB:CLASS_LSB];
 
-  always @(*) begin : gen_select
-    select = MAPPING[8*packet_class +: CHANNELS];
-    if (select == 0) begin
-      select = { {CHANNELS-1{1'b0}}, 1'b1};
-    end
-  end
+  // Calculate the mask
+  always @(*) begin : calc_mask
+    for (i=0;i<N;i=i+1) begin
+      // Initialize mask as 0
+      mask[i] = {N{1'b0}};
 
-  assign out_flit = {CHANNELS{in_flit}};
-  assign out_last = {CHANNELS{in_last}};
+      if(i>0)
+        // For i=N:1 the next right is i-1
+        mask[i][i-1] = ~gnt[i-1];
+      else
+        // For i=0 the next right is N-1
+        mask[i][N-1] = ~gnt[N-1];
 
-  always @(*) begin
-    nxt_active = active;
-
-    out_valid = 0;
-    in_ready  = 0;
-
-    if (active == 0) begin
-      in_ready  = |(select & out_ready);
-      out_valid =   select & {CHANNELS{in_valid}};
-
-      if (in_valid & ~in_last) begin
-        nxt_active = select;
-      end
-    end
-    else begin
-      in_ready  = |(active & out_ready);
-      out_valid = active & {CHANNELS{in_valid}};
-
-      if (in_valid & in_last) begin
-        nxt_active = 0;
+      for (j=2;j<N;j=j+1) begin
+        if (i-j>=0)
+          mask[i][i-j] = mask[i][i-j+1] & ~gnt[i-j];
+        else if (i-j+1>=0)
+          mask[i][i-j+N] = mask[i][i-j+1] & ~gnt[i-j+N];
+        else
+          mask[i][i-j+N] = mask[i][i-j+N+1] & ~gnt[i-j+N];
       end
     end
   end
 
-  always @(posedge clk) begin
-    if (rst) begin
-      active <= '0;
+  // Calculate the nxt_gnt
+  generate
+    for (k=0;k<N;k=k+1) begin : gen_nxt_gnt         
+      assign nxt_gnt[k] = en ? (~|(mask[k] & req) & req[k]) | (~|req & gnt[k]) : gnt[k];
     end
-    else begin
-      active <= nxt_active;
-    end
-  end
+  endgenerate
 endmodule

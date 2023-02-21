@@ -9,10 +9,8 @@
 //                  |_|                                                       //
 //                                                                            //
 //                                                                            //
-//              MPSoC-RISCV CPU                                               //
-//              Network on Chip                                               //
-//              AMBA3 AHB-Lite Bus Interface                                  //
-//              Wishbone Bus Interface                                        //
+//              Peripheral-NoC for MPSoC                                      //
+//              Network on Chip for MPSoC                                     //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,81 +36,72 @@
  *
  * =============================================================================
  * Author(s):
+ *   Stefan Wallentowitz <stefan@wallentowitz.de>
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_testbench;
+module peripheral_noc_vchannel_mux #(
+  parameter FLIT_WIDTH = 32,
+  parameter CHANNELS   = 7
+)
+  (
+    input                                 clk,
+    input                                 rst,
 
-  //////////////////////////////////////////////////////////////////////////////
-  //
-  // Constants
-  //
-  parameter FLIT_WIDTH       = 34;
-  parameter CHANNELS         = 9;
+    input  [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+    input  [CHANNELS-1:0]                 in_last,
+    input  [CHANNELS-1:0]                 in_valid,
+    output [CHANNELS-1:0]                 in_ready,
 
-  parameter ENABLE_VCHANNELS = 1;
-
-  parameter T                = 2;
-  parameter X                = 2;
-  parameter Y                = 2;
-  parameter Z                = 2;
-
-  parameter BUFFER_SIZE_IN   = 4;
-  parameter BUFFER_SIZE_OUT  = 4;
-
-  parameter NODES            = 16;
+    output reg           [FLIT_WIDTH-1:0] out_flit,
+    output reg                            out_last,
+    output [CHANNELS-1:0]                 out_valid,
+    input  [CHANNELS-1:0]                 out_ready
+  );
 
   //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  wire clk;
-  wire rst;
+  reg   [CHANNELS-1:0] select;
+  logic [CHANNELS-1:0] nxt_select;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_in_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_ready;
-
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_ready;
+  integer c;
 
   //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
+  assign out_valid = in_valid  & select;
+  assign in_ready  = out_ready & select;
 
-  //DUT
-  peripheral_noc_mesh4d #(
-    .FLIT_WIDTH       (FLIT_WIDTH),
-    .CHANNELS         (CHANNELS),
+  always @(*) begin
+    out_flit = 'x;
+    out_last = 'x;
+    for (c = 0; c < CHANNELS; c=c+1) begin
+      if (select[c]) begin
+        out_flit = in_flit[c];
+        out_last = in_last[c];
+      end
+    end
+  end
 
-    .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
-
-    .T                (T),
-    .X                (X),
-    .Y                (Y),
-    .Z                (Z),
-
-    .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
-    .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT),
-
-    .NODES            (NODES)
+  peripheral_arbiter_rr #(
+    .N (CHANNELS)
   )
-  noc_mesh4d (
-    .rst       ( rst ),
-    .clk       ( clk ),
-
-    .in_flit   ( noc_in_flit  ),
-    .in_last   ( noc_in_last  ),
-    .in_valid  ( noc_in_valid ),
-    .in_ready  ( noc_in_ready ),
-
-    .out_flit  ( noc_out_flit  ),
-    .out_last  ( noc_out_last  ),
-    .out_valid ( noc_out_valid ),
-    .out_ready ( noc_out_ready )
+  arbiter_rr (
+    .req     (in_valid & out_ready),
+    .en      (1'b1),
+    .gnt     (select),
+    .nxt_gnt (nxt_select)
   );
+
+  always @(posedge clk) begin
+    if (rst) begin
+      select <= {{CHANNELS-1{1'b0}},1'b1};
+    end
+    else begin
+      select <= nxt_select;
+    end
+  end
 endmodule

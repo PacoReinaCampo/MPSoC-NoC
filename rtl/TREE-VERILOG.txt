@@ -1,19 +1,20 @@
 verilog
-├── core
-│   ├── peripheral_arbiter_rr.sv
-│   ├── peripheral_noc_buffer.sv
-│   ├── peripheral_noc_demux.sv
-│   ├── peripheral_noc_mux.sv
-│   └── peripheral_noc_vchannel_mux.sv
-├── router
-│   ├── peripheral_noc_router_input.sv
-│   ├── peripheral_noc_router_lookup_slice.sv
-│   ├── peripheral_noc_router_lookup.sv
-│   ├── peripheral_noc_router_output.sv
-│   └── peripheral_noc_router.sv
-└── topology
-    ├── peripheral_noc_mesh2d.sv
-    ├── peripheral_noc_mesh3d.sv
-    └── peripheral_noc_mesh4d.sv
+└── peripheral
+    ├── main
+    │   ├── peripheral_arbiter_rr.sv
+    │   ├── peripheral_noc_buffer.sv
+    │   ├── peripheral_noc_demux.sv
+    │   ├── peripheral_noc_mux.sv
+    │   └── peripheral_noc_vchannel_mux.sv
+    ├── router
+    │   ├── peripheral_noc_router_input.sv
+    │   ├── peripheral_noc_router_lookup_slice.sv
+    │   ├── peripheral_noc_router_lookup.sv
+    │   ├── peripheral_noc_router_output.sv
+    │   └── peripheral_noc_router.sv
+    └── topology
+        ├── peripheral_noc_mesh2d.sv
+        ├── peripheral_noc_mesh3d.sv
+        └── peripheral_noc_mesh4d.sv
 
-3 directories, 13 files
+4 directories, 13 files

@@ -40,61 +40,86 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_arbiter_rr #(
-  parameter N = 2
+module peripheral_noc_router_lookup_slice #(
+  parameter FLIT_WIDTH = 32,
+  parameter OUTPUTS    = 7
 )
   (
-    input  [N-1:0] req,
-    input          en,
-    input  [N-1:0] gnt,
-    output [N-1:0] nxt_gnt
+    input clk,
+    input rst,
+
+    input                   [FLIT_WIDTH-1:0] in_flit,
+    input                                    in_last,
+    input      [OUTPUTS-1:0]                 in_valid,
+    output                                   in_ready,
+
+    output reg                               out_last,
+    output reg              [FLIT_WIDTH-1:0] out_flit,
+    output reg [OUTPUTS-1:0]                 out_valid,
+    input      [OUTPUTS-1:0]                 out_ready
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
 
-  // Mask net
-  reg [N-1:0] mask [0:N-1];
+  // This is an intermediate register that we use to avoid
+  // stop-and-go behavior
+  reg              [FLIT_WIDTH-1:0] reg_flit;
+  reg                               reg_last;
+  reg [OUTPUTS-1:0]                 reg_valid;
 
-  integer i,j;
+  // This signal selects where to store the next incoming flit
+  reg pressure;
 
-  genvar k;
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
 
-  // Calculate the mask
-  always @(*) begin : calc_mask
-    for (i=0;i<N;i=i+1) begin
-      // Initialize mask as 0
-      mask[i] = {N{1'b0}};
+  // A backpressure in the output port leads to backpressure on the
+  // input with one cycle delay
+  assign in_ready = !pressure;
 
-      if(i>0)
-        // For i=N:1 the next right is i-1
-        mask[i][i-1] = ~gnt[i-1];
-      else
-        // For i=0 the next right is N-1
-        mask[i][N-1] = ~gnt[N-1];
-
-      for (j=2;j<N;j=j+1) begin
-        if (i-j>=0)
-          mask[i][i-j] = mask[i][i-j+1] & ~gnt[i-j];
-        else if (i-j+1>=0)
-          mask[i][i-j+N] = mask[i][i-j+1] & ~gnt[i-j+N];
-        else
-          mask[i][i-j+N] = mask[i][i-j+N+1] & ~gnt[i-j+N];
+  always @(posedge clk) begin
+    if (rst) begin
+      pressure  <= 0;
+      out_valid <= 0;
+    end
+    else begin
+      if (!pressure) begin
+        // We are accepting the input in this cycle, determine
+        // where to store it..
+        // There is no flit waiting in the register, or
+        // The current flit is transfered this cycle
+        if (~|out_valid | (|(out_ready & out_valid))) begin
+          out_flit  <= in_flit;
+          out_last  <= in_last;
+          out_valid <= in_valid;
+        end
+        else if (|out_valid & ~|out_ready) begin
+          // Otherwise if there is a flit waiting and upstream
+          // not ready, push it to the second register. Enter the
+          // backpressure mode.
+          reg_flit  <= in_flit;
+          reg_last  <= in_last;
+          reg_valid <= in_valid;
+          pressure  <= 1;
+        end
+      end
+      else begin // if (!pressure)
+        // We can be sure that a flit is waiting now (don't need
+        // to check)
+        if (|out_ready) begin
+          // If the output accepted this flit, go back to
+          // accepting input flits.
+          out_flit  <= reg_flit;
+          out_last  <= reg_last;
+          out_valid <= reg_valid;
+          pressure  <= 0;
+        end
       end
     end
   end
-
-  // Calculate the nxt_gnt
-  generate
-    for (k=0;k<N;k=k+1) begin : gen_nxt_gnt         
-      assign nxt_gnt[k] = en ? (~|(mask[k] & req) & req[k]) | (~|req & gnt[k]) : gnt[k];
-    end
-  endgenerate
 endmodule

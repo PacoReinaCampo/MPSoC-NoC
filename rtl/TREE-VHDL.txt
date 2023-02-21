@@ -1,21 +1,23 @@
 vhdl
-├── core
-│   ├── peripheral_arbiter_rr.vhd
-│   ├── peripheral_noc_buffer.vhd
-│   ├── peripheral_noc_demux.vhd
-│   ├── peripheral_noc_mux.vhd
-│   └── peripheral_noc_vchannel_mux.vhd
-├── pkg
-│   └── vhdl_pkg.vhd
-├── router
-│   ├── peripheral_noc_router_input.vhd
-│   ├── peripheral_noc_router_lookup_slice.vhd
-│   ├── peripheral_noc_router_lookup.vhd
-│   ├── peripheral_noc_router_output.vhd
-│   └── peripheral_noc_router.vhd
-└── topology
-    ├── peripheral_noc_mesh2d.vhd
-    ├── peripheral_noc_mesh3d.vhd
-    └── peripheral_noc_mesh4d.vhd
+├── peripheral
+│   ├── main
+│   │   ├── peripheral_arbiter_rr.vhd
+│   │   ├── peripheral_noc_buffer.vhd
+│   │   ├── peripheral_noc_demux.vhd
+│   │   ├── peripheral_noc_mux.vhd
+│   │   └── peripheral_noc_vchannel_mux.vhd
+│   ├── router
+│   │   ├── peripheral_noc_router_input.vhd
+│   │   ├── peripheral_noc_router_lookup_slice.vhd
+│   │   ├── peripheral_noc_router_lookup.vhd
+│   │   ├── peripheral_noc_router_output.vhd
+│   │   └── peripheral_noc_router.vhd
+│   └── topology
+│       ├── peripheral_noc_mesh2d.vhd
+│       ├── peripheral_noc_mesh3d.vhd
+│       └── peripheral_noc_mesh4d.vhd
+└── pkg
+    └── core
+        └── vhdl_pkg.vhd
 
-4 directories, 14 files
+6 directories, 14 files

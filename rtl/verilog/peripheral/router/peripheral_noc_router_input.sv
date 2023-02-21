@@ -40,110 +40,91 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_router_lookup #(
-  parameter FLIT_WIDTH = 32,
-  parameter DEST_WIDTH = 5,
-  parameter DESTS      = 1,
-  parameter OUTPUTS    = 1
+module peripheral_noc_router_input #(
+  parameter FLIT_WIDTH   = 32,
+  parameter VCHANNELS    = 1,
+  parameter DESTS        = 1,
+  parameter OUTPUTS      = 1,
+  parameter BUFFER_DEPTH = 4
 )
   (
-    input                   clk,
-    input                   rst,
+    input                                               clk,
+    input                                               rst,
 
-    input  [DESTS*OUTPUTS-1:0] ROUTES,
+    input  [OUTPUTS*DESTS-1:0]                          ROUTES,
 
-    input  [FLIT_WIDTH-1:0] in_flit,
-    input                   in_last,
-    input                   in_valid,
-    output                  in_ready,
+    input                              [FLIT_WIDTH-1:0] in_flit,
+    input                                               in_last,
+    input  [VCHANNELS-1:0]                              in_valid,
+    output [VCHANNELS-1:0]                              in_ready,
 
-    output [OUTPUTS   -1:0] out_valid,
-    output                  out_last,
-    output [FLIT_WIDTH-1:0] out_flit,
-    input  [OUTPUTS   -1:0] out_ready
+    output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
+    output [VCHANNELS-1:0]                              out_last,
+    output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
+    input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
 
-  // We need to track worms and directly encode the output of the
-  // current worm.
-  reg   [OUTPUTS-1:0]      worm;
-  logic [OUTPUTS-1:0]      nxt_worm;
-  logic                    wormhole;
+  genvar v;
 
-  logic [DEST_WIDTH-1:0]   dest;
+  wire [FLIT_WIDTH-1:0] buffer_flit  [VCHANNELS];
+  wire                  buffer_last  [VCHANNELS];
+  wire                  buffer_valid [VCHANNELS];
+  wire                  buffer_ready [VCHANNELS];
 
-  logic [OUTPUTS-1:0]      valid;
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
+  generate
+    for (v = 0; v < VCHANNELS; v=v+1) begin : vc
 
-  // This is high if we are in a worm
-  assign wormhole = |worm;
+      peripheral_noc_buffer #(
+        .FLIT_WIDTH (FLIT_WIDTH),
+        .DEPTH      (BUFFER_DEPTH)
+      )
+      u_buffer (
+        .clk         (clk),
+        .rst         (rst),
 
-  // Extract destination from flit
-  assign dest = in_flit[FLIT_WIDTH-1 -: DEST_WIDTH];
+        .in_flit     (in_flit),
+        .in_last     (in_last),
+        .in_valid    (in_valid[v]),
+        .in_ready    (in_ready[v]),
 
-  // This is the selection signal of the slave, one hot so that it
-  // directly serves as flow control valid
+        .out_flit    (buffer_flit  [v]),
+        .out_last    (buffer_last  [v]),
+        .out_valid   (buffer_valid [v]),
+        .out_ready   (buffer_ready [v]),
 
-  // Register slice at the output.
-  peripheral_noc_router_lookup_slice #(
-    .FLIT_WIDTH (FLIT_WIDTH),
-    .OUTPUTS    (OUTPUTS)
-  )
-  u_slice (
-    .clk (clk),
-    .rst (rst),
+        .packet_size ()
+      );
 
-    .in_valid (valid),
-    .in_last  (in_last),
-    .in_flit  (in_flit),
-    .in_ready (in_ready),
+      peripheral_noc_router_lookup #(
+        .FLIT_WIDTH (FLIT_WIDTH),
+        .DESTS (DESTS),
+        .OUTPUTS (OUTPUTS)
+      )
+      u_lookup (
+        .clk       (clk),
+        .rst       (rst),
 
-    .out_valid (out_valid),
-    .out_last  (out_last),
-    .out_flit  (out_flit),
-    .out_ready (out_ready)
-  );
+        .ROUTES    (ROUTES),
 
-  always @(*) begin
-    nxt_worm = worm;
-    valid = 0;
-    if (!wormhole) begin
-      // We are waiting for a flit
-      if (in_valid) begin
-        // This is a header. Lookup output
-        valid = ROUTES[dest*OUTPUTS +: OUTPUTS];
-        if (in_ready & !in_last) begin
-          // If we can push it further and it is not the only
-          // flit, enter a worm and store the output
-          nxt_worm = ROUTES[dest*OUTPUTS +: OUTPUTS];
-        end
-      end
+        .in_flit   (buffer_flit  [v]),
+        .in_last   (buffer_last  [v]),
+        .in_valid  (buffer_valid [v]),
+        .in_ready  (buffer_ready [v]),
+
+        .out_flit  (out_flit  [v]),
+        .out_last  (out_last  [v]),
+        .out_valid (out_valid [v]),
+        .out_ready (out_ready [v])
+      );
     end
-    else begin
-      // We are in a worm
-      // The valid is set on the currently select output
-      valid = worm & {OUTPUTS{in_valid}};
-      if (in_ready & in_last) begin
-        // End of worm
-        nxt_worm = 0;
-      end
-    end
-  end
-
-  always @(posedge clk) begin
-    if (rst) begin
-      worm <= 0;
-    end
-    else begin
-      worm <= nxt_worm;
-    end
-  end
+  endgenerate
 endmodule

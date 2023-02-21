@@ -37,104 +37,95 @@
  * =============================================================================
  * Author(s):
  *   Stefan Wallentowitz <stefan@wallentowitz.de>
- *   Andreas Lankes <andreas.lankes@tum.de>
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_mux #(
-  parameter FLIT_WIDTH = 32,
-  parameter CHANNELS   = 2
+module peripheral_noc_demux #(
+  parameter        FLIT_WIDTH = 32,
+  parameter        CHANNELS   = 7,
+  parameter [63:0] MAPPING    = 'x
 )
   (
     input                                     clk,
     input                                     rst,
 
-    input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
-    input      [CHANNELS-1:0]                 in_last,
-    input      [CHANNELS-1:0]                 in_valid,
-    output reg [CHANNELS-1:0]                 in_ready,
+    input                    [FLIT_WIDTH-1:0] in_flit,
+    input                                     in_last,
+    input                                     in_valid,
+    output reg                                in_ready,
 
-    output reg               [FLIT_WIDTH-1:0] out_flit,
-    output reg                                out_last,
-    output reg                                out_valid,
-    input                                     out_ready
+    output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
+    output     [CHANNELS-1:0]                 out_last,
+    output reg [CHANNELS-1:0]                 out_valid,
+    input      [CHANNELS-1:0]                 out_ready
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  // Constants
+  //
+
+  // NoC packet header
+  // Mandatory fields
+  localparam CLASS_MSB = 26;
+  localparam CLASS_LSB = 24;
+
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  wire [CHANNELS-1:0] select;
-  reg  [CHANNELS-1:0] active;
+  reg [CHANNELS-1:0] active;
+  reg [CHANNELS-1:0] nxt_active;
 
-  reg                 activeroute;
-  reg                 nxt_activeroute;
+  wire [         2:0] packet_class;
+  reg  [CHANNELS-1:0] select;
 
-  wire [CHANNELS-1:0] req_masked;
-
-  integer c;
-
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  assign req_masked = {CHANNELS{~activeroute & out_ready}} & in_valid;
+  assign packet_class = in_flit[CLASS_MSB:CLASS_LSB];
 
-  always @(*) begin
-    out_flit = {FLIT_WIDTH{1'b0}};
-    out_last = 1'b0;
-    for (c = 0; c < CHANNELS; c = c + 1) begin
-      if (select[c]) begin
-        out_flit = in_flit[c];
-        out_last = in_last[c];
-      end
+  always @(*) begin : gen_select
+    select = MAPPING[8*packet_class +: CHANNELS];
+    if (select == 0) begin
+      select = { {CHANNELS-1{1'b0}}, 1'b1};
     end
   end
 
-  always @(*) begin
-    nxt_activeroute = activeroute;
-    in_ready        = {CHANNELS{1'b0}};
+  assign out_flit = {CHANNELS{in_flit}};
+  assign out_last = {CHANNELS{in_last}};
 
-    if (activeroute) begin
-      if (|(in_valid & active) && out_ready) begin
-        in_ready  = active;
-        out_valid = 1;
-        if (out_last)
-          nxt_activeroute = 0;
-      end
-      else begin
-        out_valid = 1'b0;
-        in_ready  = 0;
+  always @(*) begin
+    nxt_active = active;
+
+    out_valid = 0;
+    in_ready  = 0;
+
+    if (active == 0) begin
+      in_ready  = |(select & out_ready);
+      out_valid =   select & {CHANNELS{in_valid}};
+
+      if (in_valid & ~in_last) begin
+        nxt_active = select;
       end
     end
     else begin
-      out_valid = 0;
-      if (|in_valid && out_ready) begin
-        out_valid       = 1'b1;
-        nxt_activeroute = ~out_last;
-        in_ready        = select;
+      in_ready  = |(active & out_ready);
+      out_valid = active & {CHANNELS{in_valid}};
+
+      if (in_valid & in_last) begin
+        nxt_active = 0;
       end
     end
   end
 
   always @(posedge clk) begin
     if (rst) begin
-      activeroute <= 0;
-      active      <= {{CHANNELS-1{1'b0}},1'b1};
+      active <= '0;
     end
     else begin
-      activeroute <= nxt_activeroute;
-      active      <= select;
+      active <= nxt_active;
     end
   end
-
-  peripheral_arbiter_rr #(
-    .N (CHANNELS)
-  )
-  arbiter_rr (
-    .nxt_gnt (select),
-    .req     (req_masked),
-    .gnt     (active),
-    .en      (1'b1)
-  );
 endmodule

@@ -37,48 +37,53 @@
  * =============================================================================
  * Author(s):
  *   Stefan Wallentowitz <stefan@wallentowitz.de>
+ *   Andreas Lankes <andreas.lankes@tum.de>
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_vchannel_mux #(
+module peripheral_noc_mux #(
   parameter FLIT_WIDTH = 32,
-  parameter CHANNELS   = 7
+  parameter CHANNELS   = 2
 )
   (
-    input                                 clk,
-    input                                 rst,
+    input                                     clk,
+    input                                     rst,
 
-    input  [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
-    input  [CHANNELS-1:0]                 in_last,
-    input  [CHANNELS-1:0]                 in_valid,
-    output [CHANNELS-1:0]                 in_ready,
+    input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+    input      [CHANNELS-1:0]                 in_last,
+    input      [CHANNELS-1:0]                 in_valid,
+    output reg [CHANNELS-1:0]                 in_ready,
 
-    output reg           [FLIT_WIDTH-1:0] out_flit,
-    output reg                            out_last,
-    output [CHANNELS-1:0]                 out_valid,
-    input  [CHANNELS-1:0]                 out_ready
+    output reg               [FLIT_WIDTH-1:0] out_flit,
+    output reg                                out_last,
+    output reg                                out_valid,
+    input                                     out_ready
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  reg   [CHANNELS-1:0] select;
-  logic [CHANNELS-1:0] nxt_select;
+  wire [CHANNELS-1:0] select;
+  reg  [CHANNELS-1:0] active;
+
+  reg                 activeroute;
+  reg                 nxt_activeroute;
+
+  wire [CHANNELS-1:0] req_masked;
 
   integer c;
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
-  assign out_valid = in_valid  & select;
-  assign in_ready  = out_ready & select;
+  assign req_masked = {CHANNELS{~activeroute & out_ready}} & in_valid;
 
   always @(*) begin
-    out_flit = 'x;
-    out_last = 'x;
-    for (c = 0; c < CHANNELS; c=c+1) begin
+    out_flit = {FLIT_WIDTH{1'b0}};
+    out_last = 1'b0;
+    for (c = 0; c < CHANNELS; c = c + 1) begin
       if (select[c]) begin
         out_flit = in_flit[c];
         out_last = in_last[c];
@@ -86,22 +91,50 @@ module peripheral_noc_vchannel_mux #(
     end
   end
 
+  always @(*) begin
+    nxt_activeroute = activeroute;
+    in_ready        = {CHANNELS{1'b0}};
+
+    if (activeroute) begin
+      if (|(in_valid & active) && out_ready) begin
+        in_ready  = active;
+        out_valid = 1;
+        if (out_last)
+          nxt_activeroute = 0;
+      end
+      else begin
+        out_valid = 1'b0;
+        in_ready  = 0;
+      end
+    end
+    else begin
+      out_valid = 0;
+      if (|in_valid && out_ready) begin
+        out_valid       = 1'b1;
+        nxt_activeroute = ~out_last;
+        in_ready        = select;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst) begin
+      activeroute <= 0;
+      active      <= {{CHANNELS-1{1'b0}},1'b1};
+    end
+    else begin
+      activeroute <= nxt_activeroute;
+      active      <= select;
+    end
+  end
+
   peripheral_arbiter_rr #(
     .N (CHANNELS)
   )
   arbiter_rr (
-    .req     (in_valid & out_ready),
-    .en      (1'b1),
-    .gnt     (select),
-    .nxt_gnt (nxt_select)
+    .nxt_gnt (select),
+    .req     (req_masked),
+    .gnt     (active),
+    .en      (1'b1)
   );
-
-  always @(posedge clk) begin
-    if (rst) begin
-      select <= {{CHANNELS-1{1'b0}},1'b1};
-    end
-    else begin
-      select <= nxt_select;
-    end
-  end
 endmodule

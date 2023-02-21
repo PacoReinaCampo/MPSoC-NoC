@@ -40,86 +40,110 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module peripheral_noc_router_lookup_slice #(
+module peripheral_noc_router_lookup #(
   parameter FLIT_WIDTH = 32,
-  parameter OUTPUTS    = 7
+  parameter DEST_WIDTH = 5,
+  parameter DESTS      = 1,
+  parameter OUTPUTS    = 1
 )
   (
-    input clk,
-    input rst,
+    input                   clk,
+    input                   rst,
 
-    input                   [FLIT_WIDTH-1:0] in_flit,
-    input                                    in_last,
-    input      [OUTPUTS-1:0]                 in_valid,
-    output                                   in_ready,
+    input  [DESTS*OUTPUTS-1:0] ROUTES,
 
-    output reg                               out_last,
-    output reg              [FLIT_WIDTH-1:0] out_flit,
-    output reg [OUTPUTS-1:0]                 out_valid,
-    input      [OUTPUTS-1:0]                 out_ready
+    input  [FLIT_WIDTH-1:0] in_flit,
+    input                   in_last,
+    input                   in_valid,
+    output                  in_ready,
+
+    output [OUTPUTS   -1:0] out_valid,
+    output                  out_last,
+    output [FLIT_WIDTH-1:0] out_flit,
+    input  [OUTPUTS   -1:0] out_ready
   );
 
-  //////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
 
-  // This is an intermediate register that we use to avoid
-  // stop-and-go behavior
-  reg              [FLIT_WIDTH-1:0] reg_flit;
-  reg                               reg_last;
-  reg [OUTPUTS-1:0]                 reg_valid;
+  // We need to track worms and directly encode the output of the
+  // current worm.
+  reg   [OUTPUTS-1:0]      worm;
+  logic [OUTPUTS-1:0]      nxt_worm;
+  logic                    wormhole;
 
-  // This signal selects where to store the next incoming flit
-  reg pressure;
+  logic [DEST_WIDTH-1:0]   dest;
 
-  //////////////////////////////////////////////////////////////////
+  logic [OUTPUTS-1:0]      valid;
+
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
 
-  // A backpressure in the output port leads to backpressure on the
-  // input with one cycle delay
-  assign in_ready = !pressure;
+  // This is high if we are in a worm
+  assign wormhole = |worm;
+
+  // Extract destination from flit
+  assign dest = in_flit[FLIT_WIDTH-1 -: DEST_WIDTH];
+
+  // This is the selection signal of the slave, one hot so that it
+  // directly serves as flow control valid
+
+  // Register slice at the output.
+  peripheral_noc_router_lookup_slice #(
+    .FLIT_WIDTH (FLIT_WIDTH),
+    .OUTPUTS    (OUTPUTS)
+  )
+  u_slice (
+    .clk (clk),
+    .rst (rst),
+
+    .in_valid (valid),
+    .in_last  (in_last),
+    .in_flit  (in_flit),
+    .in_ready (in_ready),
+
+    .out_valid (out_valid),
+    .out_last  (out_last),
+    .out_flit  (out_flit),
+    .out_ready (out_ready)
+  );
+
+  always @(*) begin
+    nxt_worm = worm;
+    valid = 0;
+    if (!wormhole) begin
+      // We are waiting for a flit
+      if (in_valid) begin
+        // This is a header. Lookup output
+        valid = ROUTES[dest*OUTPUTS +: OUTPUTS];
+        if (in_ready & !in_last) begin
+          // If we can push it further and it is not the only
+          // flit, enter a worm and store the output
+          nxt_worm = ROUTES[dest*OUTPUTS +: OUTPUTS];
+        end
+      end
+    end
+    else begin
+      // We are in a worm
+      // The valid is set on the currently select output
+      valid = worm & {OUTPUTS{in_valid}};
+      if (in_ready & in_last) begin
+        // End of worm
+        nxt_worm = 0;
+      end
+    end
+  end
 
   always @(posedge clk) begin
     if (rst) begin
-      pressure  <= 0;
-      out_valid <= 0;
+      worm <= 0;
     end
     else begin
-      if (!pressure) begin
-        // We are accepting the input in this cycle, determine
-        // where to store it..
-        // There is no flit waiting in the register, or
-        // The current flit is transfered this cycle
-        if (~|out_valid | (|(out_ready & out_valid))) begin
-          out_flit  <= in_flit;
-          out_last  <= in_last;
-          out_valid <= in_valid;
-        end
-        else if (|out_valid & ~|out_ready) begin
-          // Otherwise if there is a flit waiting and upstream
-          // not ready, push it to the second register. Enter the
-          // backpressure mode.
-          reg_flit  <= in_flit;
-          reg_last  <= in_last;
-          reg_valid <= in_valid;
-          pressure  <= 1;
-        end
-      end
-      else begin // if (!pressure)
-        // We can be sure that a flit is waiting now (don't need
-        // to check)
-        if (|out_ready) begin
-          // If the output accepted this flit, go back to
-          // accepting input flits.
-          out_flit  <= reg_flit;
-          out_last  <= reg_last;
-          out_valid <= reg_valid;
-          pressure  <= 0;
-        end
-      end
+      worm <= nxt_worm;
     end
   end
 endmodule
