@@ -1,5 +1,5 @@
 +incdir+../../../../../../uvm/src
 
-../../../../../../uvm/bus/apb4/bench/verilog/testbench.sv
+../../../../../../uvm/bus/apb4/bench/verilog/peripheral/testbench.sv
 
-../../../../../../uvm/bus/apb4/rtl/verilog/design.sv
+../../../../../../uvm/bus/apb4/rtl/verilog/peripheral/design.sv

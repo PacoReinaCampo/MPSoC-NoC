@@ -1,19 +1,19 @@
 +incdir+../../../../../../uvm/src
 
-../../../../../../uvm/noc/2d/bench/verilog/testbench.sv
+../../../../../../uvm/noc/2d/bench/verilog/peripheral/testbench.sv
 
-../../../../../../uvm/noc/2d/rtl/verilog/design.sv
+../../../../../../uvm/noc/2d/rtl/verilog/peripheral/design.sv
 
-../../../../../../rtl/verilog/topology/peripheral_noc_mesh2d.sv
+../../../../../../rtl/verilog/peripheral/topology/peripheral_noc_mesh2d.sv
 
-../../../../../../rtl/verilog/router/peripheral_noc_router_input.sv
-../../../../../../rtl/verilog/router/peripheral_noc_router_lookup_slice.sv
-../../../../../../rtl/verilog/router/peripheral_noc_router_lookup.sv
-../../../../../../rtl/verilog/router/peripheral_noc_router_output.sv
-../../../../../../rtl/verilog/router/peripheral_noc_router.sv
+../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_input.sv
+../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_lookup_slice.sv
+../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_lookup.sv
+../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_output.sv
+../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router.sv
 
-../../../../../../rtl/verilog/core/peripheral_arb_rr.sv
-../../../../../../rtl/verilog/core/peripheral_noc_buffer.sv
-../../../../../../rtl/verilog/core/peripheral_noc_demux.sv
-../../../../../../rtl/verilog/core/peripheral_noc_mux.sv
-../../../../../../rtl/verilog/core/peripheral_noc_vchannel_mux.sv
+../../../../../../rtl/verilog/peripheral/main/peripheral_arb_rr.sv
+../../../../../../rtl/verilog/peripheral/main/peripheral_noc_buffer.sv
+../../../../../../rtl/verilog/peripheral/main/peripheral_noc_demux.sv
+../../../../../../rtl/verilog/peripheral/main/peripheral_noc_mux.sv
+../../../../../../rtl/verilog/peripheral/main/peripheral_noc_vchannel_mux.sv
