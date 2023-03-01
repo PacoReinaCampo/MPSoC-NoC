@@ -1,4 +1,4 @@
-../../../../../../rtl/vhdl/pkg/mpsoc_peripheral_noc_pkg.vhd
+../../../../../../rtl/vhdl/pkg/peripheral_noc_pkg.vhd
 
 ../../../../../../rtl/vhdl/peripheral/topology/peripheral_noc_mesh3d.vhd
 
