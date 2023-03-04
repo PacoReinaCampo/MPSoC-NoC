@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
+##              QueenField                                                       ##
 ##              Multi-Processor System on Chip                                   ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2022-2025 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,8 +42,10 @@
 ##                                                                               ##
 ###################################################################################
 
-dot -Tsvg dependences-mpsoc.dot > dependences-mpsoc.svg
+dot -Tsvg dependences-mpsoc-life.dot > dependences-mpsoc-life.svg
+dot -Tsvg dependences-soc-life.dot > dependences-soc-life.svg
+dot -Tsvg dependences-pu-life.dot > dependences-pu-life.svg
 
-dot -Tsvg dependences-soc.dot > dependences-soc.svg
-
-dot -Tsvg dependences-pu.dot > dependences-pu.svg
+dot -Tsvg dependences-mpsoc-life.dot > dependences-mpsoc-fintech.svg
+dot -Tsvg dependences-soc-life.dot > dependences-soc-fintech.svg
+dot -Tsvg dependences-pu-life.dot > dependences-pu-fintech.svg
