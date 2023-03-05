@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_uart_synthesis #(
+module peripheral_noc_synthesis #(
   parameter HADDR_SIZE =  8,
   parameter HDATA_SIZE = 32,
   parameter APB_ADDR_WIDTH =  8,
@@ -53,19 +53,19 @@ module mpsoc_uart_synthesis #(
     input                         HCLK,
 								  
     //UART AHB3
-    input                         uart_HSEL,
-    input      [HADDR_SIZE  -1:0] uart_HADDR,
-    input      [HDATA_SIZE  -1:0] uart_HWDATA,
-    output reg [HDATA_SIZE  -1:0] uart_HRDATA,
-    input                         uart_HWRITE,
-    input      [             2:0] uart_HSIZE,
-    input      [             2:0] uart_HBURST,
-    input      [             3:0] uart_HPROT,
-    input      [             1:0] uart_HTRANS,
-    input                         uart_HMASTLOCK,
-    output reg                    uart_HREADYOUT,
-    input                         uart_HREADY,
-    output reg                    uart_HRESP
+    input                         noc_HSEL,
+    input      [HADDR_SIZE  -1:0] noc_HADDR,
+    input      [HDATA_SIZE  -1:0] noc_HWDATA,
+    output reg [HDATA_SIZE  -1:0] noc_HRDATA,
+    input                         noc_HWRITE,
+    input      [             2:0] noc_HSIZE,
+    input      [             2:0] noc_HBURST,
+    input      [             3:0] noc_HPROT,
+    input      [             1:0] noc_HTRANS,
+    input                         noc_HMASTLOCK,
+    output reg                    noc_HREADYOUT,
+    input                         noc_HREADY,
+    output reg                    noc_HRESP
   );
 
   //////////////////////////////////////////////////////////////////
@@ -74,19 +74,19 @@ module mpsoc_uart_synthesis #(
   //
 
   //Common signals
-  logic [APB_ADDR_WIDTH -1:0] uart_PADDR;
-  logic [APB_DATA_WIDTH -1:0] uart_PWDATA;
-  logic                       uart_PWRITE;
-  logic                       uart_PSEL;
-  logic                       uart_PENABLE;
-  logic [APB_DATA_WIDTH -1:0] uart_PRDATA;
-  logic                       uart_PREADY;
-  logic                       uart_PSLVERR;
+  logic [APB_ADDR_WIDTH -1:0] noc_PADDR;
+  logic [APB_DATA_WIDTH -1:0] noc_PWDATA;
+  logic                       noc_PWRITE;
+  logic                       noc_PSEL;
+  logic                       noc_PENABLE;
+  logic [APB_DATA_WIDTH -1:0] noc_PRDATA;
+  logic                       noc_PREADY;
+  logic                       noc_PSLVERR;
 
-  logic                       uart_rx_i;  // Receiver input
-  logic                       uart_tx_o;  // Transmitter output
+  logic                       noc_rx_i;  // Receiver input
+  logic                       noc_tx_o;  // Transmitter output
 
-  logic                       uart_event_o;
+  logic                       noc_event_o;
 
   //////////////////////////////////////////////////////////////////
   //
@@ -94,7 +94,7 @@ module mpsoc_uart_synthesis #(
   //
 
   //DUT AHB3
-  mpsoc_bridge_apb2ahb #(
+  peripheral_bridge_apb2ahb #(
     .HADDR_SIZE ( HADDR_SIZE     ),
     .HDATA_SIZE ( HDATA_SIZE     ),
     .PADDR_SIZE ( APB_ADDR_WIDTH ),
@@ -106,56 +106,56 @@ module mpsoc_uart_synthesis #(
     .HRESETn   ( HRESETn ),
     .HCLK      ( HCLK    ),
 
-    .HSEL      ( uart_HSEL      ),
-    .HADDR     ( uart_HADDR     ),
-    .HWDATA    ( uart_HWDATA    ),
-    .HRDATA    ( uart_HRDATA    ),
-    .HWRITE    ( uart_HWRITE    ),
-    .HSIZE     ( uart_HSIZE     ),
-    .HBURST    ( uart_HBURST    ),
-    .HPROT     ( uart_HPROT     ),
-    .HTRANS    ( uart_HTRANS    ),
-    .HMASTLOCK ( uart_HMASTLOCK ),
-    .HREADYOUT ( uart_HREADYOUT ),
-    .HREADY    ( uart_HREADY    ),
-    .HRESP     ( uart_HRESP     ),
+    .HSEL      ( noc_HSEL      ),
+    .HADDR     ( noc_HADDR     ),
+    .HWDATA    ( noc_HWDATA    ),
+    .HRDATA    ( noc_HRDATA    ),
+    .HWRITE    ( noc_HWRITE    ),
+    .HSIZE     ( noc_HSIZE     ),
+    .HBURST    ( noc_HBURST    ),
+    .HPROT     ( noc_HPROT     ),
+    .HTRANS    ( noc_HTRANS    ),
+    .HMASTLOCK ( noc_HMASTLOCK ),
+    .HREADYOUT ( noc_HREADYOUT ),
+    .HREADY    ( noc_HREADY    ),
+    .HRESP     ( noc_HRESP     ),
 
     //APB Master Interface
     .PRESETn ( HRESETn ),
     .PCLK    ( HCLK    ),
 
-    .PSEL    ( uart_PSEL    ),
-    .PENABLE ( uart_PENABLE ),
+    .PSEL    ( noc_PSEL    ),
+    .PENABLE ( noc_PENABLE ),
     .PPROT   (              ),
-    .PWRITE  ( uart_PWRITE  ),
+    .PWRITE  ( noc_PWRITE  ),
     .PSTRB   (              ),
-    .PADDR   ( uart_PADDR   ),
-    .PWDATA  ( uart_PWDATA  ),
-    .PRDATA  ( uart_PRDATA  ),
-    .PREADY  ( uart_PREADY  ),
-    .PSLVERR ( uart_PSLVERR )
+    .PADDR   ( noc_PADDR   ),
+    .PWDATA  ( noc_PWDATA  ),
+    .PRDATA  ( noc_PRDATA  ),
+    .PREADY  ( noc_PREADY  ),
+    .PSLVERR ( noc_PSLVERR )
   );
 
-  mpsoc_apb4_uart #(
+  peripheral_apb4_noc #(
     .APB_ADDR_WIDTH ( APB_ADDR_WIDTH ),
     .APB_DATA_WIDTH ( APB_DATA_WIDTH )
   )
-  apb4_uart (
+  apb4_noc (
     .RSTN ( HRESETn ),
     .CLK  ( HCLK    ),
 
-    .PADDR   ( uart_PADDR   ),
-    .PWDATA  ( uart_PWDATA  ),
-    .PWRITE  ( uart_PWRITE  ),
-    .PSEL    ( uart_PSEL    ),
-    .PENABLE ( uart_PENABLE ),
-    .PRDATA  ( uart_PRDATA  ),
-    .PREADY  ( uart_PREADY  ),
-    .PSLVERR ( uart_PSLVERR ),
+    .PADDR   ( noc_PADDR   ),
+    .PWDATA  ( noc_PWDATA  ),
+    .PWRITE  ( noc_PWRITE  ),
+    .PSEL    ( noc_PSEL    ),
+    .PENABLE ( noc_PENABLE ),
+    .PRDATA  ( noc_PRDATA  ),
+    .PREADY  ( noc_PREADY  ),
+    .PSLVERR ( noc_PSLVERR ),
 
-    .rx_i ( uart_rx_i ),
-    .tx_o ( uart_tx_o ),
+    .rx_i ( noc_rx_i ),
+    .tx_o ( noc_tx_o ),
 
-    .event_o ( uart_event_o )
+    .event_o ( noc_event_o )
   );
 endmodule

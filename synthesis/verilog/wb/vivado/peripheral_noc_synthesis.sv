@@ -40,7 +40,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module mpsoc_uart_synthesis #(
+module peripheral_noc_synthesis #(
   parameter SIM   = 0,
   parameter DEBUG = 0
 )
@@ -79,11 +79,11 @@ module mpsoc_uart_synthesis #(
   //
 
   //DUT WB
-  mpsoc_wb_uart #(
+  peripheral_wb_noc #(
     .SIM   (SIM),
     .DEBUG (DEBUG)
   )
-  wb_uart (
+  wb_noc (
     .wb_clk_i (clk),
     .wb_rst_i (rst),
 
