@@ -37,82 +37,39 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-interface peripheral_interface #(
-  parameter HADDR_SIZE = 32,
-  parameter HDATA_SIZE = 32
+import peripheral_package::*;
+
+program automatic peripheral_test
+#(
+  parameter int MASTERS    = 3,
+  parameter int SLAVES     = 5,
+  parameter int HADDR_SIZE = 32,
+  parameter int HDATA_SIZE = 32
 )
-  (
-    input logic HCLK:
-    input logic HRESETn
-  );
+(
+);
 
-  //declare interface signals
-  logic                   HSEL;
-  logic [HADDR_SIZE -1:0] HADDR;
-  logic [HDATA_SIZE -1:0] HWDATA;
-  logic [HDATA_SIZE -1:0] HRDATA;
-  logic                   HWRITE;
-  logic [            2:0] HSIZE;
-  logic [            2:0] HBURST;
-  logic [            3:0] HPROT;
-  logic [            1:0] HTRANS;
-  logic                   HMASTLOCK;
-  logic                   HREADY;
-  logic                   HREADYOUT;
-  logic                   HRESP;
+virtual peripheral_interface.master #(HADDR_SIZE,HDATA_SIZE) master[MASTERS];
+virtual peripheral_interface.slave  #(HADDR_SIZE,HDATA_SIZE) slave [SLAVES ];
 
-  // Master Interface Definitions
-  clocking cb_master @(posedge HCLK);
-    output HSEL;
-    output HADDR;
-    output HWDATA;
-    input HRDATA;
-    output HWRITE;
-    output HSIZE;
-    output HBURST;
-    output HPROT;
-    output HTRANS;
-    output HMASTLOCK;
-    input HREADY;
-    input HRESP;
-  endclocking
+logic [$clog2(MASTERS+1)-1:0] master_priority [MASTERS];
+logic [HADDR_SIZE       -1:0] address_base    [SLAVES ],
+                              address_mask    [SLAVES ];
 
-  modport master(
-    //synchronous signals
-    clocking cb_master,
-      //asynchronous reset signals
-      input HRESETn,
-      output HSEL,
-      output HTRANS
-  );
+peripheral_environment enviroment;
 
-  // Slave Interface Definitions
-  clocking cb_slave @(posedge HCLK);
-    input HSEL;
-    input HADDR;
-    input HWDATA;
-    output HRDATA;
-    input HWRITE;
-    input HSIZE;
-    input HBURST;
-    input HPROT;
-    input HTRANS;
-    input HMASTLOCK;
-    input HREADY;
-    output HREADYOUT;
-    output HRESP;
-  endclocking
+initial begin
+  foreach (master_priority[i]) master_priority[i] = $urandom_range(MASTERS-1,0);
+  $root.peripheral_testbench.master_priority <= master_priority;
 
-  modport slave(
-    //synchronous signals
-    clocking cb_slave,
-      //asynchronous reset signals
-      input HRESETn,
-      output HREADYOUT,
-      output HRESP
-  );
-endinterface : peripheral_interface
+  master = $root.peripheral_testbench.ahb3_master;
+  slave  = $root.peripheral_testbench.ahb3_slave;
 
-typedef virtual peripheral_interface v_ahb3lite;
-typedef virtual peripheral_interface.master v_ahb3lite_master;
-typedef virtual peripheral_interface.slave v_ahb3lite_slave;
+  enviroment = new(master,slave,master_priority,address_base,address_mask);
+  enviroment.generation_cfg();
+  enviroment.build();
+  enviroment.run();
+  enviroment.wrap_up();
+end
+
+endprogram : peripheral_test

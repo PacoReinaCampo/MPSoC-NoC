@@ -13,7 +13,7 @@
 //              Neural Turing Machine for MPSoC                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2020-2021 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,46 +37,15 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-module bench;
-  reg clk, rst;
-  reg [7:0] ip1, ip2;
-  wire [8:0]out;
-  
-  adder DUT (
-    .clk(clk),
-    .rst(rst),
+virtual class peripheral_base_transaction;
+  static int count;  //Number of instances created
+  int        id;  //Unique transaction Id
 
-    .in1(ip1),
-    .in2(ip2),
+  function new();
+    id = count++;
+  endfunction : new
 
-    .out(out)
-  );
-  
-  always #5 clk = ~clk;
-
-  initial begin
-    // Dump waves
-    $dumpfile("dump.vcd");
-    $dumpvars(1);
-
-    clk = 0;
-
-    ip1= 0;
-    ip2= 0;
-
-    rst = 0;
-    #2ns;
-    rst = 1;
-    
-    #2ns;
-    rst = 0;
-    #10;
-    
-    ip1= 5;
-    ip2= 2;
-    #5;
-    $display("End.");
-    $finish;
-  end 
-
-endmodule
+  pure virtual function bit compare(input peripheral_base_transaction to);
+  pure virtual function peripheral_base_transaction copy(input peripheral_base_transaction to = null);
+  pure virtual function void display(input string prefix = "");
+endclass : peripheral_base_transaction

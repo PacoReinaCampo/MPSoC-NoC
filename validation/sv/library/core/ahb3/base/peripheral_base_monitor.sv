@@ -13,7 +13,7 @@
 //              Neural Turing Machine for MPSoC                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2020-2021 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,39 +37,12 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-`include "peripheral_interface.sv"
-`include "peripheral_test.sv"
+virtual class peripheral_base_monitor;
+  int PortId;  //Unique transaction Id
 
-module peripheral_testbench;
-  bit clk;
-  bit rst;
+  function new(input int PortId);
+    this.PortId = PortId;
+  endfunction : new
 
-  always #2 clk = ~clk;
-
-  add_if vif(clk, rst);
-
-  adder DUT (
-    .clk (vif.clk),
-    .rst (vif.rst),
-
-    .in1 (vif.ip1),
-    .in2 (vif.ip2),
-
-    .out (vif.out)
-  );
-
-  peripheral_test t1(vif);
-
-  initial begin
-    clk = 0;
-    rst = 1;
-    #5; 
-    rst = 0;
-  end
-
-  initial begin
-    // Dump waves
-    $dumpfile("dump.vcd");
-    $dumpvars(0);
-  end
-endmodule
+  pure virtual task run();
+endclass : peripheral_base_monitor

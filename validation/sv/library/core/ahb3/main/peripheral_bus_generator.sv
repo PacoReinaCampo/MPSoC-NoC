@@ -37,82 +37,71 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-interface peripheral_interface #(
-  parameter HADDR_SIZE = 32,
-  parameter HDATA_SIZE = 32
-)
-  (
-    input logic HCLK:
-    input logic HRESETn
-  );
+//`define DEBUG
 
-  //declare interface signals
-  logic                   HSEL;
-  logic [HADDR_SIZE -1:0] HADDR;
-  logic [HDATA_SIZE -1:0] HWDATA;
-  logic [HDATA_SIZE -1:0] HRDATA;
-  logic                   HWRITE;
-  logic [            2:0] HSIZE;
-  logic [            2:0] HBURST;
-  logic [            3:0] HPROT;
-  logic [            1:0] HTRANS;
-  logic                   HMASTLOCK;
-  logic                   HREADY;
-  logic                   HREADYOUT;
-  logic                   HRESP;
+import peripheral_package::*;
 
-  // Master Interface Definitions
-  clocking cb_master @(posedge HCLK);
-    output HSEL;
-    output HADDR;
-    output HWDATA;
-    input HRDATA;
-    output HWRITE;
-    output HSIZE;
-    output HBURST;
-    output HPROT;
-    output HTRANS;
-    output HMASTLOCK;
-    input HREADY;
-    input HRESP;
-  endclocking
+// peripheral_bus_generator Class
+// Generates bus transactions
+class peripheral_bus_generator #(
+    type T = peripheral_base_transaction
+);
+  T       blueprint;  //BluePrint for generator
+  mailbox generation2driver;  //mailbox from generator to driver
+  event   driver2generation;  //trigger from driver to generator
+  int     MasterId;  //Which master port are we connected to
+  bit     done;  //Are we done??
 
-  modport master(
-    //synchronous signals
-    clocking cb_master,
-      //asynchronous reset signals
-      input HRESETn,
-      output HSEL,
-      output HTRANS
-  );
+  function new(input mailbox generation2driver, input event driver2generation, input int unsigned MasterId, AddressSize, DataSize);
+    this.done               = 0;
+    this.generation2driver  = generation2driver;
+    this.driver2generation  = driver2generation;
+    this.MasterId           = MasterId;
+    blueprint               = new(AddressSize, DataSize);
 
-  // Slave Interface Definitions
-  clocking cb_slave @(posedge HCLK);
-    input HSEL;
-    input HADDR;
-    input HWDATA;
-    output HRDATA;
-    input HWRITE;
-    input HSIZE;
-    input HBURST;
-    input HPROT;
-    input HTRANS;
-    input HMASTLOCK;
-    input HREADY;
-    output HREADYOUT;
-    output HRESP;
-  endclocking
+`ifdef DEBUG
+    $display("peripheral_bus_generator::new id=%0d", MasterId);
+`endif
+  endfunction : new
 
-  modport slave(
-    //synchronous signals
-    clocking cb_slave,
-      //asynchronous reset signals
-      input HRESETn,
-      output HREADYOUT,
-      output HRESP
-  );
-endinterface : peripheral_interface
+  task run(input int unsigned nTransactions);
+    T transaction;
 
-typedef virtual peripheral_interface v_ahb3lite;
-typedef virtual peripheral_interface.master v_ahb3lite_master;
-typedef virtual peripheral_interface.slave v_ahb3lite_slave;
+    repeat (nTransactions) begin
+      //randomize transfer
+      blueprint.randomize_bus();
+
+      //send copy of transfer to driver
+      $cast(transaction, blueprint.copy());
+      transaction.display($sformatf("@%0t Master%0d ", $time, MasterId));
+      generation2driver.put(transaction);
+
+      //wait for driver to finish the transfer
+      @driver2generation;
+    end
+
+    //idle bus
+    idle();
+  endtask : run
+
+  task idle();
+    $display("@%0t: Master%0d going idle", $time, MasterId);
+
+    //signal 'done'
+    done = 1;
+
+    //put bus in IDLE
+    blueprint.idle();
+
+    //send transaction to driver
+    generation2driver.put(blueprint);
+
+    //wait for driver to finish transfer
+    @driver2generation;
+  endtask : idle
+
+endclass : peripheral_bus_generator
+
+`ifdef DEBUG
+`undef DEBUG
+`endif

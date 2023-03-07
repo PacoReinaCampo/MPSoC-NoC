@@ -13,7 +13,7 @@
 //              Neural Turing Machine for MPSoC                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2020-2021 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,20 +37,56 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-module adder (
-  input clk,
-  input rst,
+import peripheral_package::*;
 
-  input [7:0] in1,
-  input [7:0] in2,
+class peripheral_configuration #(
+    parameter HADDR_SIZE = 32
+) extends peripheral_base_configuration;
+  int nMasters, nSlaves;  //number of master and slave ports
 
-  output reg [8:0] out
-);
+  int MinTransactions = 100_000;  //Minimum number of transactions per master
+  int MaxTransactions = 1000_000;  //Maximum number of transactions per master
+  int nTransactions[];  //Actual number of transactions per master
 
-  always@(posedge clk or posedge rst) begin 
-    if(rst)
-      out <= 0;
-    else
-      out <= in1 + in2;
-  end
-endmodule
+  logic [2:0] master_priority[];  //TODO
+  logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[];
+
+  extern function new(input int nmasters, nslaves, input logic [2:0] master_priority[],  //TODO
+                      input logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[]);
+  extern function void random();
+  //  extern virtual function void wrap_up();
+  extern virtual function void display(string prefix = "");
+endclass : peripheral_configuration
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Class Methods
+//
+
+//Construct peripheral_configuration object
+function peripheral_configuration::new(input int nmasters, nslaves, input logic [2:0] master_priority[],
+                     input logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[]);
+  this.nMasters        = nmasters;
+  this.nSlaves         = nslaves;
+  this.master_priority = master_priority;
+  this.slave_address_base = slave_address_base;
+  this.slave_address_mask = slave_address_mask;
+
+  //create space for the number of transactions per master
+  nTransactions      = new[nMasters];
+endfunction : new
+
+//Randomize configuration
+function void peripheral_configuration::random();
+  foreach (nTransactions[i]) nTransactions[i] = $urandom_range(MinTransactions, MaxTransactions);
+endfunction : random
+
+//Pretty print
+function void peripheral_configuration::display(string prefix = "");
+  $display("%sTest configuration:", prefix);
+
+  $display("--- Transactions per master --------");
+  foreach (nTransactions[i]) $display(" Port%0d: %5d", i, nTransactions[i]);
+
+  $display("\n\n");
+endfunction : display

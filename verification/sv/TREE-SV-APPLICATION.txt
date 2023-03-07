@@ -27,10 +27,9 @@ application
 │       └── peripheral_testbench.sv
 └── core
     ├── ahb3
-    │   ├── peripheral_design.sv
+    │   ├── peripheral_hdr_ahb3.sv
     │   ├── peripheral_interface.sv
-    │   ├── peripheral_package.sv
-    │   └── peripheral_testbench.sv
+    │   └── peripheral_package.sv
     ├── apb4
     │   ├── peripheral_design.sv
     │   ├── peripheral_interface.sv
@@ -52,4 +51,4 @@ application
         ├── peripheral_package.sv
         └── peripheral_testbench.sv
 
-12 directories, 40 files
+12 directories, 39 files

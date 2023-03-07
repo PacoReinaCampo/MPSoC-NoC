@@ -13,7 +13,7 @@
 //              Neural Turing Machine for MPSoC                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2020-2021 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,10 +37,26 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-`include "peripheral_transaction.sv"
-`include "peripheral_generator.sv"
-`include "peripheral_driver.sv"
-`include "peripheral_monitor.sv"
-`include "peripheral_scoreboard.sv"
-`include "peripheral_agent.sv"
-`include "peripheral_enviroment.sv"
+//Include all required classes in a single package
+package peripheral_package;
+  `include "peripheral_hdr_ahb3.sv"
+  `include "peripheral_base_transaction.sv"
+  `include "peripheral_bus_transaction.sv"
+  `include "peripheral_bus_transaction_ahb3.sv"
+
+  `include "peripheral_base_configuration.sv"
+  `include "peripheral_configuration.sv"
+
+  `include "peripheral_base_scoreboard.sv"
+  `include "peripheral_scoreboard.sv"
+
+  `include "peripheral_bus_generator.sv"
+
+  `include "peripheral_base_driver.sv"
+  `include "peripheral_driver_ahb3.sv"
+
+  `include "peripheral_base_monitor.sv"
+  `include "peripheral_monitor_ahb3.sv"
+
+  `include "peripheral_environment.sv"
+endpackage : peripheral_package

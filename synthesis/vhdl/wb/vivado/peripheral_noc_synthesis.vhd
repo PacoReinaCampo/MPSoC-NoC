@@ -85,9 +85,8 @@ end peripheral_noc_synthesis;
 architecture rtl of peripheral_noc_synthesis is
 
   ------------------------------------------------------------------------------
-  --
   -- Components
-  --
+  ------------------------------------------------------------------------------
   component peripheral_wb_noc
     generic (
       SIM   : integer := 0;
@@ -125,9 +124,8 @@ architecture rtl of peripheral_noc_synthesis is
 
 begin
   ------------------------------------------------------------------------------
-  --
   -- Module Body
-  --
+  ------------------------------------------------------------------------------
 
   --DUT WB
   wb_noc : peripheral_wb_noc

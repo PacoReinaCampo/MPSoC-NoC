@@ -13,7 +13,7 @@
 //              Neural Turing Machine for MPSoC                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2022-2025 by the author(s)
+// Copyright (c) 2020-2021 by the author(s)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,18 +37,82 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-interface add_if (
-  input logic clk,
-  input logic rst
-);
+interface peripheral_interface #(
+  parameter HADDR_SIZE = 32,
+  parameter HDATA_SIZE = 32
+)
+  (
+    input logic HCLK:
+    input logic HRESETn
+  );
 
-  logic [7:0] ip1;
-  logic [7:0] ip2;
+  //declare interface signals
+  logic                   HSEL;
+  logic [HADDR_SIZE -1:0] HADDR;
+  logic [HDATA_SIZE -1:0] HWDATA;
+  logic [HDATA_SIZE -1:0] HRDATA;
+  logic                   HWRITE;
+  logic [            2:0] HSIZE;
+  logic [            2:0] HBURST;
+  logic [            3:0] HPROT;
+  logic [            1:0] HTRANS;
+  logic                   HMASTLOCK;
+  logic                   HREADY;
+  logic                   HREADYOUT;
+  logic                   HRESP;
 
-  logic [8:0] out;
-  
-  // clocking driver_cb @(posedge clk);
-  // default input #1 output #1;
-  // endclocking
+  // Master Interface Definitions
+  clocking cb_master @(posedge HCLK);
+    output HSEL;
+    output HADDR;
+    output HWDATA;
+    input HRDATA;
+    output HWRITE;
+    output HSIZE;
+    output HBURST;
+    output HPROT;
+    output HTRANS;
+    output HMASTLOCK;
+    input HREADY;
+    input HRESP;
+  endclocking
 
-endinterface
+  modport master(
+    //synchronous signals
+    clocking cb_master,
+      //asynchronous reset signals
+      input HRESETn,
+      output HSEL,
+      output HTRANS
+  );
+
+  // Slave Interface Definitions
+  clocking cb_slave @(posedge HCLK);
+    input HSEL;
+    input HADDR;
+    input HWDATA;
+    output HRDATA;
+    input HWRITE;
+    input HSIZE;
+    input HBURST;
+    input HPROT;
+    input HTRANS;
+    input HMASTLOCK;
+    input HREADY;
+    output HREADYOUT;
+    output HRESP;
+  endclocking
+
+  modport slave(
+    //synchronous signals
+    clocking cb_slave,
+      //asynchronous reset signals
+      input HRESETn,
+      output HREADYOUT,
+      output HRESP
+  );
+endinterface : peripheral_interface
+
+typedef virtual peripheral_interface v_ahb3lite;
+typedef virtual peripheral_interface.master v_ahb3lite_master;
+typedef virtual peripheral_interface.slave v_ahb3lite_slave;

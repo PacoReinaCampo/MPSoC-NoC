@@ -37,82 +37,39 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-interface peripheral_interface #(
-  parameter HADDR_SIZE = 32,
-  parameter HDATA_SIZE = 32
-)
-  (
-    input logic HCLK:
-    input logic HRESETn
-  );
+class peripheral_bus_generator extends peripheral_base_transaction;
+  bit TrWrite;  //read/write transaction
+  int TrType;
+  int TrSize;
 
-  //declare interface signals
-  logic                   HSEL;
-  logic [HADDR_SIZE -1:0] HADDR;
-  logic [HDATA_SIZE -1:0] HWDATA;
-  logic [HDATA_SIZE -1:0] HRDATA;
-  logic                   HWRITE;
-  logic [            2:0] HSIZE;
-  logic [            2:0] HBURST;
-  logic [            3:0] HPROT;
-  logic [            1:0] HTRANS;
-  logic                   HMASTLOCK;
-  logic                   HREADY;
-  logic                   HREADYOUT;
-  logic                   HRESP;
+  extern function new();
+  extern virtual function bit compare(input peripheral_base_transaction to);
+  extern virtual function peripheral_base_transaction copy(input peripheral_base_transaction to = null);
+  extern virtual function void display(input string prefix = "");
+endclass : peripheral_bus_generator
 
-  // Master Interface Definitions
-  clocking cb_master @(posedge HCLK);
-    output HSEL;
-    output HADDR;
-    output HWDATA;
-    input HRDATA;
-    output HWRITE;
-    output HSIZE;
-    output HBURST;
-    output HPROT;
-    output HTRANS;
-    output HMASTLOCK;
-    input HREADY;
-    input HRESP;
-  endclocking
+////////////////////////////////////////////////////////////////////////////////
+//
+// Class Methods
+//
+function peripheral_bus_generator::new();
+  super.new();
+endfunction : new
 
-  modport master(
-    //synchronous signals
-    clocking cb_master,
-      //asynchronous reset signals
-      input HRESETn,
-      output HSEL,
-      output HTRANS
-  );
+function bit peripheral_bus_generator::compare(input peripheral_base_transaction to);
+  peripheral_bus_generator cmp;
 
-  // Slave Interface Definitions
-  clocking cb_slave @(posedge HCLK);
-    input HSEL;
-    input HADDR;
-    input HWDATA;
-    output HRDATA;
-    input HWRITE;
-    input HSIZE;
-    input HBURST;
-    input HPROT;
-    input HTRANS;
-    input HMASTLOCK;
-    input HREADY;
-    output HREADYOUT;
-    output HRESP;
-  endclocking
+  if (!$cast(cmp, to))  //is 'to' the correct type?
+    $finish;
 
-  modport slave(
-    //synchronous signals
-    clocking cb_slave,
-      //asynchronous reset signals
-      input HRESETn,
-      output HREADYOUT,
-      output HRESP
-  );
-endinterface : peripheral_interface
+  return ( (this.TrWrite == cmp.TrWrite ) &&
+           (this.TrType  == cmp.TrType  ) &&
+           (this.TrSize  == cmp.TrSize  ));
+endfunction : compare
 
-typedef virtual peripheral_interface v_ahb3lite;
-typedef virtual peripheral_interface.master v_ahb3lite_master;
-typedef virtual peripheral_interface.slave v_ahb3lite_slave;
+function peripheral_base_transaction peripheral_bus_generator::copy(input peripheral_base_transaction to = null);
+  peripheral_bus_generator cp;
+
+  if (to == null) cp = new();
+  else $cast(cp, to);
+endfunction : copy
