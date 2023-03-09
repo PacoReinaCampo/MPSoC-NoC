@@ -75,6 +75,11 @@ entity peripheral_noc_synthesis is
 end peripheral_noc_synthesis;
 
 architecture rtl of peripheral_noc_synthesis is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component bb_noc
     port (
       mclk     : in  std_logic;

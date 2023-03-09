@@ -78,6 +78,11 @@ entity peripheral_noc_synthesis is
 end peripheral_noc_synthesis;
 
 architecture rtl of peripheral_noc_synthesis is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_bridge_apb2ahb
     generic (
       HADDR_SIZE : integer := 32;

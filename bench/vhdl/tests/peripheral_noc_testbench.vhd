@@ -53,6 +53,11 @@ entity peripheral_noc_testbench is
 end peripheral_noc_testbench;
 
 architecture rtl of peripheral_noc_testbench is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_noc_mesh4d
     generic (
       FLIT_WIDTH       : integer := 34;

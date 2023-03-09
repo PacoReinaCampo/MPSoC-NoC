@@ -77,6 +77,11 @@ entity peripheral_noc_router is
 end peripheral_noc_router;
 
 architecture rtl of peripheral_noc_router is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_noc_router_input
     generic (
       FLIT_WIDTH   : integer := 32;

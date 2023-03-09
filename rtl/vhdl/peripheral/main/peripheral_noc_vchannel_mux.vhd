@@ -70,6 +70,11 @@ entity peripheral_noc_vchannel_mux is
 end peripheral_noc_vchannel_mux;
 
 architecture rtl of peripheral_noc_vchannel_mux is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_arbiter_rr
     generic (
       N : integer := 2

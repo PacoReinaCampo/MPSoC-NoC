@@ -73,6 +73,11 @@ entity peripheral_noc_router_output is
 end peripheral_noc_router_output;
 
 architecture rtl of peripheral_noc_router_output is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_noc_mux
     generic (
       FLIT_WIDTH : integer := 32;

@@ -82,6 +82,11 @@ entity peripheral_noc_mesh4d is
 end peripheral_noc_mesh4d;
 
 architecture rtl of peripheral_noc_mesh4d is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_noc_vchannel_mux
     generic (
       FLIT_WIDTH : integer := 32;

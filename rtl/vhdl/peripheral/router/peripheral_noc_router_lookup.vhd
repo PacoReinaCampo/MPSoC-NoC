@@ -74,6 +74,11 @@ entity peripheral_noc_router_lookup is
 end peripheral_noc_router_lookup;
 
 architecture rtl of peripheral_noc_router_lookup is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component peripheral_noc_router_lookup_slice
     generic (
       FLIT_WIDTH : integer := 32;
