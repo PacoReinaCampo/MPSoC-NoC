@@ -40,16 +40,16 @@
 import peripheral_package::*;
 
 class peripheral_configuration #(
-    parameter HADDR_SIZE = 32
+  parameter HADDR_SIZE = 32
 ) extends peripheral_base_configuration;
-  int nMasters, nSlaves;  //number of master and slave ports
+  int                    nMasters,                                                                                                                  nSlaves;  //number of master and slave ports
 
-  int MinTransactions = 100_000;  //Minimum number of transactions per master
-  int MaxTransactions = 1000_000;  //Maximum number of transactions per master
-  int nTransactions[];  //Actual number of transactions per master
+  int                    MinTransactions                                                   = 100_000;  //Minimum number of transactions per master
+  int                    MaxTransactions                                                   = 1000_000;  //Maximum number of transactions per master
+  int                    nTransactions     [];  //Actual number of transactions per master
 
-  logic [2:0] master_priority[];  //TODO
-  logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[];
+  logic [           2:0] master_priority   [];  //TODO
+  logic [HADDR_SIZE-1:0] slave_address_base[],                                                                                                      slave_address_mask                          [];
 
   extern function new(input int nmasters, nslaves, input logic [2:0] master_priority[],  //TODO
                       input logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[]);
@@ -64,16 +64,15 @@ endclass : peripheral_configuration
 //
 
 //Construct peripheral_configuration object
-function peripheral_configuration::new(input int nmasters, nslaves, input logic [2:0] master_priority[],
-                     input logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[]);
-  this.nMasters        = nmasters;
-  this.nSlaves         = nslaves;
-  this.master_priority = master_priority;
+function peripheral_configuration::new(input int nmasters, nslaves, input logic [2:0] master_priority[], input logic [HADDR_SIZE-1:0] slave_address_base[], slave_address_mask[]);
+  this.nMasters           = nmasters;
+  this.nSlaves            = nslaves;
+  this.master_priority    = master_priority;
   this.slave_address_base = slave_address_base;
   this.slave_address_mask = slave_address_mask;
 
   //create space for the number of transactions per master
-  nTransactions      = new[nMasters];
+  nTransactions           = new[nMasters];
 endfunction : new
 
 //Randomize configuration

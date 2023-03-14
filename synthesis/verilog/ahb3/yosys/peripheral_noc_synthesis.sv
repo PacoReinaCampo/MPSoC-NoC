@@ -41,16 +41,15 @@
  */
 
 module peripheral_noc_synthesis #(
-  parameter HADDR_SIZE =  8,
-  parameter HDATA_SIZE = 32,
-  parameter APB_ADDR_WIDTH =  8,
+  parameter HADDR_SIZE     = 8,
+  parameter HDATA_SIZE     = 32,
+  parameter APB_ADDR_WIDTH = 8,
   parameter APB_DATA_WIDTH = 32,
-  parameter SYNC_DEPTH =  3
-)
-  (
+  parameter SYNC_DEPTH     = 3
+) (
   //Common signals
-  input                         HRESETn,
-  input                         HCLK,
+  input HRESETn,
+  input HCLK,
 
   //UART AHB3
   input                         noc_HSEL,
@@ -83,8 +82,8 @@ module peripheral_noc_synthesis #(
   logic                       noc_PREADY;
   logic                       noc_PSLVERR;
 
-  logic                       noc_rx_i; // Receiver input
-  logic                       noc_tx_o; // Transmitter output
+  logic                       noc_rx_i;  // Receiver input
+  logic                       noc_tx_o;  // Transmitter output
 
   logic                       noc_event_o;
 
@@ -95,67 +94,65 @@ module peripheral_noc_synthesis #(
 
   //DUT AHB3
   peripheral_bridge_apb2ahb #(
-  .HADDR_SIZE ( HADDR_SIZE     ),
-  .HDATA_SIZE ( HDATA_SIZE     ),
-  .PADDR_SIZE ( APB_ADDR_WIDTH ),
-  .PDATA_SIZE ( APB_DATA_WIDTH ),
-  .SYNC_DEPTH ( SYNC_DEPTH     )
-  )
-  bridge_apb2ahb (
+    .HADDR_SIZE(HADDR_SIZE),
+    .HDATA_SIZE(HDATA_SIZE),
+    .PADDR_SIZE(APB_ADDR_WIDTH),
+    .PDATA_SIZE(APB_DATA_WIDTH),
+    .SYNC_DEPTH(SYNC_DEPTH)
+  ) bridge_apb2ahb (
     //AHB Slave Interface
-    .HRESETn   ( HRESETn ),
-    .HCLK      ( HCLK    ),
+    .HRESETn(HRESETn),
+    .HCLK   (HCLK),
 
-    .HSEL      ( noc_HSEL      ),
-    .HADDR     ( noc_HADDR     ),
-    .HWDATA    ( noc_HWDATA    ),
-    .HRDATA    ( noc_HRDATA    ),
-    .HWRITE    ( noc_HWRITE    ),
-    .HSIZE     ( noc_HSIZE     ),
-    .HBURST    ( noc_HBURST    ),
-    .HPROT     ( noc_HPROT     ),
-    .HTRANS    ( noc_HTRANS    ),
-    .HMASTLOCK ( noc_HMASTLOCK ),
-    .HREADYOUT ( noc_HREADYOUT ),
-    .HREADY    ( noc_HREADY    ),
-    .HRESP     ( noc_HRESP     ),
+    .HSEL     (noc_HSEL),
+    .HADDR    (noc_HADDR),
+    .HWDATA   (noc_HWDATA),
+    .HRDATA   (noc_HRDATA),
+    .HWRITE   (noc_HWRITE),
+    .HSIZE    (noc_HSIZE),
+    .HBURST   (noc_HBURST),
+    .HPROT    (noc_HPROT),
+    .HTRANS   (noc_HTRANS),
+    .HMASTLOCK(noc_HMASTLOCK),
+    .HREADYOUT(noc_HREADYOUT),
+    .HREADY   (noc_HREADY),
+    .HRESP    (noc_HRESP),
 
     //APB Master Interface
-    .PRESETn ( HRESETn ),
-    .PCLK    ( HCLK    ),
+    .PRESETn(HRESETn),
+    .PCLK   (HCLK),
 
-    .PSEL    ( noc_PSEL    ),
-    .PENABLE ( noc_PENABLE ),
-    .PPROT   (              ),
-    .PWRITE  ( noc_PWRITE  ),
-    .PSTRB   (              ),
-    .PADDR   ( noc_PADDR   ),
-    .PWDATA  ( noc_PWDATA  ),
-    .PRDATA  ( noc_PRDATA  ),
-    .PREADY  ( noc_PREADY  ),
-    .PSLVERR ( noc_PSLVERR )
+    .PSEL   (noc_PSEL),
+    .PENABLE(noc_PENABLE),
+    .PPROT  (),
+    .PWRITE (noc_PWRITE),
+    .PSTRB  (),
+    .PADDR  (noc_PADDR),
+    .PWDATA (noc_PWDATA),
+    .PRDATA (noc_PRDATA),
+    .PREADY (noc_PREADY),
+    .PSLVERR(noc_PSLVERR)
   );
 
   peripheral_apb4_noc #(
-  .APB_ADDR_WIDTH ( APB_ADDR_WIDTH ),
-  .APB_DATA_WIDTH ( APB_DATA_WIDTH )
-  )
-  apb4_noc (
-    .RSTN ( HRESETn ),
-    .CLK  ( HCLK    ),
+    .APB_ADDR_WIDTH(APB_ADDR_WIDTH),
+    .APB_DATA_WIDTH(APB_DATA_WIDTH)
+  ) apb4_noc (
+    .RSTN(HRESETn),
+    .CLK (HCLK),
 
-    .PADDR   ( noc_PADDR   ),
-    .PWDATA  ( noc_PWDATA  ),
-    .PWRITE  ( noc_PWRITE  ),
-    .PSEL    ( noc_PSEL    ),
-    .PENABLE ( noc_PENABLE ),
-    .PRDATA  ( noc_PRDATA  ),
-    .PREADY  ( noc_PREADY  ),
-    .PSLVERR ( noc_PSLVERR ),
+    .PADDR  (noc_PADDR),
+    .PWDATA (noc_PWDATA),
+    .PWRITE (noc_PWRITE),
+    .PSEL   (noc_PSEL),
+    .PENABLE(noc_PENABLE),
+    .PRDATA (noc_PRDATA),
+    .PREADY (noc_PREADY),
+    .PSLVERR(noc_PSLVERR),
 
-    .rx_i ( noc_rx_i ),
-    .tx_o ( noc_tx_o ),
+    .rx_i(noc_rx_i),
+    .tx_o(noc_tx_o),
 
-    .event_o ( noc_event_o )
+    .event_o(noc_event_o)
   );
 endmodule

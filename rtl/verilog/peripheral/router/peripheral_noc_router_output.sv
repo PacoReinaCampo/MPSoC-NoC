@@ -45,8 +45,7 @@ module peripheral_noc_router_output #(
   parameter VCHANNELS    = 7,
   parameter INPUTS       = 7,
   parameter BUFFER_DEPTH = 4
-)
-  (
+) (
   input clk,
   input rst,
 
@@ -55,10 +54,10 @@ module peripheral_noc_router_output #(
   input  [VCHANNELS-1:0][INPUTS-1:0]                 in_valid,
   output [VCHANNELS-1:0][INPUTS-1:0]                 in_ready,
 
-  output                            [FLIT_WIDTH-1:0] out_flit,
-  output                                             out_last,
-  output [VCHANNELS-1:0]                             out_valid,
-  input  [VCHANNELS-1:0]                             out_ready
+  output [FLIT_WIDTH-1:0] out_flit,
+  output                  out_last,
+  output [ VCHANNELS-1:0] out_valid,
+  input  [ VCHANNELS-1:0] out_ready
 );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -82,75 +81,71 @@ module peripheral_noc_router_output #(
   // Module Body
   //
   generate
-    for (v = 0; v < VCHANNELS; v=v+1) begin
+    for (v = 0; v < VCHANNELS; v = v + 1) begin
       peripheral_noc_mux #(
-      .FLIT_WIDTH (FLIT_WIDTH),
-      .CHANNELS   (INPUTS)
-      )
-      u_mux (
-        .clk (clk),
-        .rst (rst),
+        .FLIT_WIDTH(FLIT_WIDTH),
+        .CHANNELS  (INPUTS)
+      ) u_mux (
+        .clk(clk),
+        .rst(rst),
 
-        .in_flit   (in_flit  [v]),
-        .in_last   (in_last  [v]),
-        .in_valid  (in_valid [v]),
-        .in_ready  (in_ready [v]),
+        .in_flit (in_flit[v]),
+        .in_last (in_last[v]),
+        .in_valid(in_valid[v]),
+        .in_ready(in_ready[v]),
 
-        .out_flit  (buffer_flit  [v]),
-        .out_last  (buffer_last  [v]),
-        .out_valid (buffer_valid [v]),
-        .out_ready (buffer_ready [v])
+        .out_flit (buffer_flit[v]),
+        .out_last (buffer_last[v]),
+        .out_valid(buffer_valid[v]),
+        .out_ready(buffer_ready[v])
       );
 
       peripheral_noc_buffer #(
-      .FLIT_WIDTH (FLIT_WIDTH),
-      .DEPTH      (BUFFER_DEPTH)
-      )
-      u_buffer (
-        .clk (clk),
-        .rst (rst),
+        .FLIT_WIDTH(FLIT_WIDTH),
+        .DEPTH     (BUFFER_DEPTH)
+      ) u_buffer (
+        .clk(clk),
+        .rst(rst),
 
-        .in_flit     (buffer_flit  [v]),
-        .in_last     (buffer_last  [v]),
-        .in_valid    (buffer_valid [v]),
-        .in_ready    (buffer_ready [v]),
+        .in_flit (buffer_flit[v]),
+        .in_last (buffer_last[v]),
+        .in_valid(buffer_valid[v]),
+        .in_ready(buffer_ready[v]),
 
-        .out_flit    (channel_flit  [v]),
-        .out_last    (channel_last  [v]),
-        .out_valid   (channel_valid [v]),
-        .out_ready   (channel_ready [v]),
+        .out_flit (channel_flit[v]),
+        .out_last (channel_last[v]),
+        .out_valid(channel_valid[v]),
+        .out_ready(channel_ready[v]),
 
-        .packet_size ()
+        .packet_size()
       );
     end
 
     if (VCHANNELS > 1) begin : vc_mux
       peripheral_noc_vchannel_mux #(
-      .FLIT_WIDTH (FLIT_WIDTH),
-      .CHANNELS   (VCHANNELS)
-      )
-      u_mux (
-        .clk (clk),
-        .rst (rst),
+        .FLIT_WIDTH(FLIT_WIDTH),
+        .CHANNELS  (VCHANNELS)
+      ) u_mux (
+        .clk(clk),
+        .rst(rst),
 
-        .in_flit  (channel_flit),
-        .in_last  (channel_last),
-        .in_valid (channel_valid),
-        .in_ready (channel_ready),
+        .in_flit (channel_flit),
+        .in_last (channel_last),
+        .in_valid(channel_valid),
+        .in_ready(channel_ready),
 
 
-        .out_flit  (out_flit),
-        .out_last  (out_last),
-        .out_valid (out_valid),
-        .out_ready (out_ready)
+        .out_flit (out_flit),
+        .out_last (out_last),
+        .out_valid(out_valid),
+        .out_ready(out_ready)
       );
-    end
-    else begin
-      assign out_flit  = channel_flit  [0];
-      assign out_last  = channel_last  [0];
-      assign out_valid = channel_valid [0];
+    end else begin
+      assign out_flit         = channel_flit[0];
+      assign out_last         = channel_last[0];
+      assign out_valid        = channel_valid[0];
 
-      assign channel_ready [0] = out_ready;
+      assign channel_ready[0] = out_ready;
     end
   endgenerate
 endmodule

@@ -47,27 +47,27 @@ module peripheral_noc_testbench;
   //
   // Constants
   //
-  parameter FLIT_WIDTH       = 34;
-  parameter CHANNELS         = 9;
+  parameter FLIT_WIDTH = 34;
+  parameter CHANNELS = 9;
 
   parameter ENABLE_VCHANNELS = 1;
 
-  parameter T                = 2;
-  parameter X                = 2;
-  parameter Y                = 2;
-  parameter Z                = 2;
+  parameter T = 2;
+  parameter X = 2;
+  parameter Y = 2;
+  parameter Z = 2;
 
-  parameter BUFFER_SIZE_IN   = 4;
-  parameter BUFFER_SIZE_OUT  = 4;
+  parameter BUFFER_SIZE_IN = 4;
+  parameter BUFFER_SIZE_OUT = 4;
 
-  parameter NODES            = 16;
+  parameter NODES = 16;
 
   //////////////////////////////////////////////////////////////////////////////
   //
   // Variables
   //
-  wire clk;
-  wire rst;
+  wire                                           clk;
+  wire                                           rst;
 
   wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_in_flit;
   wire [NODES-1:0][CHANNELS-1:0]                 noc_in_last;
@@ -86,33 +86,32 @@ module peripheral_noc_testbench;
 
   //DUT
   peripheral_noc_mesh4d #(
-  .FLIT_WIDTH       (FLIT_WIDTH),
-  .CHANNELS         (CHANNELS),
+    .FLIT_WIDTH(FLIT_WIDTH),
+    .CHANNELS  (CHANNELS),
 
-  .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
+    .ENABLE_VCHANNELS(ENABLE_VCHANNELS),
 
-  .T                (T),
-  .X                (X),
-  .Y                (Y),
-  .Z                (Z),
+    .T(T),
+    .X(X),
+    .Y(Y),
+    .Z(Z),
 
-  .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
-  .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT),
+    .BUFFER_SIZE_IN (BUFFER_SIZE_IN),
+    .BUFFER_SIZE_OUT(BUFFER_SIZE_OUT),
 
-  .NODES            (NODES)
-  )
-  noc_mesh4d (
-    .rst       ( rst ),
-    .clk       ( clk ),
+    .NODES(NODES)
+  ) noc_mesh4d (
+    .rst(rst),
+    .clk(clk),
 
-    .in_flit   ( noc_in_flit  ),
-    .in_last   ( noc_in_last  ),
-    .in_valid  ( noc_in_valid ),
-    .in_ready  ( noc_in_ready ),
+    .in_flit (noc_in_flit),
+    .in_last (noc_in_last),
+    .in_valid(noc_in_valid),
+    .in_ready(noc_in_ready),
 
-    .out_flit  ( noc_out_flit  ),
-    .out_last  ( noc_out_last  ),
-    .out_valid ( noc_out_valid ),
-    .out_ready ( noc_out_ready )
+    .out_flit (noc_out_flit),
+    .out_last (noc_out_last),
+    .out_valid(noc_out_valid),
+    .out_ready(noc_out_ready)
   );
 endmodule

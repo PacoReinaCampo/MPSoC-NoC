@@ -153,10 +153,10 @@ endfunction : randomize_bus
 
 //Calculate next AHB bus for transfer
 function byte_array_t peripheral_bus_transaction_ahb3::NextAddress(byte_array_t address);
-  bit [15:0] counter;
-  int unsigned increase;
+  bit          [15:0] counter;
+  int unsigned        increase;
 
-  increase = BytesPerTransfer;
+  increase    = BytesPerTransfer;
 
   //create new Address array
   NextAddress = new[address.size()];

@@ -44,7 +44,7 @@ import peripheral_package::*;
 // peripheral_bus_generator Class
 // Generates bus transactions
 class peripheral_bus_generator #(
-    type T = peripheral_base_transaction
+  type T = peripheral_base_transaction
 );
   T       blueprint;  //BluePrint for generator
   mailbox generation2driver;  //mailbox from generator to driver
@@ -53,11 +53,11 @@ class peripheral_bus_generator #(
   bit     done;  //Are we done??
 
   function new(input mailbox generation2driver, input event driver2generation, input int unsigned MasterId, AddressSize, DataSize);
-    this.done               = 0;
-    this.generation2driver  = generation2driver;
-    this.driver2generation  = driver2generation;
-    this.MasterId           = MasterId;
-    blueprint               = new(AddressSize, DataSize);
+    this.done              = 0;
+    this.generation2driver = generation2driver;
+    this.driver2generation = driver2generation;
+    this.MasterId          = MasterId;
+    blueprint              = new(AddressSize, DataSize);
 
 `ifdef DEBUG
     $display("peripheral_bus_generator::new id=%0d", MasterId);

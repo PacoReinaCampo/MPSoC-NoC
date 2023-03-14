@@ -43,31 +43,30 @@
 module peripheral_noc_synthesis #(
   parameter SIM   = 0,
   parameter DEBUG = 0
-)
-  (
-  input                  clk,
-  input                  rst,
+) (
+  input clk,
+  input rst,
 
   // WISHBONE interface
-  input  [2:0]           wb_adr_i,
-  input  [7:0]           wb_dat_i,
-  output [7:0]           wb_dat_o,
-  input                  wb_we_i,
-  input                  wb_stb_i,
-  input                  wb_cyc_i,
-  input  [3:0]           wb_sel_i,
-  output                 wb_ack_o,
-  output                 int_o,
+  input  [2:0] wb_adr_i,
+  input  [7:0] wb_dat_i,
+  output [7:0] wb_dat_o,
+  input        wb_we_i,
+  input        wb_stb_i,
+  input        wb_cyc_i,
+  input  [3:0] wb_sel_i,
+  output       wb_ack_o,
+  output       int_o,
 
   // UART signals
-  input                  srx_pad_i,
-  output                 stx_pad_o,
-  output                 rts_pad_o,
-  input                  cts_pad_i,
-  output                 dtr_pad_o,
-  input                  dsr_pad_i,
-  input                  ri_pad_i,
-  input                  dcd_pad_i,
+  input  srx_pad_i,
+  output stx_pad_o,
+  output rts_pad_o,
+  input  cts_pad_i,
+  output dtr_pad_o,
+  input  dsr_pad_i,
+  input  ri_pad_i,
+  input  dcd_pad_i,
 
   // optional baudrate output
   output baud_o
@@ -80,35 +79,34 @@ module peripheral_noc_synthesis #(
 
   //DUT WB
   peripheral_wb_noc #(
-  .SIM   (SIM),
-  .DEBUG (DEBUG)
-  )
-  wb_noc (
-    .wb_clk_i (clk),
-    .wb_rst_i (rst),
+    .SIM  (SIM),
+    .DEBUG(DEBUG)
+  ) wb_noc (
+    .wb_clk_i(clk),
+    .wb_rst_i(rst),
 
     // WISHBONE interface
-    .wb_adr_i (wb_adr_i),
-    .wb_dat_i (wb_dat_i),
-    .wb_dat_o (wb_dat_o),
-    .wb_we_i  (wb_we_i ),
-    .wb_stb_i (wb_stb_i),
-    .wb_cyc_i (wb_cyc_i),
-    .wb_sel_i (wb_sel_i),
-    .wb_ack_o (wb_ack_o),
-    .int_o    (int_o),
+    .wb_adr_i(wb_adr_i),
+    .wb_dat_i(wb_dat_i),
+    .wb_dat_o(wb_dat_o),
+    .wb_we_i (wb_we_i),
+    .wb_stb_i(wb_stb_i),
+    .wb_cyc_i(wb_cyc_i),
+    .wb_sel_i(wb_sel_i),
+    .wb_ack_o(wb_ack_o),
+    .int_o   (int_o),
 
     // UART  signals
-    .srx_pad_i (srx_pad_i),
-    .stx_pad_o (stx_pad_o),
-    .rts_pad_o (rts_pad_o),
-    .cts_pad_i (cts_pad_i),
-    .dtr_pad_o (dtr_pad_o),
-    .dsr_pad_i (dsr_pad_i),
-    .ri_pad_i  (ri_pad_i ),
-    .dcd_pad_i (dcd_pad_i),
+    .srx_pad_i(srx_pad_i),
+    .stx_pad_o(stx_pad_o),
+    .rts_pad_o(rts_pad_o),
+    .cts_pad_i(cts_pad_i),
+    .dtr_pad_o(dtr_pad_o),
+    .dsr_pad_i(dsr_pad_i),
+    .ri_pad_i (ri_pad_i),
+    .dcd_pad_i(dcd_pad_i),
 
     // optional baudrate output
-    .baud_o (baud_o)
+    .baud_o(baud_o)
   );
 endmodule

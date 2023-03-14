@@ -43,20 +43,19 @@
 module peripheral_noc_router_lookup_slice #(
   parameter FLIT_WIDTH = 32,
   parameter OUTPUTS    = 7
-)
-  (
+) (
   input clk,
   input rst,
 
-  input                   [FLIT_WIDTH-1:0] in_flit,
-  input                                    in_last,
-  input      [OUTPUTS-1:0]                 in_valid,
-  output                                   in_ready,
+  input  [FLIT_WIDTH-1:0] in_flit,
+  input                   in_last,
+  input  [   OUTPUTS-1:0] in_valid,
+  output                  in_ready,
 
-  output reg                               out_last,
-  output reg              [FLIT_WIDTH-1:0] out_flit,
-  output reg [OUTPUTS-1:0]                 out_valid,
-  input      [OUTPUTS-1:0]                 out_ready
+  output reg                  out_last,
+  output reg [FLIT_WIDTH-1:0] out_flit,
+  output reg [   OUTPUTS-1:0] out_valid,
+  input      [   OUTPUTS-1:0] out_ready
 );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -66,12 +65,12 @@ module peripheral_noc_router_lookup_slice #(
 
   // This is an intermediate register that we use to avoid
   // stop-and-go behavior
-  reg              [FLIT_WIDTH-1:0] reg_flit;
-  reg                               reg_last;
-  reg [OUTPUTS-1:0]                 reg_valid;
+  reg [FLIT_WIDTH-1:0] reg_flit;
+  reg                  reg_last;
+  reg [   OUTPUTS-1:0] reg_valid;
 
   // This signal selects where to store the next incoming flit
-  reg pressure;
+  reg                  pressure;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -86,8 +85,7 @@ module peripheral_noc_router_lookup_slice #(
     if (rst) begin
       pressure  <= 0;
       out_valid <= 0;
-    end
-    else begin
+    end else begin
       if (!pressure) begin
         // We are accepting the input in this cycle, determine
         // where to store it..
@@ -97,8 +95,7 @@ module peripheral_noc_router_lookup_slice #(
           out_flit  <= in_flit;
           out_last  <= in_last;
           out_valid <= in_valid;
-        end
-        else if (|out_valid & ~|out_ready) begin
+        end else if (|out_valid & ~|out_ready) begin
           // Otherwise if there is a flit waiting and upstream
           // not ready, push it to the second register. Enter the
           // backpressure mode.
@@ -107,10 +104,9 @@ module peripheral_noc_router_lookup_slice #(
           reg_valid <= in_valid;
           pressure  <= 1;
         end
-      end
-      else begin // if (!pressure)
-      // We can be sure that a flit is waiting now (don't need
-      // to check)
+      end else begin  // if (!pressure)
+        // We can be sure that a flit is waiting now (don't need
+        // to check)
         if (|out_ready) begin
           // If the output accepted this flit, go back to
           // accepting input flits.

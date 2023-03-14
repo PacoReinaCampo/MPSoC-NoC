@@ -46,22 +46,21 @@ module peripheral_noc_router_input #(
   parameter DESTS        = 1,
   parameter OUTPUTS      = 1,
   parameter BUFFER_DEPTH = 4
-)
-  (
-  input                                               clk,
-  input                                               rst,
+) (
+  input clk,
+  input rst,
 
-  input  [OUTPUTS*DESTS-1:0]                          ROUTES,
+  input [OUTPUTS*DESTS-1:0] ROUTES,
 
-  input                              [FLIT_WIDTH-1:0] in_flit,
-  input                                               in_last,
-  input  [VCHANNELS-1:0]                              in_valid,
-  output [VCHANNELS-1:0]                              in_ready,
+  input  [FLIT_WIDTH-1:0] in_flit,
+  input                   in_last,
+  input  [ VCHANNELS-1:0] in_valid,
+  output [ VCHANNELS-1:0] in_ready,
 
-  output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
-  output [VCHANNELS-1:0]                              out_last,
-  output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
-  input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
+  output [VCHANNELS-1:0][   OUTPUTS-1:0] out_valid,
+  output [VCHANNELS-1:0]                 out_last,
+  output [VCHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
+  input  [VCHANNELS-1:0][   OUTPUTS-1:0] out_ready
 );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -71,59 +70,57 @@ module peripheral_noc_router_input #(
 
   genvar v;
 
-  wire [FLIT_WIDTH-1:0] buffer_flit  [VCHANNELS];
-  wire                  buffer_last  [VCHANNELS];
-  wire                  buffer_valid [VCHANNELS];
-  wire                  buffer_ready [VCHANNELS];
+  wire [FLIT_WIDTH-1:0] buffer_flit [VCHANNELS];
+  wire                  buffer_last [VCHANNELS];
+  wire                  buffer_valid[VCHANNELS];
+  wire                  buffer_ready[VCHANNELS];
 
   //////////////////////////////////////////////////////////////////////////////
   //
   // Module Body
   //
   generate
-    for (v = 0; v < VCHANNELS; v=v+1) begin : vc
+    for (v = 0; v < VCHANNELS; v = v + 1) begin : vc
 
       peripheral_noc_buffer #(
-      .FLIT_WIDTH (FLIT_WIDTH),
-      .DEPTH      (BUFFER_DEPTH)
-      )
-      u_buffer (
-        .clk         (clk),
-        .rst         (rst),
+        .FLIT_WIDTH(FLIT_WIDTH),
+        .DEPTH     (BUFFER_DEPTH)
+      ) u_buffer (
+        .clk(clk),
+        .rst(rst),
 
-        .in_flit     (in_flit),
-        .in_last     (in_last),
-        .in_valid    (in_valid[v]),
-        .in_ready    (in_ready[v]),
+        .in_flit (in_flit),
+        .in_last (in_last),
+        .in_valid(in_valid[v]),
+        .in_ready(in_ready[v]),
 
-        .out_flit    (buffer_flit  [v]),
-        .out_last    (buffer_last  [v]),
-        .out_valid   (buffer_valid [v]),
-        .out_ready   (buffer_ready [v]),
+        .out_flit (buffer_flit[v]),
+        .out_last (buffer_last[v]),
+        .out_valid(buffer_valid[v]),
+        .out_ready(buffer_ready[v]),
 
-        .packet_size ()
+        .packet_size()
       );
 
       peripheral_noc_router_lookup #(
-      .FLIT_WIDTH (FLIT_WIDTH),
-      .DESTS (DESTS),
-      .OUTPUTS (OUTPUTS)
-      )
-      u_lookup (
-        .clk       (clk),
-        .rst       (rst),
+        .FLIT_WIDTH(FLIT_WIDTH),
+        .DESTS     (DESTS),
+        .OUTPUTS   (OUTPUTS)
+      ) u_lookup (
+        .clk(clk),
+        .rst(rst),
 
-        .ROUTES    (ROUTES),
+        .ROUTES(ROUTES),
 
-        .in_flit   (buffer_flit  [v]),
-        .in_last   (buffer_last  [v]),
-        .in_valid  (buffer_valid [v]),
-        .in_ready  (buffer_ready [v]),
+        .in_flit (buffer_flit[v]),
+        .in_last (buffer_last[v]),
+        .in_valid(buffer_valid[v]),
+        .in_ready(buffer_ready[v]),
 
-        .out_flit  (out_flit  [v]),
-        .out_last  (out_last  [v]),
-        .out_valid (out_valid [v]),
-        .out_ready (out_ready [v])
+        .out_flit (out_flit[v]),
+        .out_last (out_last[v]),
+        .out_valid(out_valid[v]),
+        .out_ready(out_ready[v])
       );
     end
   endgenerate

@@ -44,15 +44,14 @@ module peripheral_noc_demux #(
   parameter        FLIT_WIDTH = 32,
   parameter        CHANNELS   = 7,
   parameter [63:0] MAPPING    = 'x
-)
-  (
-  input                                     clk,
-  input                                     rst,
+) (
+  input clk,
+  input rst,
 
-  input                    [FLIT_WIDTH-1:0] in_flit,
-  input                                     in_last,
-  input                                     in_valid,
-  output reg                                in_ready,
+  input      [FLIT_WIDTH-1:0] in_flit,
+  input                       in_last,
+  input                       in_valid,
+  output reg                  in_ready,
 
   output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
   output     [CHANNELS-1:0]                 out_last,
@@ -74,8 +73,8 @@ module peripheral_noc_demux #(
   //
   // Variables
   //
-  reg [CHANNELS-1:0] active;
-  reg [CHANNELS-1:0] nxt_active;
+  reg  [CHANNELS-1:0] active;
+  reg  [CHANNELS-1:0] nxt_active;
 
   wire [         2:0] packet_class;
   reg  [CHANNELS-1:0] select;
@@ -87,9 +86,9 @@ module peripheral_noc_demux #(
   assign packet_class = in_flit[CLASS_MSB:CLASS_LSB];
 
   always @(*) begin : gen_select
-    select = MAPPING[8*packet_class +: CHANNELS];
+    select = MAPPING[8*packet_class+:CHANNELS];
     if (select == 0) begin
-      select = { {CHANNELS-1{1'b0}}, 1'b1};
+      select = {{CHANNELS - 1{1'b0}}, 1'b1};
     end
   end
 
@@ -99,18 +98,17 @@ module peripheral_noc_demux #(
   always @(*) begin
     nxt_active = active;
 
-    out_valid = 0;
-    in_ready  = 0;
+    out_valid  = 0;
+    in_ready   = 0;
 
     if (active == 0) begin
       in_ready  = |(select & out_ready);
-      out_valid =   select & {CHANNELS{in_valid}};
+      out_valid = select & {CHANNELS{in_valid}};
 
       if (in_valid & ~in_last) begin
         nxt_active = select;
       end
-    end
-    else begin
+    end else begin
       in_ready  = |(active & out_ready);
       out_valid = active & {CHANNELS{in_valid}};
 
@@ -123,8 +121,7 @@ module peripheral_noc_demux #(
   always @(posedge clk) begin
     if (rst) begin
       active <= '0;
-    end
-    else begin
+    end else begin
       active <= nxt_active;
     end
   end

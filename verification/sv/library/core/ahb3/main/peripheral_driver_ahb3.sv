@@ -42,7 +42,7 @@ import peripheral_ahb3_pkg::*;
 
 class peripheral_driver_ahb3 extends peripheral_base_driver;
   virtual peripheral_interface.master master;  //Virtual interface; master
-  peripheral_scoreboard scoreboard;  //peripheral_scoreboard
+  peripheral_scoreboard               scoreboard;  //peripheral_scoreboard
 
   function new(input mailbox generation2driver, input event driver2generation, input int PortId, input peripheral_scoreboard scoreboard, input virtual peripheral_interface.master master);
 
@@ -76,10 +76,7 @@ endtask : initialize
 
 //Wait for HREADY to assert
 task peripheral_driver_ahb3::wait4hready(input exit_on_hresp_error);
-  if (exit_on_hresp_error)
-    do
-      @(master.cb_master);
-    while (master.cb_master.HREADY !== 1'b1 && master.cb_master.HRESP !== HRESP_ERROR);
+  if (exit_on_hresp_error) do @(master.cb_master); while (master.cb_master.HREADY !== 1'b1 && master.cb_master.HRESP !== HRESP_ERROR);
   else do @(master.cb_master); while (master.cb_master.HREADY !== 1'b1);
 endtask : wait4hready
 
@@ -108,7 +105,7 @@ endtask : run
 
 //AHB command signals
 task peripheral_driver_ahb3::ahb3_cmd(input peripheral_bus_transaction_ahb3 transaction);
-  byte address[];
+  byte address [];
   int  counter;
 
   wait4hready(1);
@@ -167,7 +164,7 @@ task peripheral_driver_ahb3::ahb3_data(input peripheral_bus_transaction_ahb3 tra
 
   if (transaction.TransferSize > 0) begin
     //First data from queue (for write cycle)
-    counter         = 0;
+    counter     = 0;
 
     //where to start?
     address     = transaction.AddressQueue[0];  //Get first address of burst
@@ -233,11 +230,11 @@ endtask : ahb3_data
 //calculate HSIZE
 function bit [2:0] peripheral_driver_ahb3::BytesPerTransfer2HSIZE(input int unsigned BytesPerTransfer);
   case (BytesPerTransfer)
-    0: return 0;
-    1: return HSIZE_BYTE;
-    2: return HSIZE_HWORD;
-    4: return HSIZE_WORD;
-    8: return HSIZE_DWORD;
+    0:       return 0;
+    1:       return HSIZE_BYTE;
+    2:       return HSIZE_HWORD;
+    4:       return HSIZE_WORD;
+    8:       return HSIZE_DWORD;
     default: $error("Unsupported number of bytes per transfer %0d", BytesPerTransfer);
   endcase
 endfunction : BytesPerTransfer2HSIZE

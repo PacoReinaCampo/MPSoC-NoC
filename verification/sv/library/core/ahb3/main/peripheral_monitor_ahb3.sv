@@ -44,14 +44,14 @@ import peripheral_ahb3_pkg::*;
 
 class peripheral_monitor_ahb3 extends peripheral_base_monitor;
   virtual peripheral_interface.slave slave;  //Virtual IF, Slave Port
-  peripheral_scoreboard scoreboard;  //peripheral_scoreboard
-  peripheral_bus_transaction_ahb3 transaction;  //current transfer
+  peripheral_scoreboard              scoreboard;  //peripheral_scoreboard
+  peripheral_bus_transaction_ahb3    transaction;  //current transfer
 
   function new(input int PortId, input peripheral_scoreboard scoreboard, input virtual peripheral_interface.slave slave);
 
     super.new(PortId);
     this.scoreboard = scoreboard;
-    this.slave = slave;
+    this.slave      = slave;
   endfunction : new
 
   extern virtual task run();
@@ -105,10 +105,7 @@ endtask : run
 
 //Check if slave is addressed
 task peripheral_monitor_ahb3::wait4transfer();
-  while (!slave.cb_slave.HREADY ||
-         !slave.cb_slave.HSEL   ||
-          slave.cb_slave.HTRANS == HTRANS_IDLE)
-  begin
+  while (!slave.cb_slave.HREADY || !slave.cb_slave.HSEL || slave.cb_slave.HTRANS == HTRANS_IDLE) begin
     @(slave.cb_slave);
     slave.HREADYOUT <= 1'b1;
   end
@@ -148,9 +145,7 @@ task peripheral_monitor_ahb3::ahb3_next(input peripheral_bus_transaction_ahb3 tr
 
   //$display ("%0t %0d %0d %0d %0d", $time, PortId, slave.cb_slave.HSEL, slave.cb_slave.HTRANS, slave.cb_slave.HREADY);
 
-  while (slave.cb_slave.HSEL   == 1'b1 &&
-         (slave.cb_slave.HTRANS == HTRANS_SEQ || slave.cb_slave.HTRANS == HTRANS_BUSY || slave.cb_slave.HREADY !== 1'b1) )
-  begin
+  while (slave.cb_slave.HSEL == 1'b1 && (slave.cb_slave.HTRANS == HTRANS_SEQ || slave.cb_slave.HTRANS == HTRANS_BUSY || slave.cb_slave.HREADY !== 1'b1)) begin
     //$display ("%0t %0d %0d %0d", $time, PortId, slave.cb_slave.HREADY, slave.cb_slave.HTRANS);
     if (slave.cb_slave.HREADY && slave.cb_slave.HTRANS == HTRANS_SEQ) begin
       address = new[(transaction.AddressSize + 7) / 8];
@@ -176,7 +171,7 @@ task peripheral_monitor_ahb3::ahb3_data(input peripheral_bus_transaction_ahb3 tr
   int unsigned data_offset, counter;
 
   //what's the start address?
-  address = transaction.AddressQueue[0];
+  address     = transaction.AddressQueue[0];
 
   //what's the offset in the databus?
   data_offset = address[0] & 'hff;  //get address LSB in UNSIGNED format

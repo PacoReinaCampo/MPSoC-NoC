@@ -44,28 +44,27 @@
 
 module peripheral_noc_buffer #(
   parameter FLIT_WIDTH = 32,
-  parameter DEPTH      = 16, // must be a power of 2
+  parameter DEPTH      = 16,  // must be a power of 2
   parameter FULLPACKET = 0,
 
-  parameter AW = $clog2(DEPTH) // the width of the index
-)
-  (
+  parameter AW = $clog2(DEPTH)  // the width of the index
+) (
   input clk,
   input rst,
 
   // FIFO input side
-  input      [FLIT_WIDTH-1:0]   in_flit,
-  input                         in_last,
-  input                         in_valid,
-  output                        in_ready,
+  input  [FLIT_WIDTH-1:0] in_flit,
+  input                   in_last,
+  input                   in_valid,
+  output                  in_ready,
 
   //FIFO output side
-  output reg [FLIT_WIDTH-1:0]   out_flit,
-  output reg                    out_last,
-  output                        out_valid,
-  input                         out_ready,
+  output reg [FLIT_WIDTH-1:0] out_flit,
+  output reg                  out_last,
+  output                      out_valid,
+  input                       out_ready,
 
-  output     [AW:0]             packet_size
+  output [AW:0] packet_size
 );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -73,20 +72,20 @@ module peripheral_noc_buffer #(
   // Constants
   //
 
-  reg [AW-1:0]   wr_addr;
-  reg [AW-1:0]   rd_addr;
-  reg [  AW:0]   rd_count;
-  wire           fifo_read;
-  wire           fifo_write;
-  wire           read_ram;
-  wire           write_through;
-  wire           write_ram;
+  reg  [      AW-1:0] wr_addr;
+  reg  [      AW-1:0] rd_addr;
+  reg  [        AW:0] rd_count;
+  wire                fifo_read;
+  wire                fifo_write;
+  wire                read_ram;
+  wire                write_through;
+  wire                write_ram;
 
   // Generic dual-port, single clock memory
-  reg [FLIT_WIDTH:0] ram [DEPTH-1:0];
+  reg  [FLIT_WIDTH:0] ram               [DEPTH-1:0];
 
-  reg  [DEPTH:0] data_last_buf;
-  wire [DEPTH:0] data_last_shifted;
+  reg  [     DEPTH:0] data_last_buf;
+  wire [     DEPTH:0] data_last_shifted;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -94,8 +93,7 @@ module peripheral_noc_buffer #(
   //
 
   function logic [AW:0] find_first_one(input logic [DEPTH:0] data);
-    for (int i = DEPTH; i >= 0; i--)
-      if (data[i]) return i;
+    for (int i = DEPTH; i >= 0; i--) if (data[i]) return i;
     return DEPTH + 1;
   endfunction
 
@@ -112,7 +110,7 @@ module peripheral_noc_buffer #(
   end
 
   // The actual depth is DEPTH+1 because of the output register
-  assign in_ready = (rd_count < DEPTH + 1);
+  assign in_ready      = (rd_count < DEPTH + 1);
   assign fifo_read     = out_valid & out_ready;
   assign fifo_write    = in_ready & in_valid;
   assign read_ram      = fifo_read & (rd_count > 1);
@@ -125,16 +123,11 @@ module peripheral_noc_buffer #(
       wr_addr  <= 'b0;
       rd_addr  <= 'b0;
       rd_count <= 'b0;
-    end
-    else begin
-      if (fifo_write & ~fifo_read)
-        rd_count <=  rd_count + 1'b1;
-      else if (fifo_read & ~fifo_write)
-        rd_count <= rd_count - 1'b1;
-      if (write_ram)
-        wr_addr <= wr_addr + 1'b1;
-      if (read_ram)
-        rd_addr <= rd_addr + 1'b1;
+    end else begin
+      if (fifo_write & ~fifo_read) rd_count <= rd_count + 1'b1;
+      else if (fifo_read & ~fifo_write) rd_count <= rd_count - 1'b1;
+      if (write_ram) wr_addr <= wr_addr + 1'b1;
+      if (read_ram) rd_addr <= rd_addr + 1'b1;
     end
   end
 
@@ -148,10 +141,9 @@ module peripheral_noc_buffer #(
   // Read
   always @(posedge clk) begin
     if (read_ram) begin
-      out_flit <= ram[rd_addr][0 +: FLIT_WIDTH];
+      out_flit <= ram[rd_addr][0+:FLIT_WIDTH];
       out_last <= ram[rd_addr][FLIT_WIDTH];
-    end
-    else if (fifo_write & write_through) begin
+    end else if (fifo_write & write_through) begin
       out_flit <= in_flit;
       out_last <= in_last;
     end
@@ -160,19 +152,16 @@ module peripheral_noc_buffer #(
   generate
     if (FULLPACKET != 0) begin
       always @(posedge clk) begin
-        if (rst)
-          data_last_buf <= 0;
-        else if (fifo_write)
-          data_last_buf <= {data_last_buf, in_last};
+        if (rst) data_last_buf <= 0;
+        else if (fifo_write) data_last_buf <= {data_last_buf, in_last};
       end
 
       // Extra logic to get the packet size in a stable manner
       assign data_last_shifted = data_last_buf << DEPTH + 1 - rd_count;
 
-      assign out_valid   = (rd_count > 0) & |data_last_shifted;
-      assign packet_size = DEPTH + 1 - find_first_one(data_last_shifted);
-    end
-    else begin
+      assign out_valid         = (rd_count > 0) & |data_last_shifted;
+      assign packet_size       = DEPTH + 1 - find_first_one(data_last_shifted);
+    end else begin
       assign out_valid   = rd_count > 0;
       assign packet_size = 0;
     end

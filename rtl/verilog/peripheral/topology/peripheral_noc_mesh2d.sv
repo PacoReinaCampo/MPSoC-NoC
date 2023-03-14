@@ -52,11 +52,10 @@ module peripheral_noc_mesh2d #(
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
 
-  parameter NODES = X*Y
-)
-  (
-  input                                            clk,
-  input                                            rst,
+  parameter NODES = X * Y
+) (
+  input clk,
+  input rst,
 
   input  [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
   input  [NODES-1:0][CHANNELS-1:0]                 in_last,
@@ -77,18 +76,18 @@ module peripheral_noc_mesh2d #(
   // Those are indexes into the wiring arrays
   localparam LOCAL = 0;
   localparam NORTH = 1;
-  localparam EAST  = 2;
+  localparam EAST = 2;
   localparam SOUTH = 3;
-  localparam WEST  = 4;
+  localparam WEST = 4;
 
   // Those are direction codings that match the wiring indices
   // above. The router is configured to use those to select the
   // proper output port.
   localparam DIR_LOCAL = 5'b00001;
   localparam DIR_NORTH = 5'b00010;
-  localparam DIR_EAST  = 5'b00100;
+  localparam DIR_EAST = 5'b00100;
   localparam DIR_SOUTH = 5'b01000;
-  localparam DIR_WEST  = 5'b10000;
+  localparam DIR_WEST = 5'b10000;
 
   // Number of physical channels between routers. This is essentially
   // the number of flits (and last) between the routers.
@@ -101,23 +100,23 @@ module peripheral_noc_mesh2d #(
 
   genvar c, p, x, y;
 
-  wire [4:0][PCHANNELS-1:0][FLIT_WIDTH-1:0]     node_in_flit   [0:NODES-1];
-  wire [4:0][PCHANNELS-1:0]                     node_in_last   [0:NODES-1];
-  wire [4:0][ CHANNELS-1:0]                     node_in_valid  [0:NODES-1];
-  wire [4:0][ CHANNELS-1:0]                     node_in_ready  [0:NODES-1];
-  wire [4:0][PCHANNELS-1:0][FLIT_WIDTH-1:0]     node_out_flit  [0:NODES-1];
-  wire [4:0][PCHANNELS-1:0]                     node_out_last  [0:NODES-1];
-  wire [4:0][ CHANNELS-1:0]                     node_out_valid [0:NODES-1];
-  wire [4:0][ CHANNELS-1:0]                     node_out_ready [0:NODES-1];
+  wire [4:0][ PCHANNELS-1:0][FLIT_WIDTH-1:0] node_in_flit   [0:NODES-1];
+  wire [4:0][ PCHANNELS-1:0]                 node_in_last   [0:NODES-1];
+  wire [4:0][  CHANNELS-1:0]                 node_in_valid  [0:NODES-1];
+  wire [4:0][  CHANNELS-1:0]                 node_in_ready  [0:NODES-1];
+  wire [4:0][ PCHANNELS-1:0][FLIT_WIDTH-1:0] node_out_flit  [0:NODES-1];
+  wire [4:0][ PCHANNELS-1:0]                 node_out_last  [0:NODES-1];
+  wire [4:0][  CHANNELS-1:0]                 node_out_valid [0:NODES-1];
+  wire [4:0][  CHANNELS-1:0]                 node_out_ready [0:NODES-1];
 
-  wire [4:0][FLIT_WIDTH-1:0] phys_in_flit;
-  wire [4:0]                 phys_in_last;
-  wire [4:0]                 phys_in_valid;
-  wire [4:0]                 phys_in_ready;
-  wire [4:0][FLIT_WIDTH-1:0] phys_out_flit;
-  wire [4:0]                 phys_out_last;
-  wire [4:0]                 phys_out_valid;
-  wire [4:0]                 phys_out_ready;
+  wire [4:0][FLIT_WIDTH-1:0]                 phys_in_flit;
+  wire [4:0]                                 phys_in_last;
+  wire [4:0]                                 phys_in_valid;
+  wire [4:0]                                 phys_in_ready;
+  wire [4:0][FLIT_WIDTH-1:0]                 phys_out_flit;
+  wire [4:0]                                 phys_out_last;
+  wire [4:0]                                 phys_out_valid;
+  wire [4:0]                                 phys_out_ready;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -125,60 +124,57 @@ module peripheral_noc_mesh2d #(
   //
 
   // Get the node number
-  function integer nodenum(input integer x,input integer y);
-    nodenum = x+y*X;
-  endfunction // nodenum
+  function integer nodenum(input integer x, input integer y);
+    nodenum = x + y * X;
+  endfunction  // nodenum
 
   // Get the node north of position
-  function integer northof(input integer x,input integer y);
-    northof = x+(y+1)*X;
-  endfunction // northof
+  function integer northof(input integer x, input integer y);
+    northof = x + (y + 1) * X;
+  endfunction  // northof
 
   // Get the node east of position
-  function integer eastof(input integer x,input integer y);
-    eastof  = (x+1)+y*X;
-  endfunction // eastof
+  function integer eastof(input integer x, input integer y);
+    eastof = (x + 1) + y * X;
+  endfunction  // eastof
 
   // Get the node south of position
-  function integer southof(input integer x,input integer y);
-    southof = x+(y-1)*X;
-  endfunction // southof
+  function integer southof(input integer x, input integer y);
+    southof = x + (y - 1) * X;
+  endfunction  // southof
 
   // Get the node west of position
-  function integer westof(input integer x,input integer y);
-    westof = (x-1)+y*X;
-  endfunction // westof
+  function integer westof(input integer x, input integer y);
+    westof = (x - 1) + y * X;
+  endfunction  // westof
 
   // This generates the lookup table for each individual node
   function [NODES-1:0][4:0] genroutes(input integer x, input integer y);
-    integer yd,xd;
-    integer nd;
-    reg [4:0] d;
+    integer yd, xd;
+    integer       nd;
+    reg     [4:0] d;
 
     genroutes = {NODES{5'b00000}};
 
     for (yd = 0; yd < Y; yd++) begin
       for (xd = 0; xd < X; xd++) begin : inner_loop
-        nd = nodenum(xd,yd);
-        d = 5'b00000;
-        if ((xd==x) && (yd==y)) begin
+        nd = nodenum(xd, yd);
+        d  = 5'b00000;
+        if ((xd == x) && (yd == y)) begin
           d = DIR_LOCAL;
-        end else if (xd==x) begin
-          if (yd<y) begin
+        end else if (xd == x) begin
+          if (yd < y) begin
             d = DIR_SOUTH;
-          end
-          else begin
+          end else begin
             d = DIR_NORTH;
           end
-        end
-        else begin
-          if (xd<x) begin
+        end else begin
+          if (xd < x) begin
             d = DIR_WEST;
-          end
-          else begin
+          end else begin
             d = DIR_EAST;
           end
-        end // else: !if(xd==x)
+        end  // else: !if(xd==x)
         genroutes[nd] = d;
       end
     end
@@ -198,80 +194,77 @@ module peripheral_noc_mesh2d #(
     // Arrays of wires between the routers. Each router has a
     // pair of NoC wires per direction and below those are hooked
     // up.
-    for (y = 0; y < Y; y=y+1) begin : ydir
-      for (x = 0; x < X; x=x+1) begin : xdir
+    for (y = 0; y < Y; y = y + 1) begin : ydir
+      for (x = 0; x < X; x = x + 1) begin : xdir
         if (ENABLE_VCHANNELS) begin
           // Mux inputs to virtual channels
           peripheral_noc_vchannel_mux #(
-          .FLIT_WIDTH (FLIT_WIDTH),
-          .CHANNELS   (CHANNELS)
-          )
-          noc_vchannel_mux (
-            .clk (clk),
-            .rst (rst),
+            .FLIT_WIDTH(FLIT_WIDTH),
+            .CHANNELS  (CHANNELS)
+          ) noc_vchannel_mux (
+            .clk(clk),
+            .rst(rst),
 
-            .in_flit   (in_flit  [nodenum(x,y)]),
-            .in_last   (in_last  [nodenum(x,y)]),
-            .in_valid  (in_valid [nodenum(x,y)]),
-            .in_ready  (in_ready [nodenum(x,y)]),
+            .in_flit (in_flit[nodenum(x, y)]),
+            .in_last (in_last[nodenum(x, y)]),
+            .in_valid(in_valid[nodenum(x, y)]),
+            .in_ready(in_ready[nodenum(x, y)]),
 
-            .out_flit  (node_in_flit  [nodenum(x,y)][LOCAL][0]),
-            .out_last  (node_in_last  [nodenum(x,y)][LOCAL][0]),
-            .out_valid (node_in_valid [nodenum(x,y)][LOCAL]),
-            .out_ready (node_in_ready [nodenum(x,y)][LOCAL])
+            .out_flit (node_in_flit[nodenum(x, y)][LOCAL][0]),
+            .out_last (node_in_last[nodenum(x, y)][LOCAL][0]),
+            .out_valid(node_in_valid[nodenum(x, y)][LOCAL]),
+            .out_ready(node_in_ready[nodenum(x, y)][LOCAL])
           );
 
           // Replicate the flit to all output channels and the
           // rest is just wiring
-          for (c = 0; c < CHANNELS; c=c+1) begin : flit_demux
-            assign out_flit[nodenum(x,y)][c] = node_out_flit[nodenum(x,y)][LOCAL][0];
-            assign out_last[nodenum(x,y)][c] = node_out_last[nodenum(x,y)][LOCAL][0];
+          for (c = 0; c < CHANNELS; c = c + 1) begin : flit_demux
+            assign out_flit[nodenum(x, y)][c] = node_out_flit[nodenum(x, y)][LOCAL][0];
+            assign out_last[nodenum(x, y)][c] = node_out_last[nodenum(x, y)][LOCAL][0];
           end
-          assign out_valid[nodenum(x,y)] = node_out_valid[nodenum(x,y)][LOCAL];
-          assign node_out_ready[nodenum(x,y)][LOCAL] = out_ready[nodenum(x,y)];
+          assign out_valid[nodenum(x, y)]             = node_out_valid[nodenum(x, y)][LOCAL];
+          assign node_out_ready[nodenum(x, y)][LOCAL] = out_ready[nodenum(x, y)];
 
           // Instantiate the router. We call a function to
           // generate the routing table
           peripheral_noc_router #(
-          .FLIT_WIDTH      (FLIT_WIDTH),
-          .VCHANNELS       (CHANNELS),
-          .INPUTS          (5),
-          .OUTPUTS         (5),
-          .BUFFER_SIZE_IN  (BUFFER_SIZE_IN),
-          .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
-          .DESTS           (NODES)
-          )
-          noc_router (
-            .clk (clk),
-            .rst (rst),
+            .FLIT_WIDTH     (FLIT_WIDTH),
+            .VCHANNELS      (CHANNELS),
+            .INPUTS         (5),
+            .OUTPUTS        (5),
+            .BUFFER_SIZE_IN (BUFFER_SIZE_IN),
+            .BUFFER_SIZE_OUT(BUFFER_SIZE_OUT),
+            .DESTS          (NODES)
+          ) noc_router (
+            .clk(clk),
+            .rst(rst),
 
-            .ROUTES    (genroutes(x,y)),
+            .ROUTES(genroutes(x, y)),
 
-            .in_flit   (node_in_flit  [nodenum(x,y)]),
-            .in_last   (node_in_last  [nodenum(x,y)]),
-            .in_valid  (node_in_valid [nodenum(x,y)]),
-            .in_ready  (node_in_ready [nodenum(x,y)]),
+            .in_flit (node_in_flit[nodenum(x, y)]),
+            .in_last (node_in_last[nodenum(x, y)]),
+            .in_valid(node_in_valid[nodenum(x, y)]),
+            .in_ready(node_in_ready[nodenum(x, y)]),
 
-            .out_flit  (node_out_flit  [nodenum(x,y)]),
-            .out_last  (node_out_last  [nodenum(x,y)]),
-            .out_valid (node_out_valid [nodenum(x,y)]),
-            .out_ready (node_out_ready [nodenum(x,y)])
+            .out_flit (node_out_flit[nodenum(x, y)]),
+            .out_last (node_out_last[nodenum(x, y)]),
+            .out_valid(node_out_valid[nodenum(x, y)]),
+            .out_ready(node_out_ready[nodenum(x, y)])
           );
-        end
-        else begin
-          assign out_flit  [nodenum(x,y)] = node_out_flit  [nodenum(x,y)][LOCAL];
-          assign out_last  [nodenum(x,y)] = node_out_last  [nodenum(x,y)][LOCAL];
-          assign out_valid [nodenum(x,y)] = node_out_valid [nodenum(x,y)][LOCAL];
+        end else begin
+          assign out_flit[nodenum(x, y)]              = node_out_flit[nodenum(x, y)][LOCAL];
+          assign out_last[nodenum(x, y)]              = node_out_last[nodenum(x, y)][LOCAL];
+          assign out_valid[nodenum(x, y)]             = node_out_valid[nodenum(x, y)][LOCAL];
 
-          assign node_out_ready [nodenum(x,y)][LOCAL] = out_ready [nodenum(x,y)];
+          assign node_out_ready[nodenum(x, y)][LOCAL] = out_ready[nodenum(x, y)];
 
-          assign node_in_flit  [nodenum(x,y)][LOCAL] = in_flit  [nodenum(x,y)];
-          assign node_in_last  [nodenum(x,y)][LOCAL] = in_last  [nodenum(x,y)];
-          assign node_in_valid [nodenum(x,y)][LOCAL] = in_valid [nodenum(x,y)];
+          assign node_in_flit[nodenum(x, y)][LOCAL]   = in_flit[nodenum(x, y)];
+          assign node_in_last[nodenum(x, y)][LOCAL]   = in_last[nodenum(x, y)];
+          assign node_in_valid[nodenum(x, y)][LOCAL]  = in_valid[nodenum(x, y)];
 
-          assign in_ready [nodenum(x,y)] = node_in_ready [nodenum(x,y)][LOCAL];
+          assign in_ready[nodenum(x, y)]              = node_in_ready[nodenum(x, y)][LOCAL];
 
-          for (c = 0; c < CHANNELS; c=c+1) begin
+          for (c = 0; c < CHANNELS; c = c + 1) begin
             // First we just need to re-arrange the wires a bit
             // because the array structure varies a bit here:
             // The directions and channels and differently
@@ -279,44 +272,43 @@ module peripheral_noc_mesh2d #(
             // arrays.
 
             // Re-wire the ports
-            for (p = 0; p < 5; p=p+1) begin
-              assign phys_in_flit  [p] = node_in_flit  [nodenum(x,y)][p][c];
-              assign phys_in_last  [p] = node_in_last  [nodenum(x,y)][p][c];
-              assign phys_in_valid [p] = node_in_valid [nodenum(x,y)][p][c];
+            for (p = 0; p < 5; p = p + 1) begin
+              assign phys_in_flit[p]                     = node_in_flit[nodenum(x, y)][p][c];
+              assign phys_in_last[p]                     = node_in_last[nodenum(x, y)][p][c];
+              assign phys_in_valid[p]                    = node_in_valid[nodenum(x, y)][p][c];
 
-              assign node_in_ready [nodenum(x,y)][p][c] = phys_in_ready [p];
+              assign node_in_ready[nodenum(x, y)][p][c]  = phys_in_ready[p];
 
-              assign node_out_flit  [nodenum(x,y)][p][c] = phys_out_flit  [p];
-              assign node_out_last  [nodenum(x,y)][p][c] = phys_out_last  [p];
-              assign node_out_valid [nodenum(x,y)][p][c] = phys_out_valid [p];
+              assign node_out_flit[nodenum(x, y)][p][c]  = phys_out_flit[p];
+              assign node_out_last[nodenum(x, y)][p][c]  = phys_out_last[p];
+              assign node_out_valid[nodenum(x, y)][p][c] = phys_out_valid[p];
 
-              assign phys_out_ready [p] = node_out_ready [nodenum(x,y)][p][c];
+              assign phys_out_ready[p]                   = node_out_ready[nodenum(x, y)][p][c];
             end
 
             // Instantiate the router. We call a function to
             // generate the routing table
             peripheral_noc_router #(
-            .FLIT_WIDTH (FLIT_WIDTH),
-            .VCHANNELS  (1),
-            .INPUTS     (5),
-            .OUTPUTS    (5),
-            .DESTS      (NODES)
-            )
-            noc_router (
-              .clk (clk),
-              .rst (rst),
+              .FLIT_WIDTH(FLIT_WIDTH),
+              .VCHANNELS (1),
+              .INPUTS    (5),
+              .OUTPUTS   (5),
+              .DESTS     (NODES)
+            ) noc_router (
+              .clk(clk),
+              .rst(rst),
 
-              .ROUTES    (genroutes(x,y)),
+              .ROUTES(genroutes(x, y)),
 
-              .in_flit   (phys_in_flit),
-              .in_last   (phys_in_last),
-              .in_valid  (phys_in_valid),
-              .in_ready  (phys_in_ready),
+              .in_flit (phys_in_flit),
+              .in_last (phys_in_last),
+              .in_valid(phys_in_valid),
+              .in_ready(phys_in_ready),
 
-              .out_flit  (phys_out_flit),
-              .out_last  (phys_out_last),
-              .out_valid (phys_out_valid),
-              .out_ready (phys_out_ready)
+              .out_flit (phys_out_flit),
+              .out_last (phys_out_last),
+              .out_valid(phys_out_valid),
+              .out_ready(phys_out_ready)
             );
           end
         end
@@ -325,55 +317,51 @@ module peripheral_noc_mesh2d #(
         // in the four directions. If the router is on an outer
         // border, tie off.
         if (y > 0) begin
-          assign node_in_flit   [nodenum(x,y)][SOUTH] = node_out_flit  [southof(x,y)][NORTH];
-          assign node_in_last   [nodenum(x,y)][SOUTH] = node_out_last  [southof(x,y)][NORTH];
-          assign node_in_valid  [nodenum(x,y)][SOUTH] = node_out_valid [southof(x,y)][NORTH];
-          assign node_out_ready [nodenum(x,y)][SOUTH] = node_in_ready  [southof(x,y)][NORTH];
-        end
-        else begin
-          assign node_in_flit   [nodenum(x,y)][SOUTH] = 'x;
-          assign node_in_last   [nodenum(x,y)][SOUTH] = 'x;
-          assign node_in_valid  [nodenum(x,y)][SOUTH] = 0;
-          assign node_out_ready [nodenum(x,y)][SOUTH] = 0;
+          assign node_in_flit[nodenum(x, y)][SOUTH]   = node_out_flit[southof(x, y)][NORTH];
+          assign node_in_last[nodenum(x, y)][SOUTH]   = node_out_last[southof(x, y)][NORTH];
+          assign node_in_valid[nodenum(x, y)][SOUTH]  = node_out_valid[southof(x, y)][NORTH];
+          assign node_out_ready[nodenum(x, y)][SOUTH] = node_in_ready[southof(x, y)][NORTH];
+        end else begin
+          assign node_in_flit[nodenum(x, y)][SOUTH]   = 'x;
+          assign node_in_last[nodenum(x, y)][SOUTH]   = 'x;
+          assign node_in_valid[nodenum(x, y)][SOUTH]  = 0;
+          assign node_out_ready[nodenum(x, y)][SOUTH] = 0;
         end
 
-        if (y < Y-1) begin
-          assign node_in_flit   [nodenum(x,y)][NORTH] = node_out_flit  [northof(x,y)][SOUTH];
-          assign node_in_last   [nodenum(x,y)][NORTH] = node_out_last  [northof(x,y)][SOUTH];
-          assign node_in_valid  [nodenum(x,y)][NORTH] = node_out_valid [northof(x,y)][SOUTH];
-          assign node_out_ready [nodenum(x,y)][NORTH] = node_in_ready  [northof(x,y)][SOUTH];
-        end
-        else begin
-          assign node_in_flit[nodenum(x,y)][NORTH] = 'x;
-          assign node_in_last[nodenum(x,y)][NORTH] = 'x;
-          assign node_in_valid[nodenum(x,y)][NORTH] = 0;
-          assign node_out_ready[nodenum(x,y)][NORTH] = 0;
+        if (y < Y - 1) begin
+          assign node_in_flit[nodenum(x, y)][NORTH]   = node_out_flit[northof(x, y)][SOUTH];
+          assign node_in_last[nodenum(x, y)][NORTH]   = node_out_last[northof(x, y)][SOUTH];
+          assign node_in_valid[nodenum(x, y)][NORTH]  = node_out_valid[northof(x, y)][SOUTH];
+          assign node_out_ready[nodenum(x, y)][NORTH] = node_in_ready[northof(x, y)][SOUTH];
+        end else begin
+          assign node_in_flit[nodenum(x, y)][NORTH]   = 'x;
+          assign node_in_last[nodenum(x, y)][NORTH]   = 'x;
+          assign node_in_valid[nodenum(x, y)][NORTH]  = 0;
+          assign node_out_ready[nodenum(x, y)][NORTH] = 0;
         end
 
         if (x > 0) begin
-          assign node_in_flit   [nodenum(x,y)][WEST] = node_out_flit  [westof(x,y)][EAST];
-          assign node_in_last   [nodenum(x,y)][WEST] = node_out_last  [westof(x,y)][EAST];
-          assign node_in_valid  [nodenum(x,y)][WEST] = node_out_valid [westof(x,y)][EAST];
-          assign node_out_ready [nodenum(x,y)][WEST] = node_in_ready  [westof(x,y)][EAST];
-        end
-        else begin
-          assign node_in_flit   [nodenum(x,y)][WEST] = 'x;
-          assign node_in_last   [nodenum(x,y)][WEST] = 'x;
-          assign node_in_valid  [nodenum(x,y)][WEST] = 0;
-          assign node_out_ready [nodenum(x,y)][WEST] = 0;
+          assign node_in_flit[nodenum(x, y)][WEST]   = node_out_flit[westof(x, y)][EAST];
+          assign node_in_last[nodenum(x, y)][WEST]   = node_out_last[westof(x, y)][EAST];
+          assign node_in_valid[nodenum(x, y)][WEST]  = node_out_valid[westof(x, y)][EAST];
+          assign node_out_ready[nodenum(x, y)][WEST] = node_in_ready[westof(x, y)][EAST];
+        end else begin
+          assign node_in_flit[nodenum(x, y)][WEST]   = 'x;
+          assign node_in_last[nodenum(x, y)][WEST]   = 'x;
+          assign node_in_valid[nodenum(x, y)][WEST]  = 0;
+          assign node_out_ready[nodenum(x, y)][WEST] = 0;
         end
 
-        if (x < X-1) begin
-          assign node_in_flit   [nodenum(x,y)][EAST] = node_out_flit  [eastof(x,y)][WEST];
-          assign node_in_last   [nodenum(x,y)][EAST] = node_out_last  [eastof(x,y)][WEST];
-          assign node_in_valid  [nodenum(x,y)][EAST] = node_out_valid [eastof(x,y)][WEST];
-          assign node_out_ready [nodenum(x,y)][EAST] = node_in_ready  [eastof(x,y)][WEST];
-        end
-        else begin
-          assign node_in_flit   [nodenum(x,y)][EAST] = 'x;
-          assign node_in_last   [nodenum(x,y)][EAST] = 'x;
-          assign node_in_valid  [nodenum(x,y)][EAST] = 0;
-          assign node_out_ready [nodenum(x,y)][EAST] = 0;
+        if (x < X - 1) begin
+          assign node_in_flit[nodenum(x, y)][EAST]   = node_out_flit[eastof(x, y)][WEST];
+          assign node_in_last[nodenum(x, y)][EAST]   = node_out_last[eastof(x, y)][WEST];
+          assign node_in_valid[nodenum(x, y)][EAST]  = node_out_valid[eastof(x, y)][WEST];
+          assign node_out_ready[nodenum(x, y)][EAST] = node_in_ready[eastof(x, y)][WEST];
+        end else begin
+          assign node_in_flit[nodenum(x, y)][EAST]   = 'x;
+          assign node_in_last[nodenum(x, y)][EAST]   = 'x;
+          assign node_in_valid[nodenum(x, y)][EAST]  = 0;
+          assign node_out_ready[nodenum(x, y)][EAST] = 0;
         end
       end
     end

@@ -45,7 +45,7 @@ virtual class peripheral_base_driver;
   function new(input mailbox generation2driver, input event driver2generation, input int PortId);
     this.generation2driver = generation2driver;
     this.driver2generation = driver2generation;
-    this.PortId  = PortId;
+    this.PortId            = PortId;
   endfunction : new
 
   pure virtual task run();

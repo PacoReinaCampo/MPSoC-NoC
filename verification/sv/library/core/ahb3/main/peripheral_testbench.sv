@@ -78,11 +78,13 @@ module peripheral_testbench;
     forever #10 HCLK = ~HCLK;
   end : generation_HCLK
 
-  initial begin : generation_HRESETn;
+  initial begin : generation_HRESETn
+    ;
     HRESETn <= 1'b0;
     #32;
     HRESETn <= 1'b1;
-  end : generation_HRESETn;
+  end : generation_HRESETn
+  ;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -120,18 +122,18 @@ module peripheral_testbench;
   //
   generate
     for (m = 0; m < MASTERS; m++) begin
-      assign master_HSEL[m]          = ahb3_master[m].HSEL;
-      assign master_HADDR[m]         = ahb3_master[m].HADDR;
-      assign master_HWDATA[m]        = ahb3_master[m].HWDATA;
-      assign master_HWRITE[m]        = ahb3_master[m].HWRITE;
-      assign master_HSIZE[m]         = ahb3_master[m].HSIZE;
-      assign master_HBURST[m]        = ahb3_master[m].HBURST;
-      assign master_HPROT[m]         = ahb3_master[m].HPROT;
-      assign master_HTRANS[m]        = ahb3_master[m].HTRANS;
-      assign master_HMASTLOCK[m]     = ahb3_master[m].HMASTLOCK;
+      assign master_HSEL[m]        = ahb3_master[m].HSEL;
+      assign master_HADDR[m]       = ahb3_master[m].HADDR;
+      assign master_HWDATA[m]      = ahb3_master[m].HWDATA;
+      assign master_HWRITE[m]      = ahb3_master[m].HWRITE;
+      assign master_HSIZE[m]       = ahb3_master[m].HSIZE;
+      assign master_HBURST[m]      = ahb3_master[m].HBURST;
+      assign master_HPROT[m]       = ahb3_master[m].HPROT;
+      assign master_HTRANS[m]      = ahb3_master[m].HTRANS;
+      assign master_HMASTLOCK[m]   = ahb3_master[m].HMASTLOCK;
 
       //HREADY-OUT -> HREADY logic (only 1 master/slave connection)
-      assign master_HREADY[m] = master_HREADYOUT[m];
+      assign master_HREADY[m]      = master_HREADYOUT[m];
 
       assign ahb3_master[m].HRDATA = master_HRDATA[m];
       assign ahb3_master[m].HREADY = master_HREADY[m];
@@ -148,11 +150,11 @@ module peripheral_testbench;
       assign ahb3_slave[s].HPROT     = slave_HPROT[s];
       assign ahb3_slave[s].HTRANS    = slave_HTRANS[s];
       assign ahb3_slave[s].HMASTLOCK = slave_HMASTLOCK[s];
-      assign ahb3_slave[s].HREADY    = slave_HREADYOUT[s]; //no decoder on slave bus. Interconnect's HREADYOUT drives single slave's HREADY input
+      assign ahb3_slave[s].HREADY    = slave_HREADYOUT[s];  //no decoder on slave bus. Interconnect's HREADYOUT drives single slave's HREADY input
 
-      assign slave_HRDATA[s] = ahb3_slave[s].HRDATA;
-      assign slave_HREADY[s] = ahb3_slave[s].HREADYOUT; //no decoder on slave bus. Interconnect's HREADY is driven by single slave's HREADYOUT
-      assign slave_HRESP[s]  = ahb3_slave[s].HRESP;
+      assign slave_HRDATA[s]         = ahb3_slave[s].HRDATA;
+      assign slave_HREADY[s]         = ahb3_slave[s].HREADYOUT;  //no decoder on slave bus. Interconnect's HREADY is driven by single slave's HREADYOUT
+      assign slave_HRESP[s]          = ahb3_slave[s].HRESP;
     end
   endgenerate
 
@@ -165,8 +167,7 @@ module peripheral_testbench;
     .SLAVES    (SLAVES),
     .HADDR_SIZE(HADDR_SIZE),
     .HDATA_SIZE(HDATA_SIZE)
-  )
-  tb ();
+  ) tb ();
 
   peripheral_msi_ahb3 #(
     .MASTERS          (MASTERS),
@@ -175,8 +176,7 @@ module peripheral_testbench;
     .HDATA_SIZE       (HDATA_SIZE),
     .SLAVE_MASK       ('{MASTERS{4'b1011}}),
     .ERROR_ON_NO_SLAVE('{MASTERS{1'b1}})
-  )
-  dut (
+  ) dut (
     .*
   );
 

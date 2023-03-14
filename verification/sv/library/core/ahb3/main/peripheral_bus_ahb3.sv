@@ -62,9 +62,7 @@ function bit peripheral_bus_generator::compare(input peripheral_base_transaction
   if (!$cast(cmp, to))  //is 'to' the correct type?
     $finish;
 
-  return ( (this.TrWrite == cmp.TrWrite ) &&
-           (this.TrType  == cmp.TrType  ) &&
-           (this.TrSize  == cmp.TrSize  ));
+  return ((this.TrWrite == cmp.TrWrite) && (this.TrType == cmp.TrType) && (this.TrSize == cmp.TrSize));
 endfunction : compare
 
 function peripheral_base_transaction peripheral_bus_generator::copy(input peripheral_base_transaction to = null);

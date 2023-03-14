@@ -48,22 +48,21 @@ module peripheral_noc_router #(
   parameter BUFFER_SIZE_IN  = 4,
   parameter BUFFER_SIZE_OUT = 4,
   parameter DESTS           = 'x
-)
-  (
+) (
   input clk,
   input rst,
 
-  input  [OUTPUTS*DESTS-1:0] ROUTES,
+  input [OUTPUTS*DESTS-1:0] ROUTES,
 
-  output [OUTPUTS-1:0]               [FLIT_WIDTH-1:0] out_flit,
-  output [OUTPUTS-1:0]                                out_last,
-  output [OUTPUTS-1:0][VCHANNELS-1:0]                 out_valid,
-  input  [OUTPUTS-1:0][VCHANNELS-1:0]                 out_ready,
+  output [OUTPUTS-1:0][FLIT_WIDTH-1:0] out_flit,
+  output [OUTPUTS-1:0]                 out_last,
+  output [OUTPUTS-1:0][ VCHANNELS-1:0] out_valid,
+  input  [OUTPUTS-1:0][ VCHANNELS-1:0] out_ready,
 
-  input  [ INPUTS-1:0]               [FLIT_WIDTH-1:0] in_flit,
-  input  [ INPUTS-1:0]                                in_last,
-  input  [ INPUTS-1:0][VCHANNELS-1:0]                 in_valid,
-  output [ INPUTS-1:0][VCHANNELS-1:0]                 in_ready
+  input  [INPUTS-1:0][FLIT_WIDTH-1:0] in_flit,
+  input  [INPUTS-1:0]                 in_last,
+  input  [INPUTS-1:0][ VCHANNELS-1:0] in_valid,
+  output [INPUTS-1:0][ VCHANNELS-1:0] in_ready
 );
 
   //////////////////////////////////////////////////////////////////////////////
@@ -77,16 +76,16 @@ module peripheral_noc_router #(
 
   // The input valid signals are one (or zero) hot and hence share
   // the flit signal.
-  wire [INPUTS-1:0][VCHANNELS-1:0][FLIT_WIDTH-1:0] switch_in_flit;
-  wire [INPUTS-1:0][VCHANNELS-1:0]                 switch_in_last;
-  wire [INPUTS-1:0][VCHANNELS-1:0][OUTPUTS-1:0]    switch_in_valid;
-  wire [INPUTS-1:0][VCHANNELS-1:0][OUTPUTS-1:0]    switch_in_ready;
+  wire [ INPUTS-1:0][VCHANNELS-1:0][FLIT_WIDTH-1:0]                 switch_in_flit;
+  wire [ INPUTS-1:0][VCHANNELS-1:0]                                 switch_in_last;
+  wire [ INPUTS-1:0][VCHANNELS-1:0][   OUTPUTS-1:0]                 switch_in_valid;
+  wire [ INPUTS-1:0][VCHANNELS-1:0][   OUTPUTS-1:0]                 switch_in_ready;
 
   // Outputs are fully wired to receive all input requests.
-  wire [OUTPUTS-1:0][VCHANNELS-1:0][INPUTS-1:0][FLIT_WIDTH-1:0] switch_out_flit;
-  wire [OUTPUTS-1:0][VCHANNELS-1:0][INPUTS-1:0]                 switch_out_last;
-  wire [OUTPUTS-1:0][VCHANNELS-1:0][INPUTS-1:0]                 switch_out_valid;
-  wire [OUTPUTS-1:0][VCHANNELS-1:0][INPUTS-1:0]                 switch_out_ready;
+  wire [OUTPUTS-1:0][VCHANNELS-1:0][    INPUTS-1:0][FLIT_WIDTH-1:0] switch_out_flit;
+  wire [OUTPUTS-1:0][VCHANNELS-1:0][    INPUTS-1:0]                 switch_out_last;
+  wire [OUTPUTS-1:0][VCHANNELS-1:0][    INPUTS-1:0]                 switch_out_valid;
+  wire [OUTPUTS-1:0][VCHANNELS-1:0][    INPUTS-1:0]                 switch_out_ready;
 
   genvar i, v, o;
 
@@ -95,67 +94,65 @@ module peripheral_noc_router #(
   // Module Body
   //
   generate
-    for (i = 0; i < INPUTS; i=i+1) begin : inputs
+    for (i = 0; i < INPUTS; i = i + 1) begin : inputs
       // The input stages
       peripheral_noc_router_input #(
-      .FLIT_WIDTH   (FLIT_WIDTH),
-      .VCHANNELS    (VCHANNELS),
-      .DESTS        (DESTS),
-      .OUTPUTS      (OUTPUTS),
-      .BUFFER_DEPTH (BUFFER_SIZE_IN)
-      )
-      u_input (
+        .FLIT_WIDTH  (FLIT_WIDTH),
+        .VCHANNELS   (VCHANNELS),
+        .DESTS       (DESTS),
+        .OUTPUTS     (OUTPUTS),
+        .BUFFER_DEPTH(BUFFER_SIZE_IN)
+      ) u_input (
 
-        .clk (clk),
-        .rst (rst),
+        .clk(clk),
+        .rst(rst),
 
-        .ROUTES    (ROUTES),
+        .ROUTES(ROUTES),
 
-        .in_flit   (in_flit[i]),
-        .in_last   (in_last[i]),
-        .in_valid  (in_valid[i]),
-        .in_ready  (in_ready[i]),
+        .in_flit (in_flit[i]),
+        .in_last (in_last[i]),
+        .in_valid(in_valid[i]),
+        .in_ready(in_ready[i]),
 
-        .out_flit  (switch_in_flit[i]),
-        .out_last  (switch_in_last[i]),
-        .out_valid (switch_in_valid[i]),
-        .out_ready (switch_in_ready[i])
+        .out_flit (switch_in_flit[i]),
+        .out_last (switch_in_last[i]),
+        .out_valid(switch_in_valid[i]),
+        .out_ready(switch_in_ready[i])
       );
     end
 
     // The switching logic
-    for (o = 0; o < OUTPUTS; o=o+1) begin
-      for (v = 0; v < VCHANNELS; v=v+1) begin
-        for (i = 0; i < INPUTS; i=i+1) begin
-          assign switch_out_flit  [o][v][i] = switch_in_flit   [i][v];
-          assign switch_out_last  [o][v][i] = switch_in_last   [i][v];
-          assign switch_out_valid [o][v][i] = switch_in_valid  [i][v][o];
-          assign switch_in_ready  [i][v][o] = switch_out_ready [o][v][i];
+    for (o = 0; o < OUTPUTS; o = o + 1) begin
+      for (v = 0; v < VCHANNELS; v = v + 1) begin
+        for (i = 0; i < INPUTS; i = i + 1) begin
+          assign switch_out_flit[o][v][i]  = switch_in_flit[i][v];
+          assign switch_out_last[o][v][i]  = switch_in_last[i][v];
+          assign switch_out_valid[o][v][i] = switch_in_valid[i][v][o];
+          assign switch_in_ready[i][v][o]  = switch_out_ready[o][v][i];
         end
       end
     end
 
-    for (o = 0; o < OUTPUTS; o=o+1) begin :  outputs
+    for (o = 0; o < OUTPUTS; o = o + 1) begin : outputs
       // The output stages
       peripheral_noc_router_output #(
-      .FLIT_WIDTH   (FLIT_WIDTH),
-      .VCHANNELS    (VCHANNELS),
-      .INPUTS       (INPUTS),
-      .BUFFER_DEPTH (BUFFER_SIZE_OUT)
-      )
-      u_output (
-        .clk (clk),
-        .rst (rst),
+        .FLIT_WIDTH  (FLIT_WIDTH),
+        .VCHANNELS   (VCHANNELS),
+        .INPUTS      (INPUTS),
+        .BUFFER_DEPTH(BUFFER_SIZE_OUT)
+      ) u_output (
+        .clk(clk),
+        .rst(rst),
 
-        .in_flit   (switch_out_flit  [o]),
-        .in_last   (switch_out_last  [o]),
-        .in_valid  (switch_out_valid [o]),
-        .in_ready  (switch_out_ready [o]),
+        .in_flit (switch_out_flit[o]),
+        .in_last (switch_out_last[o]),
+        .in_valid(switch_out_valid[o]),
+        .in_ready(switch_out_ready[o]),
 
-        .out_flit  (out_flit  [o]),
-        .out_last  (out_last  [o]),
-        .out_valid (out_valid [o]),
-        .out_ready (out_ready [o])
+        .out_flit (out_flit[o]),
+        .out_last (out_last[o]),
+        .out_valid(out_valid[o]),
+        .out_ready(out_ready[o])
       );
     end
   endgenerate

@@ -40,11 +40,11 @@
 import peripheral_package::*;
 
 class peripheral_scoreboard #(
-    type T = peripheral_bus_transaction_ahb3
+  type T = peripheral_bus_transaction_ahb3
 ) extends peripheral_base_scoreboard;
-  T TrQueue[$], MismatchTrQueue[$];
+  T   TrQueue             [$], MismatchTrQueue        [$];
 
-  int matched_transaction, mismatched_transaction, idle_transaction, error_transaction;
+  int matched_transaction,     mismatched_transaction,     idle_transaction, error_transaction;
 
   extern function new(peripheral_base_configuration configuration);
   extern virtual function void wrap_up();
@@ -62,15 +62,15 @@ endclass : peripheral_scoreboard
 function peripheral_scoreboard::new(peripheral_base_configuration configuration);
   super.new(configuration);
 
-  matched_transaction = 0;
+  matched_transaction    = 0;
   mismatched_transaction = 0;
-  error_transaction = 0;
+  error_transaction      = 0;
 endfunction : new
 
 //Wrap up ...
 //Check if any transactions are remaining
 function void peripheral_scoreboard::wrap_up();
-  int total_transactions;
+  int                      total_transactions;
   peripheral_configuration my_cfg;
 
   $cast(my_cfg, configuration);
