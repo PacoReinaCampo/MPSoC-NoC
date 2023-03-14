@@ -47,21 +47,21 @@ module peripheral_noc_router_lookup #(
   parameter OUTPUTS    = 1
 )
   (
-    input                   clk,
-    input                   rst,
+  input                   clk,
+  input                   rst,
 
-    input  [DESTS*OUTPUTS-1:0] ROUTES,
+  input  [DESTS*OUTPUTS-1:0] ROUTES,
 
-    input  [FLIT_WIDTH-1:0] in_flit,
-    input                   in_last,
-    input                   in_valid,
-    output                  in_ready,
+  input  [FLIT_WIDTH-1:0] in_flit,
+  input                   in_last,
+  input                   in_valid,
+  output                  in_ready,
 
-    output [OUTPUTS   -1:0] out_valid,
-    output                  out_last,
-    output [FLIT_WIDTH-1:0] out_flit,
-    input  [OUTPUTS   -1:0] out_ready
-  );
+  output [OUTPUTS   -1:0] out_valid,
+  output                  out_last,
+  output [FLIT_WIDTH-1:0] out_flit,
+  input  [OUTPUTS   -1:0] out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -94,8 +94,8 @@ module peripheral_noc_router_lookup #(
 
   // Register slice at the output.
   peripheral_noc_router_lookup_slice #(
-    .FLIT_WIDTH (FLIT_WIDTH),
-    .OUTPUTS    (OUTPUTS)
+  .FLIT_WIDTH (FLIT_WIDTH),
+  .OUTPUTS    (OUTPUTS)
   )
   u_slice (
     .clk (clk),

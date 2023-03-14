@@ -48,25 +48,25 @@ module peripheral_noc_synthesis #(
   parameter SYNC_DEPTH =  3
 )
   (
-    //Common signals
-    input                         HRESETn,
-    input                         HCLK,
-								  
-    //UART AHB3
-    input                         noc_HSEL,
-    input      [HADDR_SIZE  -1:0] noc_HADDR,
-    input      [HDATA_SIZE  -1:0] noc_HWDATA,
-    output reg [HDATA_SIZE  -1:0] noc_HRDATA,
-    input                         noc_HWRITE,
-    input      [             2:0] noc_HSIZE,
-    input      [             2:0] noc_HBURST,
-    input      [             3:0] noc_HPROT,
-    input      [             1:0] noc_HTRANS,
-    input                         noc_HMASTLOCK,
-    output reg                    noc_HREADYOUT,
-    input                         noc_HREADY,
-    output reg                    noc_HRESP
-  );
+  //Common signals
+  input                         HRESETn,
+  input                         HCLK,
+
+  //UART AHB3
+  input                         noc_HSEL,
+  input      [HADDR_SIZE  -1:0] noc_HADDR,
+  input      [HDATA_SIZE  -1:0] noc_HWDATA,
+  output reg [HDATA_SIZE  -1:0] noc_HRDATA,
+  input                         noc_HWRITE,
+  input      [             2:0] noc_HSIZE,
+  input      [             2:0] noc_HBURST,
+  input      [             3:0] noc_HPROT,
+  input      [             1:0] noc_HTRANS,
+  input                         noc_HMASTLOCK,
+  output reg                    noc_HREADYOUT,
+  input                         noc_HREADY,
+  output reg                    noc_HRESP
+);
 
   //////////////////////////////////////////////////////////////////
   //
@@ -83,8 +83,8 @@ module peripheral_noc_synthesis #(
   logic                       noc_PREADY;
   logic                       noc_PSLVERR;
 
-  logic                       noc_rx_i;  // Receiver input
-  logic                       noc_tx_o;  // Transmitter output
+  logic                       noc_rx_i; // Receiver input
+  logic                       noc_tx_o; // Transmitter output
 
   logic                       noc_event_o;
 
@@ -95,11 +95,11 @@ module peripheral_noc_synthesis #(
 
   //DUT AHB3
   peripheral_bridge_apb2ahb #(
-    .HADDR_SIZE ( HADDR_SIZE     ),
-    .HDATA_SIZE ( HDATA_SIZE     ),
-    .PADDR_SIZE ( APB_ADDR_WIDTH ),
-    .PDATA_SIZE ( APB_DATA_WIDTH ),
-    .SYNC_DEPTH ( SYNC_DEPTH     )
+  .HADDR_SIZE ( HADDR_SIZE     ),
+  .HDATA_SIZE ( HDATA_SIZE     ),
+  .PADDR_SIZE ( APB_ADDR_WIDTH ),
+  .PDATA_SIZE ( APB_DATA_WIDTH ),
+  .SYNC_DEPTH ( SYNC_DEPTH     )
   )
   bridge_apb2ahb (
     //AHB Slave Interface
@@ -137,8 +137,8 @@ module peripheral_noc_synthesis #(
   );
 
   peripheral_apb4_noc #(
-    .APB_ADDR_WIDTH ( APB_ADDR_WIDTH ),
-    .APB_DATA_WIDTH ( APB_DATA_WIDTH )
+  .APB_ADDR_WIDTH ( APB_ADDR_WIDTH ),
+  .APB_DATA_WIDTH ( APB_DATA_WIDTH )
   )
   apb4_noc (
     .RSTN ( HRESETn ),

@@ -86,20 +86,20 @@ module peripheral_noc_testbench;
 
   //DUT
   peripheral_noc_mesh4d #(
-    .FLIT_WIDTH       (FLIT_WIDTH),
-    .CHANNELS         (CHANNELS),
+  .FLIT_WIDTH       (FLIT_WIDTH),
+  .CHANNELS         (CHANNELS),
 
-    .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
+  .ENABLE_VCHANNELS (ENABLE_VCHANNELS),
 
-    .T                (T),
-    .X                (X),
-    .Y                (Y),
-    .Z                (Z),
+  .T                (T),
+  .X                (X),
+  .Y                (Y),
+  .Z                (Z),
 
-    .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
-    .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT),
+  .BUFFER_SIZE_IN   (BUFFER_SIZE_IN),
+  .BUFFER_SIZE_OUT  (BUFFER_SIZE_OUT),
 
-    .NODES            (NODES)
+  .NODES            (NODES)
   )
   noc_mesh4d (
     .rst       ( rst ),

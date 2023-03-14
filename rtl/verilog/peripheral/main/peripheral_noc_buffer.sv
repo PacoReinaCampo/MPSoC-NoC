@@ -44,29 +44,29 @@
 
 module peripheral_noc_buffer #(
   parameter FLIT_WIDTH = 32,
-  parameter DEPTH      = 16,  // must be a power of 2
+  parameter DEPTH      = 16, // must be a power of 2
   parameter FULLPACKET = 0,
 
   parameter AW = $clog2(DEPTH) // the width of the index
 )
   (
-    input clk,
-    input rst,
+  input clk,
+  input rst,
 
-    // FIFO input side
-    input      [FLIT_WIDTH-1:0]   in_flit,
-    input                         in_last,
-    input                         in_valid,
-    output                        in_ready,
+  // FIFO input side
+  input      [FLIT_WIDTH-1:0]   in_flit,
+  input                         in_last,
+  input                         in_valid,
+  output                        in_ready,
 
-    //FIFO output side
-    output reg [FLIT_WIDTH-1:0]   out_flit,
-    output reg                    out_last,
-    output                        out_valid,
-    input                         out_ready,
+  //FIFO output side
+  output reg [FLIT_WIDTH-1:0]   out_flit,
+  output reg                    out_last,
+  output                        out_valid,
+  input                         out_ready,
 
-    output     [AW:0]             packet_size
-  );
+  output     [AW:0]             packet_size
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //

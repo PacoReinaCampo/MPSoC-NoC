@@ -50,21 +50,21 @@ module peripheral_noc_router #(
   parameter DESTS           = 'x
 )
   (
-    input clk,
-    input rst,
+  input clk,
+  input rst,
 
-    input  [OUTPUTS*DESTS-1:0] ROUTES,
+  input  [OUTPUTS*DESTS-1:0] ROUTES,
 
-    output [OUTPUTS-1:0]               [FLIT_WIDTH-1:0] out_flit,
-    output [OUTPUTS-1:0]                                out_last,
-    output [OUTPUTS-1:0][VCHANNELS-1:0]                 out_valid,
-    input  [OUTPUTS-1:0][VCHANNELS-1:0]                 out_ready,
+  output [OUTPUTS-1:0]               [FLIT_WIDTH-1:0] out_flit,
+  output [OUTPUTS-1:0]                                out_last,
+  output [OUTPUTS-1:0][VCHANNELS-1:0]                 out_valid,
+  input  [OUTPUTS-1:0][VCHANNELS-1:0]                 out_ready,
 
-    input  [ INPUTS-1:0]               [FLIT_WIDTH-1:0] in_flit,
-    input  [ INPUTS-1:0]                                in_last,
-    input  [ INPUTS-1:0][VCHANNELS-1:0]                 in_valid,
-    output [ INPUTS-1:0][VCHANNELS-1:0]                 in_ready
-  );
+  input  [ INPUTS-1:0]               [FLIT_WIDTH-1:0] in_flit,
+  input  [ INPUTS-1:0]                                in_last,
+  input  [ INPUTS-1:0][VCHANNELS-1:0]                 in_valid,
+  output [ INPUTS-1:0][VCHANNELS-1:0]                 in_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -98,11 +98,11 @@ module peripheral_noc_router #(
     for (i = 0; i < INPUTS; i=i+1) begin : inputs
       // The input stages
       peripheral_noc_router_input #(
-        .FLIT_WIDTH   (FLIT_WIDTH),
-        .VCHANNELS    (VCHANNELS),
-        .DESTS        (DESTS),
-        .OUTPUTS      (OUTPUTS),
-        .BUFFER_DEPTH (BUFFER_SIZE_IN)
+      .FLIT_WIDTH   (FLIT_WIDTH),
+      .VCHANNELS    (VCHANNELS),
+      .DESTS        (DESTS),
+      .OUTPUTS      (OUTPUTS),
+      .BUFFER_DEPTH (BUFFER_SIZE_IN)
       )
       u_input (
 
@@ -138,10 +138,10 @@ module peripheral_noc_router #(
     for (o = 0; o < OUTPUTS; o=o+1) begin :  outputs
       // The output stages
       peripheral_noc_router_output #(
-        .FLIT_WIDTH   (FLIT_WIDTH),
-        .VCHANNELS    (VCHANNELS),
-        .INPUTS       (INPUTS),
-        .BUFFER_DEPTH (BUFFER_SIZE_OUT)
+      .FLIT_WIDTH   (FLIT_WIDTH),
+      .VCHANNELS    (VCHANNELS),
+      .INPUTS       (INPUTS),
+      .BUFFER_DEPTH (BUFFER_SIZE_OUT)
       )
       u_output (
         .clk (clk),

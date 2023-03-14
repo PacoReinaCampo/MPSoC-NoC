@@ -57,19 +57,19 @@ module peripheral_noc_mesh4d #(
   parameter NODES = X*Y*Z*T
 )
   (
-    input                                            clk,
-    input                                            rst,
+  input                                            clk,
+  input                                            rst,
 
-    input  [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
-    input  [NODES-1:0][CHANNELS-1:0]                 in_last,
-    input  [NODES-1:0][CHANNELS-1:0]                 in_valid,
-    output [NODES-1:0][CHANNELS-1:0]                 in_ready,
+  input  [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+  input  [NODES-1:0][CHANNELS-1:0]                 in_last,
+  input  [NODES-1:0][CHANNELS-1:0]                 in_valid,
+  output [NODES-1:0][CHANNELS-1:0]                 in_ready,
 
-    output [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
-    output [NODES-1:0][CHANNELS-1:0]                 out_last,
-    output [NODES-1:0][CHANNELS-1:0]                 out_valid,
-    input  [NODES-1:0][CHANNELS-1:0]                 out_ready
-  );
+  output [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
+  output [NODES-1:0][CHANNELS-1:0]                 out_last,
+  output [NODES-1:0][CHANNELS-1:0]                 out_valid,
+  input  [NODES-1:0][CHANNELS-1:0]                 out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -256,8 +256,8 @@ module peripheral_noc_mesh4d #(
             if (ENABLE_VCHANNELS) begin
               // Mux inputs to virtual channels
               peripheral_noc_vchannel_mux #(
-                .FLIT_WIDTH (FLIT_WIDTH),
-                .CHANNELS   (CHANNELS)
+              .FLIT_WIDTH (FLIT_WIDTH),
+              .CHANNELS   (CHANNELS)
               )
               noc_vchannel_mux (
                 .clk (clk),
@@ -286,13 +286,13 @@ module peripheral_noc_mesh4d #(
               // Instantiate the router. We call a function to
               // generate the routing table
               peripheral_noc_router #(
-                .FLIT_WIDTH      (FLIT_WIDTH),
-                .VCHANNELS       (CHANNELS),
-                .INPUTS          (9),
-                .OUTPUTS         (9),
-                .BUFFER_SIZE_IN  (BUFFER_SIZE_IN),
-                .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
-                .DESTS           (NODES)
+              .FLIT_WIDTH      (FLIT_WIDTH),
+              .VCHANNELS       (CHANNELS),
+              .INPUTS          (9),
+              .OUTPUTS         (9),
+              .BUFFER_SIZE_IN  (BUFFER_SIZE_IN),
+              .BUFFER_SIZE_OUT (BUFFER_SIZE_OUT),
+              .DESTS           (NODES)
               )
               noc_router (
                 .clk (clk),
@@ -349,11 +349,11 @@ module peripheral_noc_mesh4d #(
                 // Instantiate the router. We call a function to
                 // generate the routing table
                 peripheral_noc_router #(
-                  .FLIT_WIDTH (FLIT_WIDTH),
-                  .VCHANNELS  (1),
-                  .INPUTS     (9),
-                  .OUTPUTS    (9),
-                  .DESTS      (NODES)
+                .FLIT_WIDTH (FLIT_WIDTH),
+                .VCHANNELS  (1),
+                .INPUTS     (9),
+                .OUTPUTS    (9),
+                .DESTS      (NODES)
                 )
                 noc_router (
                   .clk (clk),

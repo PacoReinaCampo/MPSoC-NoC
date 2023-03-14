@@ -45,19 +45,19 @@ module peripheral_noc_router_lookup_slice #(
   parameter OUTPUTS    = 7
 )
   (
-    input clk,
-    input rst,
+  input clk,
+  input rst,
 
-    input                   [FLIT_WIDTH-1:0] in_flit,
-    input                                    in_last,
-    input      [OUTPUTS-1:0]                 in_valid,
-    output                                   in_ready,
+  input                   [FLIT_WIDTH-1:0] in_flit,
+  input                                    in_last,
+  input      [OUTPUTS-1:0]                 in_valid,
+  output                                   in_ready,
 
-    output reg                               out_last,
-    output reg              [FLIT_WIDTH-1:0] out_flit,
-    output reg [OUTPUTS-1:0]                 out_valid,
-    input      [OUTPUTS-1:0]                 out_ready
-  );
+  output reg                               out_last,
+  output reg              [FLIT_WIDTH-1:0] out_flit,
+  output reg [OUTPUTS-1:0]                 out_valid,
+  input      [OUTPUTS-1:0]                 out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -109,8 +109,8 @@ module peripheral_noc_router_lookup_slice #(
         end
       end
       else begin // if (!pressure)
-        // We can be sure that a flit is waiting now (don't need
-        // to check)
+      // We can be sure that a flit is waiting now (don't need
+      // to check)
         if (|out_ready) begin
           // If the output accepted this flit, go back to
           // accepting input flits.

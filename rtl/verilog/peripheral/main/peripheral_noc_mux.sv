@@ -46,19 +46,19 @@ module peripheral_noc_mux #(
   parameter CHANNELS   = 2
 )
   (
-    input                                     clk,
-    input                                     rst,
+  input                                     clk,
+  input                                     rst,
 
-    input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
-    input      [CHANNELS-1:0]                 in_last,
-    input      [CHANNELS-1:0]                 in_valid,
-    output reg [CHANNELS-1:0]                 in_ready,
+  input      [CHANNELS-1:0][FLIT_WIDTH-1:0] in_flit,
+  input      [CHANNELS-1:0]                 in_last,
+  input      [CHANNELS-1:0]                 in_valid,
+  output reg [CHANNELS-1:0]                 in_ready,
 
-    output reg               [FLIT_WIDTH-1:0] out_flit,
-    output reg                                out_last,
-    output reg                                out_valid,
-    input                                     out_ready
-  );
+  output reg               [FLIT_WIDTH-1:0] out_flit,
+  output reg                                out_last,
+  output reg                                out_valid,
+  input                                     out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -129,7 +129,7 @@ module peripheral_noc_mux #(
   end
 
   peripheral_arbiter_rr #(
-    .N (CHANNELS)
+  .N (CHANNELS)
   )
   arbiter_rr (
     .nxt_gnt (select),

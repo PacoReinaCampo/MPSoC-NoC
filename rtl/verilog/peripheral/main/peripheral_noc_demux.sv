@@ -46,19 +46,19 @@ module peripheral_noc_demux #(
   parameter [63:0] MAPPING    = 'x
 )
   (
-    input                                     clk,
-    input                                     rst,
+  input                                     clk,
+  input                                     rst,
 
-    input                    [FLIT_WIDTH-1:0] in_flit,
-    input                                     in_last,
-    input                                     in_valid,
-    output reg                                in_ready,
+  input                    [FLIT_WIDTH-1:0] in_flit,
+  input                                     in_last,
+  input                                     in_valid,
+  output reg                                in_ready,
 
-    output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
-    output     [CHANNELS-1:0]                 out_last,
-    output reg [CHANNELS-1:0]                 out_valid,
-    input      [CHANNELS-1:0]                 out_ready
-  );
+  output     [CHANNELS-1:0][FLIT_WIDTH-1:0] out_flit,
+  output     [CHANNELS-1:0]                 out_last,
+  output reg [CHANNELS-1:0]                 out_valid,
+  input      [CHANNELS-1:0]                 out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //

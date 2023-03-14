@@ -44,11 +44,11 @@ module peripheral_arbiter_rr #(
   parameter N = 2
 )
   (
-    input  [N-1:0] req,
-    input          en,
-    input  [N-1:0] gnt,
-    output [N-1:0] nxt_gnt
-  );
+  input  [N-1:0] req,
+  input          en,
+  input  [N-1:0] gnt,
+  output [N-1:0] nxt_gnt
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -93,7 +93,7 @@ module peripheral_arbiter_rr #(
 
   // Calculate the nxt_gnt
   generate
-    for (k=0;k<N;k=k+1) begin : gen_nxt_gnt         
+    for (k=0;k<N;k=k+1) begin : gen_nxt_gnt
       assign nxt_gnt[k] = en ? (~|(mask[k] & req) & req[k]) | (~|req & gnt[k]) : gnt[k];
     end
   endgenerate

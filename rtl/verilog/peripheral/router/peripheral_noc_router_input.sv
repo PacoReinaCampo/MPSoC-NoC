@@ -48,21 +48,21 @@ module peripheral_noc_router_input #(
   parameter BUFFER_DEPTH = 4
 )
   (
-    input                                               clk,
-    input                                               rst,
+  input                                               clk,
+  input                                               rst,
 
-    input  [OUTPUTS*DESTS-1:0]                          ROUTES,
+  input  [OUTPUTS*DESTS-1:0]                          ROUTES,
 
-    input                              [FLIT_WIDTH-1:0] in_flit,
-    input                                               in_last,
-    input  [VCHANNELS-1:0]                              in_valid,
-    output [VCHANNELS-1:0]                              in_ready,
+  input                              [FLIT_WIDTH-1:0] in_flit,
+  input                                               in_last,
+  input  [VCHANNELS-1:0]                              in_valid,
+  output [VCHANNELS-1:0]                              in_ready,
 
-    output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
-    output [VCHANNELS-1:0]                              out_last,
-    output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
-    input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
-  );
+  output [VCHANNELS-1:0][OUTPUTS-1:0]                 out_valid,
+  output [VCHANNELS-1:0]                              out_last,
+  output [VCHANNELS-1:0]             [FLIT_WIDTH-1:0] out_flit,
+  input  [VCHANNELS-1:0][OUTPUTS-1:0]                 out_ready
+);
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -84,8 +84,8 @@ module peripheral_noc_router_input #(
     for (v = 0; v < VCHANNELS; v=v+1) begin : vc
 
       peripheral_noc_buffer #(
-        .FLIT_WIDTH (FLIT_WIDTH),
-        .DEPTH      (BUFFER_DEPTH)
+      .FLIT_WIDTH (FLIT_WIDTH),
+      .DEPTH      (BUFFER_DEPTH)
       )
       u_buffer (
         .clk         (clk),
@@ -105,9 +105,9 @@ module peripheral_noc_router_input #(
       );
 
       peripheral_noc_router_lookup #(
-        .FLIT_WIDTH (FLIT_WIDTH),
-        .DESTS (DESTS),
-        .OUTPUTS (OUTPUTS)
+      .FLIT_WIDTH (FLIT_WIDTH),
+      .DESTS (DESTS),
+      .OUTPUTS (OUTPUTS)
       )
       u_lookup (
         .clk       (clk),

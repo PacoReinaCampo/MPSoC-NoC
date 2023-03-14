@@ -45,33 +45,33 @@ module peripheral_noc_synthesis #(
   parameter DEBUG = 0
 )
   (
-    input                  clk,
-    input                  rst,
+  input                  clk,
+  input                  rst,
 
-    // WISHBONE interface
-    input  [2:0]           wb_adr_i,
-    input  [7:0]           wb_dat_i,
-    output [7:0]           wb_dat_o,
-    input                  wb_we_i,
-    input                  wb_stb_i,
-    input                  wb_cyc_i,
-    input  [3:0]           wb_sel_i,
-    output                 wb_ack_o,
-    output                 int_o,
+  // WISHBONE interface
+  input  [2:0]           wb_adr_i,
+  input  [7:0]           wb_dat_i,
+  output [7:0]           wb_dat_o,
+  input                  wb_we_i,
+  input                  wb_stb_i,
+  input                  wb_cyc_i,
+  input  [3:0]           wb_sel_i,
+  output                 wb_ack_o,
+  output                 int_o,
 
-    // UART signals
-    input                  srx_pad_i,
-    output                 stx_pad_o,
-    output                 rts_pad_o,
-    input                  cts_pad_i,
-    output                 dtr_pad_o,
-    input                  dsr_pad_i,
-    input                  ri_pad_i,
-    input                  dcd_pad_i,
+  // UART signals
+  input                  srx_pad_i,
+  output                 stx_pad_o,
+  output                 rts_pad_o,
+  input                  cts_pad_i,
+  output                 dtr_pad_o,
+  input                  dsr_pad_i,
+  input                  ri_pad_i,
+  input                  dcd_pad_i,
 
-    // optional baudrate output
-    output baud_o
-  );
+  // optional baudrate output
+  output baud_o
+);
 
   //////////////////////////////////////////////////////////////////
   //
@@ -80,8 +80,8 @@ module peripheral_noc_synthesis #(
 
   //DUT WB
   peripheral_wb_noc #(
-    .SIM   (SIM),
-    .DEBUG (DEBUG)
+  .SIM   (SIM),
+  .DEBUG (DEBUG)
   )
   wb_noc (
     .wb_clk_i (clk),
