@@ -52,7 +52,7 @@ entity peripheral_noc_vchannel_mux is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 7
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -66,7 +66,7 @@ entity peripheral_noc_vchannel_mux is
     out_last  : out std_logic;
     out_valid : out std_logic_vector(CHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-  );
+    );
 end peripheral_noc_vchannel_mux;
 
 architecture rtl of peripheral_noc_vchannel_mux is
@@ -78,13 +78,13 @@ architecture rtl of peripheral_noc_vchannel_mux is
   component peripheral_arbiter_rr
     generic (
       N : integer := 2
-    );
+      );
     port (
       req     : in  std_logic_vector(N-1 downto 0);
       en      : in  std_logic;
       gnt     : in  std_logic_vector(N-1 downto 0);
       nxt_gnt : out std_logic_vector(N-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ begin
   ------------------------------------------------------------------------------
   -- Module Body
   ------------------------------------------------------------------------------
-  out_valid <= in_valid  and selected;
+  out_valid <= in_valid and selected;
   in_ready  <= out_ready and selected;
 
   processing_0 : process (rst, selected, in_flit, in_last)
@@ -120,13 +120,13 @@ begin
   arbiter_rr : peripheral_arbiter_rr
     generic map (
       N => CHANNELS
-    )
+      )
     port map (
       req     => req_rr,
       en      => '1',
       gnt     => selected,
       nxt_gnt => nxt_selected
-    );
+      );
 
   req_rr <= in_valid and out_ready;
 

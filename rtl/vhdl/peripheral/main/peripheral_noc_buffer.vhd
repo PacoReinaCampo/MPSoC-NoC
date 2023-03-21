@@ -56,7 +56,7 @@ entity peripheral_noc_buffer is
     FLIT_WIDTH : integer := 32;
     DEPTH      : integer := 16;
     FULLPACKET : integer := 0
-  );
+    );
   port (
     -- the width of the index
     clk : in std_logic;
@@ -75,7 +75,7 @@ entity peripheral_noc_buffer is
     out_ready : in  std_logic;
 
     packet_size : out std_logic_vector(integer(log2(real(DEPTH))) downto 0)
-  );
+    );
 end peripheral_noc_buffer;
 
 architecture rtl of peripheral_noc_buffer is
@@ -91,7 +91,7 @@ architecture rtl of peripheral_noc_buffer is
   ------------------------------------------------------------------------------
   function find_first_one (
     data : std_logic_vector(DEPTH downto 0)
-  ) return std_logic_vector is
+    ) return std_logic_vector is
     variable find_first_one_return : std_logic_vector (AW downto 0);
   begin
     for i in DEPTH downto 0 loop
@@ -140,9 +140,9 @@ begin
   fifo_read     <= out_valid_sgn and out_ready;
   fifo_write    <= in_ready_sgn and in_valid;
   read_ram      <= fifo_read and to_stdlogic(rd_count > std_logic_vector(to_unsigned(1, AW+1)));
-  write_through <= to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1))) or 
-                  (to_stdlogic(rd_count > std_logic_vector(to_unsigned(1, AW+1))) and fifo_read);
-  write_ram     <= fifo_write and not write_through;
+  write_through <= to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1))) or
+                   (to_stdlogic(rd_count > std_logic_vector(to_unsigned(1, AW+1))) and fifo_read);
+  write_ram <= fifo_write and not write_through;
 
   -- Address logic
   processing_1 : process (clk)
@@ -208,10 +208,10 @@ begin
     -- Extra logic to get the packet size in a stable manner
     data_last_shifted <= std_logic_vector(unsigned(data_last_buf) sll (DEPTH+1-to_integer(unsigned(rd_addr))));
 
-  out_valid_sgn <= to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1))) and reduce_or(data_last_shifted) when FULLPACKET = 1
-                   else to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1)));
+    out_valid_sgn <= to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1))) and reduce_or(data_last_shifted) when FULLPACKET = 1
+                     else to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1)));
 
-  packet_size   <= std_logic_vector(to_unsigned(DEPTH+1, AW+1)-unsigned(find_first_one(data_last_shifted))) when FULLPACKET = 1
+    packet_size <= std_logic_vector(to_unsigned(DEPTH+1, AW+1)-unsigned(find_first_one(data_last_shifted))) when FULLPACKET = 1
                    else (others => '0');
   elsif (FULLPACKET > 1) generate
     out_valid_sgn <= to_stdlogic(rd_count > std_logic_vector(to_unsigned(0, AW+1)));

@@ -57,7 +57,7 @@ entity peripheral_noc_router is
     BUFFER_SIZE_IN  : integer := 4;
     BUFFER_SIZE_OUT : integer := 4;
     DESTS           : integer := 8
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -73,7 +73,7 @@ entity peripheral_noc_router is
     in_last  : in  std_logic_vector(INPUTS-1 downto 0);
     in_valid : in  std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0);
     in_ready : out std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0)
-  );
+    );
 end peripheral_noc_router;
 
 architecture rtl of peripheral_noc_router is
@@ -89,7 +89,7 @@ architecture rtl of peripheral_noc_router is
       DESTS        : integer := 8;
       OUTPUTS      : integer := 7;
       BUFFER_DEPTH : integer := 4
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -105,7 +105,7 @@ architecture rtl of peripheral_noc_router is
       out_last  : out std_logic_vector(VCHANNELS-1 downto 0);
       out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
       out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
-    );
+      );
   end component;
 
   component peripheral_noc_router_output
@@ -114,7 +114,7 @@ architecture rtl of peripheral_noc_router is
       VCHANNELS    : integer := 7;
       INPUTS       : integer := 7;
       BUFFER_DEPTH : integer := 4
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -128,7 +128,7 @@ architecture rtl of peripheral_noc_router is
       out_last  : out std_logic;
       out_valid : out std_logic_vector(VCHANNELS-1 downto 0);
       out_ready : in  std_logic_vector(VCHANNELS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -165,23 +165,23 @@ begin
         DESTS        => DESTS,
         OUTPUTS      => OUTPUTS,
         BUFFER_DEPTH => BUFFER_SIZE_IN
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
 
         ROUTES => ROUTES,
 
-        in_flit  => in_flit  (i),
-        in_last  => in_last  (i),
+        in_flit  => in_flit (i),
+        in_last  => in_last (i),
         in_valid => in_valid (i),
         in_ready => in_ready (i),
 
-        out_flit  => switch_in_flit  (i),
-        out_last  => switch_in_last  (i),
+        out_flit  => switch_in_flit (i),
+        out_last  => switch_in_last (i),
         out_valid => switch_in_valid (i),
         out_ready => switch_in_ready (i)
-      );
+        );
   end generate;
   -- block: inputs
 
@@ -189,10 +189,10 @@ begin
   generating_1 : for o in 0 to OUTPUTS - 1 generate
     generating_2 : for v in 0 to VCHANNELS - 1 generate
       generating_3 : for i in 0 to INPUTS - 1 generate
-        switch_out_flit  (o)(v)(i) <= switch_in_flit   (i)(v);
-        switch_out_last  (o)(v)(i) <= switch_in_last   (i)(v);
-        switch_out_valid (o)(v)(i) <= switch_in_valid  (i)(v)(o);
-        switch_in_ready  (i)(v)(o) <= switch_out_ready (o)(v)(i);
+        switch_out_flit (o)(v)(i)  <= switch_in_flit (i)(v);
+        switch_out_last (o)(v)(i)  <= switch_in_last (i)(v);
+        switch_out_valid (o)(v)(i) <= switch_in_valid (i)(v)(o);
+        switch_in_ready (i)(v)(o)  <= switch_out_ready (o)(v)(i);
       end generate;
     end generate;
   end generate;
@@ -205,20 +205,20 @@ begin
         VCHANNELS    => VCHANNELS,
         INPUTS       => INPUTS,
         BUFFER_DEPTH => BUFFER_SIZE_OUT
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
 
-        in_flit  => switch_out_flit  (o),
-        in_last  => switch_out_last  (o),
+        in_flit  => switch_out_flit (o),
+        in_last  => switch_out_last (o),
         in_valid => switch_out_valid (o),
         in_ready => switch_out_ready (o),
 
-        out_flit  => out_flit  (o),
-        out_last  => out_last  (o),
+        out_flit  => out_flit (o),
+        out_last  => out_last (o),
         out_valid => out_valid (o),
         out_ready => out_ready (o)
-      );
+        );
   end generate;
 end rtl;

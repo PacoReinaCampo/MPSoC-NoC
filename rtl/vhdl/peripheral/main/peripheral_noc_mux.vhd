@@ -53,7 +53,7 @@ entity peripheral_noc_mux is
   generic (
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 2
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -67,7 +67,7 @@ entity peripheral_noc_mux is
     out_last  : out std_logic;
     out_valid : out std_logic;
     out_ready : in  std_logic
-  );
+    );
 end peripheral_noc_mux;
 
 architecture rtl of peripheral_noc_mux is
@@ -79,13 +79,13 @@ architecture rtl of peripheral_noc_mux is
   component peripheral_arbiter_rr
     generic (
       N : integer := 2
-    );
+      );
     port (
       req     : in  std_logic_vector(N-1 downto 0);
       en      : in  std_logic;
       gnt     : in  std_logic_vector(N-1 downto 0);
       nxt_gnt : out std_logic_vector(N-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -161,13 +161,13 @@ begin
   arb_rr : peripheral_arbiter_rr
     generic map (
       N => CHANNELS
-    )
+      )
     port map (
       nxt_gnt => selected,
       req     => req_masked,
       gnt     => active,
       en      => '1'
-    );
+      );
 
   out_last <= out_last_sgn;
 end rtl;

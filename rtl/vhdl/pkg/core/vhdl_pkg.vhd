@@ -61,7 +61,7 @@ package vhdl_pkg is
   type std_logic_8array is array (natural range <>) of std_logic_7array;
   type std_logic_9array is array (natural range <>) of std_logic_8array;
 
-  type xy_std_logic        is array (natural range <>, natural range <>) of std_logic;
+  type xy_std_logic is array (natural range <>, natural range <>) of std_logic;
   type xy_std_logic_vector is array (natural range <>, natural range <>) of std_logic_vector;
   type xy_std_logic_matrix is array (natural range <>, natural range <>) of std_logic_matrix;
   type xy_std_logic_3array is array (natural range <>, natural range <>) of std_logic_3array;
@@ -72,7 +72,7 @@ package vhdl_pkg is
   type xy_std_logic_8array is array (natural range <>, natural range <>) of std_logic_8array;
   type xy_std_logic_9array is array (natural range <>, natural range <>) of std_logic_9array;
 
-  type xyz_std_logic        is array (natural range <>, natural range <>, natural range <>) of std_logic;
+  type xyz_std_logic is array (natural range <>, natural range <>, natural range <>) of std_logic;
   type xyz_std_logic_vector is array (natural range <>, natural range <>, natural range <>) of std_logic_vector;
   type xyz_std_logic_matrix is array (natural range <>, natural range <>, natural range <>) of std_logic_matrix;
   type xyz_std_logic_3array is array (natural range <>, natural range <>, natural range <>) of std_logic_3array;
@@ -83,13 +83,13 @@ package vhdl_pkg is
   type xyz_std_logic_8array is array (natural range <>, natural range <>, natural range <>) of std_logic_8array;
   type xyz_std_logic_9array is array (natural range <>, natural range <>, natural range <>) of std_logic_9array;
 
-  function to_stdlogic (input : boolean) return std_logic;
-  function reduce_and (reduce_and_in : std_logic_vector) return std_logic;
+  function to_stdlogic (input          : boolean) return std_logic;
+  function reduce_and (reduce_and_in   : std_logic_vector) return std_logic;
   function reduce_nand (reduce_nand_in : std_logic_vector) return std_logic;
-  function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
-  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
-  function reduce_xor (reduce_xor_in : std_logic_vector) return std_logic;
-  function ternary (a : integer; b : integer; selection : integer) return integer;
+  function reduce_nor (reduce_nor_in   : std_logic_vector) return std_logic;
+  function reduce_or (reduce_or_in     : std_logic_vector) return std_logic;
+  function reduce_xor (reduce_xor_in   : std_logic_vector) return std_logic;
+  function ternary (a                  : integer; b : integer; selection : integer) return integer;
 
 end vhdl_pkg;
 
@@ -121,7 +121,7 @@ package body vhdl_pkg is
 
   function reduce_nand (
     reduce_nand_in : std_logic_vector
-  ) return std_logic is
+    ) return std_logic is
     variable reduce_nand_out : std_logic := '0';
   begin
     for i in reduce_nand_in'range loop
@@ -164,8 +164,8 @@ package body vhdl_pkg is
   end reduce_xor;
 
   function ternary (
-    a : integer;
-    b : integer;
+    a         : integer;
+    b         : integer;
     selection : integer
     ) return integer is
   begin

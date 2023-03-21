@@ -55,7 +55,7 @@ entity peripheral_noc_router_output is
     VCHANNELS    : integer := 7;
     INPUTS       : integer := 7;
     BUFFER_DEPTH : integer := 4
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -69,7 +69,7 @@ entity peripheral_noc_router_output is
     out_last  : out std_logic;
     out_valid : out std_logic_vector(VCHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(VCHANNELS-1 downto 0)
-  );
+    );
 end peripheral_noc_router_output;
 
 architecture rtl of peripheral_noc_router_output is
@@ -82,7 +82,7 @@ architecture rtl of peripheral_noc_router_output is
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 7
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -96,14 +96,14 @@ architecture rtl of peripheral_noc_router_output is
       out_last  : out std_logic;
       out_valid : out std_logic;
       out_ready : in  std_logic
-    );
+      );
   end component;
 
   component peripheral_noc_buffer
     generic (
       FLIT_WIDTH : integer := 32;
       DEPTH      : integer := 16
-    );
+      );
     port (
       -- the width of the index
       clk : in std_logic;
@@ -122,14 +122,14 @@ architecture rtl of peripheral_noc_router_output is
       out_ready : in  std_logic;
 
       packet_size : out std_logic_vector(integer(log2(real(DEPTH))) downto 0)
-    );
+      );
   end component;
 
   component peripheral_noc_vchannel_mux
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 7
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -143,7 +143,7 @@ architecture rtl of peripheral_noc_router_output is
       out_last  : out std_logic;
       out_valid : out std_logic_vector(CHANNELS-1 downto 0);
       out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -168,43 +168,43 @@ begin
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         CHANNELS   => INPUTS
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
 
-        in_flit  => in_flit  (v),
-        in_last  => in_last  (v),
+        in_flit  => in_flit (v),
+        in_last  => in_last (v),
         in_valid => in_valid (v),
         in_ready => in_ready (v),
 
-        out_flit  => buffer_flit  (v),
-        out_last  => buffer_last  (v),
+        out_flit  => buffer_flit (v),
+        out_last  => buffer_last (v),
         out_valid => buffer_valid (v),
         out_ready => buffer_ready (v)
-      );
+        );
 
     u_buffer : peripheral_noc_buffer
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DEPTH      => BUFFER_DEPTH
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
 
-        in_flit  => buffer_flit  (v),
-        in_last  => buffer_last  (v),
+        in_flit  => buffer_flit (v),
+        in_last  => buffer_last (v),
         in_valid => buffer_valid (v),
         in_ready => buffer_ready (v),
 
-        out_flit  => channel_flit  (v),
-        out_last  => channel_last  (v),
+        out_flit  => channel_flit (v),
+        out_last  => channel_last (v),
         out_valid => channel_valid (v),
         out_ready => channel_ready (v),
 
         packet_size => open
-      );
+        );
   end generate;
 
   generating_1 : if (VCHANNELS > 1) generate
@@ -212,7 +212,7 @@ begin
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         CHANNELS   => VCHANNELS
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
@@ -226,11 +226,11 @@ begin
         out_last  => out_last,
         out_valid => out_valid,
         out_ready => out_ready
-      );
+        );
   elsif (VCHANNELS <= 1) generate
-    out_flit      <= channel_flit (0);
-    out_last      <= channel_last (0);
-    out_valid     <= channel_valid;
+    out_flit  <= channel_flit (0);
+    out_last  <= channel_last (0);
+    out_valid <= channel_valid;
 
     channel_ready <= out_ready;
   end generate;

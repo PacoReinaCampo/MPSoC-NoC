@@ -60,21 +60,21 @@ architecture rtl of peripheral_noc_testbench is
 
   component peripheral_noc_mesh4d
     generic (
-      FLIT_WIDTH       : integer := 34;
-      CHANNELS         : integer := 9;
+      FLIT_WIDTH : integer := 34;
+      CHANNELS   : integer := 9;
 
       ENABLE_VCHANNELS : integer := 1;
 
-      T                : integer := 2;
-      X                : integer := 2;
-      Y                : integer := 2;
-      Z                : integer := 2;
+      T : integer := 2;
+      X : integer := 2;
+      Y : integer := 2;
+      Z : integer := 2;
 
-      BUFFER_SIZE_IN   : integer := 4;
-      BUFFER_SIZE_OUT  : integer := 4;
+      BUFFER_SIZE_IN  : integer := 4;
+      BUFFER_SIZE_OUT : integer := 4;
 
-      NODES            : integer := 16
-    );
+      NODES : integer := 16
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -88,27 +88,27 @@ architecture rtl of peripheral_noc_testbench is
       out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
       out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
       out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
   --  Constants
   ------------------------------------------------------------------------------
-  constant FLIT_WIDTH       : integer := 34;
-  constant CHANNELS         : integer := 9;
+  constant FLIT_WIDTH : integer := 34;
+  constant CHANNELS   : integer := 9;
 
 
   constant ENABLE_VCHANNELS : integer := 1;
 
-  constant T                : integer := 2;
-  constant X                : integer := 2;
-  constant Y                : integer := 2;
-  constant Z                : integer := 2;
+  constant T : integer := 2;
+  constant X : integer := 2;
+  constant Y : integer := 2;
+  constant Z : integer := 2;
 
-  constant BUFFER_SIZE_IN   : integer := 4;
-  constant BUFFER_SIZE_OUT  : integer := 4;
+  constant BUFFER_SIZE_IN  : integer := 4;
+  constant BUFFER_SIZE_OUT : integer := 4;
 
-  constant NODES            : integer := 16;
+  constant NODES : integer := 16;
 
   ------------------------------------------------------------------------------
   -- Variables
@@ -133,34 +133,34 @@ begin
 
   --DUT
   noc_mesh4d : peripheral_noc_mesh4d
-  generic map (
-    FLIT_WIDTH       => FLIT_WIDTH,
-    CHANNELS         => CHANNELS,
+    generic map (
+      FLIT_WIDTH => FLIT_WIDTH,
+      CHANNELS   => CHANNELS,
 
-    ENABLE_VCHANNELS => ENABLE_VCHANNELS,
+      ENABLE_VCHANNELS => ENABLE_VCHANNELS,
 
-    T                => T,
-    X                => X,
-    Y                => Y,
-    Z                => Z,
+      T => T,
+      X => X,
+      Y => Y,
+      Z => Z,
 
-    BUFFER_SIZE_IN   => BUFFER_SIZE_IN,
-    BUFFER_SIZE_OUT  => BUFFER_SIZE_OUT,
+      BUFFER_SIZE_IN  => BUFFER_SIZE_IN,
+      BUFFER_SIZE_OUT => BUFFER_SIZE_OUT,
 
-    NODES            => NODES
-  )
-  port map (
-    rst => rst,
-    clk => clk,
+      NODES => NODES
+      )
+    port map (
+      rst => rst,
+      clk => clk,
 
-    in_flit  => noc_in_flit,
-    in_last  => noc_in_last,
-    in_valid => noc_in_valid,
-    in_ready => noc_in_ready,
+      in_flit  => noc_in_flit,
+      in_last  => noc_in_last,
+      in_valid => noc_in_valid,
+      in_ready => noc_in_ready,
 
-    out_flit  => noc_out_flit,
-    out_last  => noc_out_last,
-    out_valid => noc_out_valid,
-    out_ready => noc_out_ready
-  );
+      out_flit  => noc_out_flit,
+      out_last  => noc_out_last,
+      out_valid => noc_out_valid,
+      out_ready => noc_out_ready
+      );
 end rtl;

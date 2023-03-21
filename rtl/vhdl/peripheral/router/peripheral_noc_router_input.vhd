@@ -56,7 +56,7 @@ entity peripheral_noc_router_input is
     DESTS        : integer := 1;
     OUTPUTS      : integer := 1;
     BUFFER_DEPTH : integer := 4
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -72,7 +72,7 @@ entity peripheral_noc_router_input is
     out_last  : out std_logic_vector(VCHANNELS-1 downto 0);
     out_flit  : out std_logic_matrix(VCHANNELS-1 downto 0)(FLIT_WIDTH-1 downto 0);
     out_ready : in  std_logic_matrix(VCHANNELS-1 downto 0)(OUTPUTS-1 downto 0)
-  );
+    );
 end peripheral_noc_router_input;
 
 architecture rtl of peripheral_noc_router_input is
@@ -85,7 +85,7 @@ architecture rtl of peripheral_noc_router_input is
     generic (
       FLIT_WIDTH : integer := 32;
       DEPTH      : integer := 16
-    );
+      );
     port (
       -- the width of the index
       clk : in std_logic;
@@ -104,7 +104,7 @@ architecture rtl of peripheral_noc_router_input is
       out_ready : in  std_logic;
 
       packet_size : out std_logic_vector(integer(log2(real(DEPTH))) downto 0)
-    );
+      );
   end component;
 
   component peripheral_noc_router_lookup
@@ -112,7 +112,7 @@ architecture rtl of peripheral_noc_router_input is
       FLIT_WIDTH : integer := 32;
       DESTS      : integer := 1;
       OUTPUTS    : integer := 1
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -128,7 +128,7 @@ architecture rtl of peripheral_noc_router_input is
       out_last  : out std_logic;
       out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
       out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -139,16 +139,16 @@ architecture rtl of peripheral_noc_router_input is
   signal buffer_valid : std_logic_vector(VCHANNELS-1 downto 0);
   signal buffer_ready : std_logic_vector(VCHANNELS-1 downto 0);
 
-  ------------------------------------------------------------------------------
-  -- Module Body
-  ------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- Module Body
+------------------------------------------------------------------------------
 begin
   generating_0 : for v in 0 to VCHANNELS - 1 generate
     U_buffer : peripheral_noc_buffer
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DEPTH      => BUFFER_DEPTH
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
@@ -158,35 +158,35 @@ begin
         in_valid => in_valid (v),
         in_ready => in_ready (v),
 
-        out_flit  => buffer_flit  (v),
-        out_last  => buffer_last  (v),
+        out_flit  => buffer_flit (v),
+        out_last  => buffer_last (v),
         out_valid => buffer_valid (v),
         out_ready => buffer_ready (v),
 
         packet_size => open
-      );
+        );
 
     router_lookup : peripheral_noc_router_lookup
       generic map (
         FLIT_WIDTH => FLIT_WIDTH,
         DESTS      => DESTS,
         OUTPUTS    => OUTPUTS
-      )
+        )
       port map (
         clk => clk,
         rst => rst,
 
         ROUTES => ROUTES,
 
-        in_flit  => buffer_flit  (v),
-        in_last  => buffer_last  (v),
+        in_flit  => buffer_flit (v),
+        in_last  => buffer_last (v),
         in_valid => buffer_valid (v),
         in_ready => buffer_ready (v),
 
-        out_flit  => out_flit  (v),
-        out_last  => out_last  (v),
+        out_flit  => out_flit (v),
+        out_last  => out_last (v),
         out_valid => out_valid (v),
         out_ready => out_ready (v)
-      );
+        );
   end generate;
 end rtl;

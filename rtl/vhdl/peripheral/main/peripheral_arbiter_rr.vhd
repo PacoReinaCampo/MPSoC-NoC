@@ -54,7 +54,7 @@ entity peripheral_arbiter_rr is
     );
   port (
     req     : in  std_logic_vector(N-1 downto 0);
-    en      : in std_logic;
+    en      : in  std_logic;
     gnt     : in  std_logic_vector(N-1 downto 0);
     nxt_gnt : out std_logic_vector(N-1 downto 0)
     );

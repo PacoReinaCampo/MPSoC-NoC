@@ -52,7 +52,7 @@ entity peripheral_noc_router_lookup_slice is
   generic (
     FLIT_WIDTH : integer := 32;
     OUTPUTS    : integer := 7
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -66,7 +66,7 @@ entity peripheral_noc_router_lookup_slice is
     out_last  : out std_logic;
     out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
     out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
-  );
+    );
 end peripheral_noc_router_lookup_slice;
 
 architecture rtl of peripheral_noc_router_lookup_slice is
@@ -97,7 +97,7 @@ begin
   begin
     if (rising_edge(clk)) then
       if (rst = '1') then
-        pressure       <= '0';
+        pressure      <= '0';
         out_valid_sgn := (others => '0');
       elsif (pressure = '0') then
         -- We are accepting the input in this cycle, determine
@@ -105,8 +105,8 @@ begin
         if (reduce_nor(out_valid_sgn) = '1' or reduce_or(out_ready and out_valid_sgn) = '1') then
           -- There is no flit waiting in the register, or
           -- The current flit is transfered this cycle
-          out_flit       <= in_flit;
-          out_last       <= in_last;
+          out_flit      <= in_flit;
+          out_last      <= in_last;
           out_valid_sgn := in_valid;
         elsif (reduce_or(out_valid_sgn) = '1' and reduce_nor(out_ready) = '1') then
           -- Otherwise if there is a flit waiting and upstream
@@ -130,6 +130,6 @@ begin
       end if;
     end if;
 
-  out_valid <= out_valid_sgn;
+    out_valid <= out_valid_sgn;
   end process;
 end rtl;

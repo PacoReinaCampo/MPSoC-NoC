@@ -53,8 +53,8 @@ entity peripheral_noc_demux is
     FLIT_WIDTH : integer := 32;
     CHANNELS   : integer := 7;
 
-    MAPPING    : std_logic_vector(63 downto 0) := (others => 'X')
-  );
+    MAPPING : std_logic_vector(63 downto 0) := (others => 'X')
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -68,7 +68,7 @@ entity peripheral_noc_demux is
     out_last  : out std_logic_vector(CHANNELS-1 downto 0);
     out_valid : out std_logic_vector(CHANNELS-1 downto 0);
     out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-  );
+    );
 end peripheral_noc_demux;
 
 architecture rtl of peripheral_noc_demux is

@@ -64,7 +64,7 @@ entity peripheral_noc_mesh4d is
     BUFFER_SIZE_OUT : integer := 4;
 
     NODES : integer := 16
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -78,7 +78,7 @@ entity peripheral_noc_mesh4d is
     out_last  : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_valid : out std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0);
     out_ready : in  std_logic_matrix(NODES-1 downto 0)(CHANNELS-1 downto 0)
-  );
+    );
 end peripheral_noc_mesh4d;
 
 architecture rtl of peripheral_noc_mesh4d is
@@ -91,7 +91,7 @@ architecture rtl of peripheral_noc_mesh4d is
     generic (
       FLIT_WIDTH : integer := 32;
       CHANNELS   : integer := 9
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -105,7 +105,7 @@ architecture rtl of peripheral_noc_mesh4d is
       out_last  : out std_logic;
       out_valid : out std_logic_vector(CHANNELS-1 downto 0);
       out_ready : in  std_logic_vector(CHANNELS-1 downto 0)
-    );
+      );
   end component;
 
   component peripheral_noc_router
@@ -117,7 +117,7 @@ architecture rtl of peripheral_noc_mesh4d is
       BUFFER_SIZE_IN  : integer := 4;
       BUFFER_SIZE_OUT : integer := 4;
       DESTS           : integer := 8
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -133,7 +133,7 @@ architecture rtl of peripheral_noc_mesh4d is
       in_last  : in  std_logic_vector(INPUTS-1 downto 0);
       in_valid : in  std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0);
       in_ready : out std_logic_matrix(INPUTS-1 downto 0)(VCHANNELS-1 downto 0)
-    );
+      );
   end component;
 
   ------------------------------------------------------------------------------
@@ -400,7 +400,7 @@ begin
                 out_last  => node_in_last (nodenum(xd, yd, zd, td))(LOCAL)(0),
                 out_valid => node_in_valid (nodenum(xd, yd, zd, td))(LOCAL),
                 out_ready => node_in_ready (nodenum(xd, yd, zd, td))(LOCAL)
-              );
+                );
 
             -- Replicate the flit to all output channels and the
             -- rest is just wiring
@@ -440,7 +440,7 @@ begin
                 out_last  => open,
                 out_valid => node_out_valid (nodenum(xd, yd, zd, td)),
                 out_ready => node_out_ready (nodenum(xd, yd, zd, td))
-              );
+                );
           elsif (ENABLE_VCHANNELS = 0) generate
             out_flit (nodenum(xd, yd, zd, td))  <= node_out_flit (nodenum(xd, yd, zd, td))(LOCAL);
             out_last (nodenum(xd, yd, zd, td))  <= node_out_last (nodenum(xd, yd, zd, td))(LOCAL);
@@ -504,7 +504,7 @@ begin
                   out_last  => open,
                   out_valid => phys_out_valid (nodenum(xd, yd, zd, td)),
                   out_ready => phys_out_ready (nodenum(xd, yd, zd, td))
-                );
+                  );
             end generate;
           end generate;
 

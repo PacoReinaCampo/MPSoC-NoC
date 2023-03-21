@@ -54,7 +54,7 @@ entity peripheral_noc_router_lookup is
     DEST_WIDTH : integer := 5;
     DESTS      : integer := 1;
     OUTPUTS    : integer := 1
-  );
+    );
   port (
     clk : in std_logic;
     rst : in std_logic;
@@ -70,7 +70,7 @@ entity peripheral_noc_router_lookup is
     out_last  : out std_logic;
     out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
     out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
-  );
+    );
 end peripheral_noc_router_lookup;
 
 architecture rtl of peripheral_noc_router_lookup is
@@ -83,7 +83,7 @@ architecture rtl of peripheral_noc_router_lookup is
     generic (
       FLIT_WIDTH : integer := 32;
       OUTPUTS    : integer := 7
-    );
+      );
     port (
       clk : in std_logic;
       rst : in std_logic;
@@ -97,7 +97,7 @@ architecture rtl of peripheral_noc_router_lookup is
       out_last  : out std_logic;
       out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
       out_ready : in  std_logic_vector(OUTPUTS-1 downto 0)
-    );
+      );
   end component;
   ------------------------------------------------------------------------------
   -- Variables
@@ -138,7 +138,7 @@ begin
     generic map (
       FLIT_WIDTH => FLIT_WIDTH,
       OUTPUTS    => OUTPUTS
-    )
+      )
     port map (
       clk => clk,
       rst => rst,
@@ -152,7 +152,7 @@ begin
       out_last  => out_last,
       out_flit  => out_flit,
       out_ready => out_ready
-    );
+      );
 
   processing_0 : process (d, in_last, in_ready_sgn, in_valid, worm, wormhole)
   begin
@@ -170,7 +170,7 @@ begin
           nxt_worm <= ROUTES(OUTPUTS*(d-1) downto OUTPUTS*d);
         end if;
       end if;
-    else  -- if (!wormhole)
+    else                                -- if (!wormhole)
       -- We are in a worm
       -- The valid is set on the currently select output
       valid <= worm and (valid'range => in_valid);

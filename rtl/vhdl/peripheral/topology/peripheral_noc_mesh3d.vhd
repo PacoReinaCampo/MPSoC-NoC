@@ -347,13 +347,13 @@ begin
               clk => clk,
               rst => rst,
 
-              in_flit  => in_flit  (nodenum(xd, yd, zd)),
-              in_last  => in_last  (nodenum(xd, yd, zd)),
+              in_flit  => in_flit (nodenum(xd, yd, zd)),
+              in_last  => in_last (nodenum(xd, yd, zd)),
               in_valid => in_valid (nodenum(xd, yd, zd)),
               in_ready => in_ready (nodenum(xd, yd, zd)),
 
-              out_flit  => node_in_flit  (nodenum(xd, yd, zd))(LOCAL)(0),
-              out_last  => node_in_last  (nodenum(xd, yd, zd))(LOCAL)(0),
+              out_flit  => node_in_flit (nodenum(xd, yd, zd))(LOCAL)(0),
+              out_last  => node_in_last (nodenum(xd, yd, zd))(LOCAL)(0),
               out_valid => node_in_valid (nodenum(xd, yd, zd))(LOCAL),
               out_ready => node_in_ready (nodenum(xd, yd, zd))(LOCAL)
               );
@@ -398,8 +398,8 @@ begin
               out_ready => node_out_ready (nodenum(xd, yd, zd))
               );
         elsif (ENABLE_VCHANNELS = 0) generate
-          out_flit  (nodenum(xd, yd, zd)) <= node_out_flit  (nodenum(xd, yd, zd))(LOCAL);
-          out_last  (nodenum(xd, yd, zd)) <= node_out_last  (nodenum(xd, yd, zd))(LOCAL);
+          out_flit (nodenum(xd, yd, zd))  <= node_out_flit (nodenum(xd, yd, zd))(LOCAL);
+          out_last (nodenum(xd, yd, zd))  <= node_out_last (nodenum(xd, yd, zd))(LOCAL);
           out_valid (nodenum(xd, yd, zd)) <= node_out_valid (nodenum(xd, yd, zd))(LOCAL);
 
           node_out_ready(nodenum(xd, yd, zd))(LOCAL) <= out_ready(nodenum(xd, yd, zd));
@@ -419,23 +419,23 @@ begin
 
             -- Re-wire the ports
             generating_6 : for p in 0 to 6 generate
-              phys_in_flit  (nodenum(xd, yd, zd))(p)(c) <= node_in_flit  (nodenum(xd, yd, zd))(p)(c);
-              phys_in_last  (nodenum(xd, yd, zd))(p)(c) <= node_in_last  (nodenum(xd, yd, zd))(p)(c);
+              phys_in_flit (nodenum(xd, yd, zd))(p)(c)  <= node_in_flit (nodenum(xd, yd, zd))(p)(c);
+              phys_in_last (nodenum(xd, yd, zd))(p)(c)  <= node_in_last (nodenum(xd, yd, zd))(p)(c);
               phys_in_valid (nodenum(xd, yd, zd))(p)(c) <= node_in_valid (nodenum(xd, yd, zd))(p)(c);
 
               node_in_ready (nodenum(xd, yd, zd))(p)(c) <= phys_in_ready (nodenum(xd, yd, zd))(p)(c);
 
 
-              node_out_flit  (nodenum(xd, yd, zd))(p)(c) <= phys_out_flit  (nodenum(xd, yd, zd))(p)(c);
-              node_out_last  (nodenum(xd, yd, zd))(p)(c) <= phys_out_last  (nodenum(xd, yd, zd))(p)(c);
+              node_out_flit (nodenum(xd, yd, zd))(p)(c)  <= phys_out_flit (nodenum(xd, yd, zd))(p)(c);
+              node_out_last (nodenum(xd, yd, zd))(p)(c)  <= phys_out_last (nodenum(xd, yd, zd))(p)(c);
               node_out_valid (nodenum(xd, yd, zd))(p)(c) <= phys_out_valid (nodenum(xd, yd, zd))(p)(c);
 
               phys_out_ready (nodenum(xd, yd, zd))(p)(c) <= node_out_ready (nodenum(xd, yd, zd))(p)(c);
             end generate;
 
-              -- Instantiate the router. We call a function to
-              -- generate the routing table
-              router : peripheral_noc_router
+            -- Instantiate the router. We call a function to
+            -- generate the routing table
+            router : peripheral_noc_router
               generic map (
                 FLIT_WIDTH      => FLIT_WIDTH,
                 VCHANNELS       => 1,
