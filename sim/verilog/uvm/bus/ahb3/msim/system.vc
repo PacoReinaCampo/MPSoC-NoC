@@ -44,6 +44,6 @@
 
 +incdir+../../../../../../uvm/src
 
-../../../../../../uvm/bus/ahb3/bench/verilog/peripheral/testbench.sv
+../../../../../../uvm/bus/ahb3/bench/verilog/code/peripheral/testbench.sv
 
-../../../../../../uvm/bus/ahb3/rtl/verilog/peripheral/design.sv
+../../../../../../uvm/bus/ahb3/rtl/verilog/code/peripheral/design.sv

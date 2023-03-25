@@ -42,8 +42,4 @@
 ##                                                                               ##
 ###################################################################################
 
-+incdir+../../../../../../uvm/src
-
-../../../../../../uvm/bus/bb/bench/verilog/code/peripheral/testbench.sv
-
-../../../../../../uvm/bus/bb/rtl/verilog/code/peripheral/design.sv
+tree -P '*.sv' code > TREE-VERILOG.txt

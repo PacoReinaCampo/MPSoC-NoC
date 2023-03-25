@@ -1,4 +1,4 @@
-vhdl
+code
 ├── peripheral
 │   ├── main
 │   │   ├── peripheral_arbiter_rr.vhd

@@ -42,6 +42,6 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-sv work ../../../../../../uvm/bus/apb4/bench/verilog/testbench.sv
+sv work ../../../../../../uvm/bus/apb4/bench/verilog/code/testbench.sv
 
-sv work ../../../../../../uvm/bus/apb4/rtl/verilog/design.sv
+sv work ../../../../../../uvm/bus/apb4/rtl/verilog/code/design.sv

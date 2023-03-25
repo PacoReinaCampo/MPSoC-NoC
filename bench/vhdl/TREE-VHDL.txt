@@ -1,4 +1,4 @@
-vhdl
+code
 └── tests
     └── peripheral_noc_testbench.vhd
 

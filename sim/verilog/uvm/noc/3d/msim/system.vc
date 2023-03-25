@@ -44,20 +44,20 @@
 
 +incdir+../../../../../../uvm/src
 
-../../../../../../uvm/noc/3d/bench/verilog/peripheral/testbench.sv
+../../../../../../uvm/noc/3d/bench/verilog/code/peripheral/testbench.sv
 
-../../../../../../uvm/noc/3d/rtl/verilog/peripheral/design.sv
+../../../../../../uvm/noc/3d/rtl/verilog/code/peripheral/design.sv
 
-../../../../../../rtl/verilog/peripheral/topology/peripheral_noc_mesh3d.sv
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh3d.sv
 
-../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_input.sv
-../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_lookup_slice.sv
-../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_lookup.sv
-../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router_output.sv
-../../../../../../rtl/verilog/peripheral/router/peripheral_noc_router.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_input.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup_slice.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router.sv
 
-../../../../../../rtl/verilog/peripheral/main/peripheral_arb_rr.sv
-../../../../../../rtl/verilog/peripheral/main/peripheral_noc_buffer.sv
-../../../../../../rtl/verilog/peripheral/main/peripheral_noc_demux.sv
-../../../../../../rtl/verilog/peripheral/main/peripheral_noc_mux.sv
-../../../../../../rtl/verilog/peripheral/main/peripheral_noc_vchannel_mux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_arb_rr.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_demux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_mux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_vchannel_mux.sv
