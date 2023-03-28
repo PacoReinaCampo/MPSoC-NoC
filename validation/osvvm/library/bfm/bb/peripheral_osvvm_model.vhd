@@ -42,9 +42,6 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.ntm_arithmetic_pkg.all;
-use work.ntm_math_pkg.all;
-
 entity peripheral_osvvm_model is
   generic (
     DATA_SIZE : positive := 4
@@ -63,9 +60,9 @@ architecture peripheral_osvvm_model_architecture of peripheral_osvvm_model is
 
 begin
 
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
   -- Body
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
 
   model : process (CLK, RST) is
     variable carry_int : std_logic;

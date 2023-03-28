@@ -51,14 +51,14 @@ use osvvm.CoveragePkg.all;
 entity peripheral_osvvm_testbench is
 end entity peripheral_osvvm_testbench;
 
-use work.model_intro_pkg.all;
-use work.peripheral_osvvm_pkg.all;
+use work.peripheral_osvvm_model_pkg.all;
+use work.peripheral_osvvm_design_pkg.all;
 
 architecture peripheral_osvvm_testbench_architecture of peripheral_osvvm_testbench is
 
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
   -- Constants
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
 
   -- width of adder inputs
   constant DATA_SIZE : positive := 8;
@@ -69,9 +69,9 @@ architecture peripheral_osvvm_testbench_architecture of peripheral_osvvm_testben
   -- how many bins should be generated
   constant C_MAX_BINS : natural := 16;
 
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
   -- Signals
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
 
   -- GLOBAL
   signal clk_int : std_logic := '0';
@@ -90,9 +90,9 @@ architecture peripheral_osvvm_testbench_architecture of peripheral_osvvm_testben
 
 begin
 
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
   -- Body
-  -----------------------------------------------------------------------
+  ------------------------------------------------------------------------------
 
   -- clk generation
   clk_int <= not clk_int after PERIOD/2;
