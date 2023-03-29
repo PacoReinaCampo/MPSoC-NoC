@@ -3,9 +3,11 @@ library
 │   ├── ahb3
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_environment.sv
+│   │   ├── peripheral_enviroment.sv
 │   │   ├── peripheral_generator.sv
+│   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
+│   │   ├── peripheral_package.sv
 │   │   ├── peripheral_scoreboard.sv
 │   │   ├── peripheral_testbench.sv
 │   │   ├── peripheral_test.sv
@@ -13,9 +15,11 @@ library
 │   ├── apb4
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_environment.sv
+│   │   ├── peripheral_enviroment.sv
 │   │   ├── peripheral_generator.sv
+│   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
+│   │   ├── peripheral_package.sv
 │   │   ├── peripheral_scoreboard.sv
 │   │   ├── peripheral_testbench.sv
 │   │   ├── peripheral_test.sv
@@ -23,9 +27,11 @@ library
 │   ├── axi4
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_environment.sv
+│   │   ├── peripheral_enviroment.sv
 │   │   ├── peripheral_generator.sv
+│   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
+│   │   ├── peripheral_package.sv
 │   │   ├── peripheral_scoreboard.sv
 │   │   ├── peripheral_testbench.sv
 │   │   ├── peripheral_test.sv
@@ -33,9 +39,11 @@ library
 │   ├── bb
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_environment.sv
+│   │   ├── peripheral_enviroment.sv
 │   │   ├── peripheral_generator.sv
+│   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
+│   │   ├── peripheral_package.sv
 │   │   ├── peripheral_scoreboard.sv
 │   │   ├── peripheral_testbench.sv
 │   │   ├── peripheral_test.sv
@@ -43,39 +51,36 @@ library
 │   └── wb
 │       ├── peripheral_agent.sv
 │       ├── peripheral_driver.sv
-│       ├── peripheral_environment.sv
+│       ├── peripheral_enviroment.sv
 │       ├── peripheral_generator.sv
+│       ├── peripheral_interface.sv
 │       ├── peripheral_monitor.sv
+│       ├── peripheral_package.sv
 │       ├── peripheral_scoreboard.sv
 │       ├── peripheral_testbench.sv
 │       ├── peripheral_test.sv
 │       └── peripheral_transaction.sv
 └── core
     ├── ahb3
-    │   ├── base
-    │   │   ├── peripheral_base_configuration.sv
-    │   │   ├── peripheral_base_driver.sv
-    │   │   ├── peripheral_base_monitor.sv
-    │   │   ├── peripheral_base_scoreboard.sv
-    │   │   └── peripheral_base_transaction.sv
-    │   └── main
-    │       ├── peripheral_bus_ahb3.sv
-    │       ├── peripheral_bus_generator.sv
-    │       ├── peripheral_bus_transaction_ahb3.sv
-    │       ├── peripheral_bus_transaction.sv
-    │       ├── peripheral_configuration.sv
-    │       ├── peripheral_driver_ahb3.sv
-    │       ├── peripheral_environment.sv
-    │       ├── peripheral_monitor_ahb3.sv
-    │       ├── peripheral_scoreboard.sv
-    │       ├── peripheral_testbench.sv
-    │       └── peripheral_test.sv
+    │   ├── peripheral_agent.sv
+    │   ├── peripheral_driver.sv
+    │   ├── peripheral_enviroment.sv
+    │   ├── peripheral_generator.sv
+    │   ├── peripheral_interface.sv
+    │   ├── peripheral_monitor.sv
+    │   ├── peripheral_package.sv
+    │   ├── peripheral_scoreboard.sv
+    │   ├── peripheral_testbench.sv
+    │   ├── peripheral_test.sv
+    │   └── peripheral_transaction.sv
     ├── apb4
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_environment.sv
+    │   ├── peripheral_enviroment.sv
     │   ├── peripheral_generator.sv
+    │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
+    │   ├── peripheral_package.sv
     │   ├── peripheral_scoreboard.sv
     │   ├── peripheral_testbench.sv
     │   ├── peripheral_test.sv
@@ -83,9 +88,11 @@ library
     ├── axi4
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_environment.sv
+    │   ├── peripheral_enviroment.sv
     │   ├── peripheral_generator.sv
+    │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
+    │   ├── peripheral_package.sv
     │   ├── peripheral_scoreboard.sv
     │   ├── peripheral_testbench.sv
     │   ├── peripheral_test.sv
@@ -93,9 +100,11 @@ library
     ├── bb
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_environment.sv
+    │   ├── peripheral_enviroment.sv
     │   ├── peripheral_generator.sv
+    │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
+    │   ├── peripheral_package.sv
     │   ├── peripheral_scoreboard.sv
     │   ├── peripheral_testbench.sv
     │   ├── peripheral_test.sv
@@ -103,12 +112,14 @@ library
     └── wb
         ├── peripheral_agent.sv
         ├── peripheral_driver.sv
-        ├── peripheral_environment.sv
+        ├── peripheral_enviroment.sv
         ├── peripheral_generator.sv
+        ├── peripheral_interface.sv
         ├── peripheral_monitor.sv
+        ├── peripheral_package.sv
         ├── peripheral_scoreboard.sv
         ├── peripheral_testbench.sv
         ├── peripheral_test.sv
         └── peripheral_transaction.sv
 
-14 directories, 97 files
+12 directories, 110 files
