@@ -38,6 +38,7 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 `include "uvm_macros.svh"
+`include "uvm_pkg.sv"
 import uvm_pkg::*;
 
 `include "peripheral_uvm_interface.sv"
@@ -80,6 +81,6 @@ module peripheral_uvm_testbench;
   end
 
   initial begin
-    run_test("base test");
+    run_test("base_test");
   end
 endmodule

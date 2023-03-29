@@ -37,8 +37,8 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-class peripheral_uvm_sequence extends uvm_sequence #(sequence_item);
-  sequence_item req;
+class peripheral_uvm_sequence extends uvm_sequence #(peripheral_uvm_sequence_item);
+  peripheral_uvm_sequence_item req;
   `uvm_object_utils(peripheral_uvm_sequence)
 
   function new(string name = "sequence");

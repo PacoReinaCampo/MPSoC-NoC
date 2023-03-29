@@ -43,7 +43,7 @@ class peripheral_uvm_sequence_item extends uvm_sequence_item;
 
   bit      [8:0] out;
 
-  function new(string name = "sequence item");
+  function new(string name = "peripheral_uvm_sequence_item");
     super.new(name);
   endfunction
 

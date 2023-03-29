@@ -3,7 +3,7 @@ library
 │   ├── ahb3
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_enviroment.sv
+│   │   ├── peripheral_environment.sv
 │   │   ├── peripheral_generator.sv
 │   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
@@ -15,7 +15,7 @@ library
 │   ├── apb4
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_enviroment.sv
+│   │   ├── peripheral_environment.sv
 │   │   ├── peripheral_generator.sv
 │   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
@@ -27,7 +27,7 @@ library
 │   ├── axi4
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_enviroment.sv
+│   │   ├── peripheral_environment.sv
 │   │   ├── peripheral_generator.sv
 │   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
@@ -39,7 +39,7 @@ library
 │   ├── bb
 │   │   ├── peripheral_agent.sv
 │   │   ├── peripheral_driver.sv
-│   │   ├── peripheral_enviroment.sv
+│   │   ├── peripheral_environment.sv
 │   │   ├── peripheral_generator.sv
 │   │   ├── peripheral_interface.sv
 │   │   ├── peripheral_monitor.sv
@@ -51,7 +51,7 @@ library
 │   └── wb
 │       ├── peripheral_agent.sv
 │       ├── peripheral_driver.sv
-│       ├── peripheral_enviroment.sv
+│       ├── peripheral_environment.sv
 │       ├── peripheral_generator.sv
 │       ├── peripheral_interface.sv
 │       ├── peripheral_monitor.sv
@@ -64,7 +64,7 @@ library
     ├── ahb3
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_enviroment.sv
+    │   ├── peripheral_environment.sv
     │   ├── peripheral_generator.sv
     │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
@@ -76,7 +76,7 @@ library
     ├── apb4
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_enviroment.sv
+    │   ├── peripheral_environment.sv
     │   ├── peripheral_generator.sv
     │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
@@ -88,7 +88,7 @@ library
     ├── axi4
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_enviroment.sv
+    │   ├── peripheral_environment.sv
     │   ├── peripheral_generator.sv
     │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
@@ -100,7 +100,7 @@ library
     ├── bb
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv
-    │   ├── peripheral_enviroment.sv
+    │   ├── peripheral_environment.sv
     │   ├── peripheral_generator.sv
     │   ├── peripheral_interface.sv
     │   ├── peripheral_monitor.sv
@@ -112,7 +112,7 @@ library
     └── wb
         ├── peripheral_agent.sv
         ├── peripheral_driver.sv
-        ├── peripheral_enviroment.sv
+        ├── peripheral_environment.sv
         ├── peripheral_generator.sv
         ├── peripheral_interface.sv
         ├── peripheral_monitor.sv

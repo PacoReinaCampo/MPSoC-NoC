@@ -37,7 +37,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-class peripheral_uvm_sequencer extends uvm_sequencer #(seq_item);
+class peripheral_uvm_sequencer extends uvm_sequencer #(peripheral_uvm_sequence_item);
   `uvm_component_utils(peripheral_uvm_sequencer)
 
   function new(string name = "sequencer", uvm_component parent = null);

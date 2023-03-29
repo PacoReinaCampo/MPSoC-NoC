@@ -37,7 +37,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-class peripheral_uvm_driver extends uvm_driver #(sequence_item);
+class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
   virtual peripheral_adder_if vif;
   `uvm_component_utils(peripheral_uvm_driver)
 
