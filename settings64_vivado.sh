@@ -47,3 +47,5 @@
 ##############################################################
 
 export PATH=$PATH:/opt/Xilinx/Vivado/2020.2/bin/
+
+export XILINX_UVM=/opt/Xilinx/Vivado/2020.2/data/system_verilog/uvm_1.2/uvm_macros.svh
