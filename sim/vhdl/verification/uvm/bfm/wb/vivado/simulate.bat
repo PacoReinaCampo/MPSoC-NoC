@@ -45,7 +45,7 @@
 @echo off
 call ../../../../../../../settings64_vivado.bat
 
-xvlog -i ../../../../../../../verification/uvm/src -prj system.prj
-xelab peripheral_uvm_testbench
-xsim -R peripheral_uvm_testbench
+xvlog -sv -prj system.prj -L uvm
+xelab peripheral_uvm_testbench -relax -s top -timescale 1ns/1ps
+xsim top -testplusarg UVM_TESTNAME=peripheral_uvm_test -testplusarg UVM_VERBOSITY=UVM_LOW -runall
 pause
