@@ -46,4 +46,4 @@
 # Copyright (c) 1986-2020 Xilinx, Inc.  All rights reserved. #
 ##############################################################
 
-export XILINX_UVM=/opt/Xilinx/Vivado/2020.2/data/system_verilog/uvm_1.2/uvm_macros.svh
+export PATH=$PATH:/opt/Xilinx/Vivado/2020.2/bin/
