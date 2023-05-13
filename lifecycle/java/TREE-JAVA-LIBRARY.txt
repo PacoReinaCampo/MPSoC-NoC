@@ -1,25 +1,25 @@
 library
 ├── bfm
 │   ├── ahb3
-│   │   └── peripheral.java
+│   │   └── peripheral_design.java
 │   ├── apb4
-│   │   └── peripheral.java
+│   │   └── peripheral_design.java
 │   ├── axi4
-│   │   └── peripheral.java
+│   │   └── peripheral_design.java
 │   ├── bb
-│   │   └── peripheral.java
+│   │   └── peripheral_design.java
 │   └── wb
-│       └── peripheral.java
+│       └── peripheral_design.java
 └── core
     ├── ahb3
-    │   └── peripheral.java
+    │   └── peripheral_design.java
     ├── apb4
-    │   └── peripheral.java
+    │   └── peripheral_design.java
     ├── axi4
-    │   └── peripheral.java
+    │   └── peripheral_design.java
     ├── bb
-    │   └── peripheral.java
+    │   └── peripheral_design.java
     └── wb
-        └── peripheral.java
+        └── peripheral_design.java
 
 12 directories, 10 files

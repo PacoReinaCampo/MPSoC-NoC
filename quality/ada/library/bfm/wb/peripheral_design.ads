@@ -45,66 +45,34 @@
 with Ada.Text_IO;
 use Ada.Text_IO;
 
-with System.Assertions;
+package peripheral_design is
 
-with peripheral_design;
-use peripheral_design;
-
-procedure peripheral_test is
-
-  data_a_in : float := 48.0;
-  data_b_in : float := 16.0;
- 
-  data_out : float;
-
-begin
-
-  peripheral_design.ntm_scalar_adder(
-    data_a_in => data_a_in,
-    data_b_in => data_b_in,
-    data_out  => data_out
+  procedure ntm_scalar_adder (
+    data_a_in : in float;
+    data_b_in : in float;
+    
+    data_out : out float
   );
 
-  pragma Assert (data_a_in + data_b_in = data_out, "Scalar Adder");
-
-  Put(float'Image(data_out));
-
-  New_Line;
-
-  peripheral_design.ntm_scalar_substractor(
-    data_a_in => data_a_in,
-    data_b_in => data_b_in,
-    data_out  => data_out
+  procedure ntm_scalar_substractor (
+    data_a_in : in float;
+    data_b_in : in float;
+    
+    data_out : out float
   );
 
-  pragma Assert (data_a_in - data_b_in = data_out, "Scalar Substractor");
-
-  Put(float'Image(data_out));
-
-  New_Line;
-
-  peripheral_design.ntm_scalar_multiplier(
-    data_a_in => data_a_in,
-    data_b_in => data_b_in,
-    data_out  => data_out
+  procedure ntm_scalar_multiplier (
+    data_a_in : in float;
+    data_b_in : in float;
+    
+    data_out : out float
   );
 
-  pragma Assert (data_a_in * data_b_in = data_out, "Scalar Multiplier");
-
-  Put(float'Image(data_out));
-
-  New_Line;
-
-  peripheral_design.ntm_scalar_divider(
-    data_a_in => data_a_in,
-    data_b_in => data_b_in,
-    data_out  => data_out
+  procedure ntm_scalar_divider (
+    data_a_in : in float;
+    data_b_in : in float;
+    
+    data_out : out float
   );
 
-  pragma Assert (data_a_in / data_b_in = data_out, "Scalar Divider");
-
-  Put(float'Image(data_out));
-
-  New_Line;
-
-end peripheral_test;
+end peripheral_design;

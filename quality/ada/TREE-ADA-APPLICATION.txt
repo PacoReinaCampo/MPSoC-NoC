@@ -1,35 +1,25 @@
 application
 ├── bfm
 │   ├── ahb3
-│   │   ├── peripheral_test.adb
-│   │   └── peripheral_test.ads
+│   │   └── peripheral_test.adb
 │   ├── apb4
-│   │   ├── peripheral_test.adb
-│   │   └── peripheral_test.ads
+│   │   └── peripheral_test.adb
 │   ├── axi4
-│   │   ├── peripheral_test.adb
-│   │   └── peripheral_test.ads
+│   │   └── peripheral_test.adb
 │   ├── bb
-│   │   ├── peripheral_test.adb
-│   │   └── peripheral_test.ads
+│   │   └── peripheral_test.adb
 │   └── wb
-│       ├── peripheral_test.adb
-│       └── peripheral_test.ads
+│       └── peripheral_test.adb
 └── core
     ├── ahb3
-    │   ├── peripheral_test.adb
-    │   └── peripheral_test.ads
+    │   └── peripheral_test.adb
     ├── apb4
-    │   ├── peripheral_test.adb
-    │   └── peripheral_test.ads
+    │   └── peripheral_test.adb
     ├── axi4
-    │   ├── peripheral_test.adb
-    │   └── peripheral_test.ads
+    │   └── peripheral_test.adb
     ├── bb
-    │   ├── peripheral_test.adb
-    │   └── peripheral_test.ads
+    │   └── peripheral_test.adb
     └── wb
-        ├── peripheral_test.adb
-        └── peripheral_test.ads
+        └── peripheral_test.adb
 
-12 directories, 20 files
+12 directories, 10 files

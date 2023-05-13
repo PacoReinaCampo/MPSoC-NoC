@@ -1,35 +1,35 @@
 library
 ├── bfm
 │   ├── ahb3
-│   │   ├── peripheral.adb
-│   │   └── peripheral.ads
+│   │   ├── peripheral_design.adb
+│   │   └── peripheral_design.ads
 │   ├── apb4
-│   │   ├── peripheral.adb
-│   │   └── peripheral.ads
+│   │   ├── peripheral_design.adb
+│   │   └── peripheral_design.ads
 │   ├── axi4
-│   │   ├── peripheral.adb
-│   │   └── peripheral.ads
+│   │   ├── peripheral_design.adb
+│   │   └── peripheral_design.ads
 │   ├── bb
-│   │   ├── peripheral.adb
-│   │   └── peripheral.ads
+│   │   ├── peripheral_design.adb
+│   │   └── peripheral_design.ads
 │   └── wb
-│       ├── peripheral.adb
-│       └── peripheral.ads
+│       ├── peripheral_design.adb
+│       └── peripheral_design.ads
 └── core
     ├── ahb3
-    │   ├── peripheral.adb
-    │   └── peripheral.ads
+    │   ├── peripheral_design.adb
+    │   └── peripheral_design.ads
     ├── apb4
-    │   ├── peripheral.adb
-    │   └── peripheral.ads
+    │   ├── peripheral_design.adb
+    │   └── peripheral_design.ads
     ├── axi4
-    │   ├── peripheral.adb
-    │   └── peripheral.ads
+    │   ├── peripheral_design.adb
+    │   └── peripheral_design.ads
     ├── bb
-    │   ├── peripheral.adb
-    │   └── peripheral.ads
+    │   ├── peripheral_design.adb
+    │   └── peripheral_design.ads
     └── wb
-        ├── peripheral.adb
-        └── peripheral.ads
+        ├── peripheral_design.adb
+        └── peripheral_design.ads
 
 12 directories, 20 files
