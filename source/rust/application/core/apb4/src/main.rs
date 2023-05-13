@@ -42,9 +42,9 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-extern crate bfm;
+extern crate core;
 
-use bfm::ahb3::peripheral_design::*;
+use core::apb4::peripheral_design::*;
 
 fn main() {
 

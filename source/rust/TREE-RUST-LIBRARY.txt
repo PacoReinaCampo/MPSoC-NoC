@@ -8,28 +8,28 @@ library
 │   │       └── lib.rs
 │   ├── apb4
 │   │   └── src
-│   │       ├── ahb3
+│   │       ├── apb4
 │   │       │   ├── mod.rs
 │   │       │   └── peripheral_design.rs
 │   │       └── lib.rs
 │   ├── axi4
 │   │   └── src
-│   │       ├── ahb3
+│   │       ├── axi4
 │   │       │   ├── mod.rs
 │   │       │   └── peripheral_design.rs
 │   │       └── lib.rs
 │   ├── bb
 │   │   └── src
-│   │       ├── ahb3
+│   │       ├── bb
 │   │       │   ├── mod.rs
 │   │       │   └── peripheral_design.rs
 │   │       └── lib.rs
 │   └── wb
 │       └── src
-│           ├── ahb3
-│           │   ├── mod.rs
-│           │   └── peripheral_design.rs
-│           └── lib.rs
+│           ├── lib.rs
+│           └── wb
+│               ├── mod.rs
+│               └── peripheral_design.rs
 └── core
     ├── ahb3
     │   └── src
@@ -39,27 +39,27 @@ library
     │       └── lib.rs
     ├── apb4
     │   └── src
-    │       ├── ahb3
+    │       ├── apb4
     │       │   ├── mod.rs
     │       │   └── peripheral_design.rs
     │       └── lib.rs
     ├── axi4
     │   └── src
-    │       ├── ahb3
+    │       ├── axi4
     │       │   ├── mod.rs
     │       │   └── peripheral_design.rs
     │       └── lib.rs
     ├── bb
     │   └── src
-    │       ├── ahb3
+    │       ├── bb
     │       │   ├── mod.rs
     │       │   └── peripheral_design.rs
     │       └── lib.rs
     └── wb
         └── src
-            ├── ahb3
-            │   ├── mod.rs
-            │   └── peripheral_design.rs
-            └── lib.rs
+            ├── lib.rs
+            └── wb
+                ├── mod.rs
+                └── peripheral_design.rs
 
 32 directories, 30 files

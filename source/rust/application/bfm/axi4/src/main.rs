@@ -44,7 +44,7 @@
 
 extern crate bfm;
 
-use bfm::ahb3::peripheral_design::*;
+use bfm::axi4::peripheral_design::*;
 
 fn main() {
 
