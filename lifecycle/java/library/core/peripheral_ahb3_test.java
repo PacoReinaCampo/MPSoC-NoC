@@ -42,38 +42,19 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-package axi4;
+import ahb3.peripheral_design;
 
-public class peripheral_design {
-  public static double ntm_scalar_adder(double data_a_in, double data_b_in) {
-    double data_out;
- 
-    data_out = data_a_in + data_b_in;
- 
-    return data_out;
-  }
+class peripheral_ahb3_test {
+  public static void main(String[] args) {
+    double data_a_in = 20.0;
+    double data_b_in = 10.0;
 
-  public static double ntm_scalar_subtractor(double data_a_in, double data_b_in) {
-    double data_out;
- 
-    data_out = data_a_in - data_b_in;
- 
-    return data_out;
-  }
+    assert peripheral_design.ntm_scalar_adder(data_a_in, data_b_in) == data_a_in + data_b_in;
 
-  public static double ntm_scalar_multiplier(double data_a_in, double data_b_in) {
-    double data_out;
- 
-    data_out = data_a_in * data_b_in;
- 
-    return data_out;
-  }
+    assert peripheral_design.ntm_scalar_subtractor(data_a_in, data_b_in) == data_a_in - data_b_in;
 
-  public static double ntm_scalar_divider(double data_a_in, double data_b_in) {
-    double data_out;
- 
-    data_out = data_a_in / data_b_in;
- 
-    return data_out;
+    assert peripheral_design.ntm_scalar_multiplier(data_a_in, data_b_in) == data_a_in * data_b_in;
+
+    assert peripheral_design.ntm_scalar_divider(data_a_in, data_b_in) == data_a_in / data_b_in;
   }
 }
