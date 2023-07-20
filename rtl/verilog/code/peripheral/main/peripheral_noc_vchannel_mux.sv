@@ -97,7 +97,8 @@ module peripheral_noc_vchannel_mux #(
   always @(posedge clk) begin
     if (rst) begin
       select <= {{CHANNELS - 1{1'b0}}, 1'b1};
-    end else begin
+    end
+    else begin
       select <= nxt_select;
     end
   end

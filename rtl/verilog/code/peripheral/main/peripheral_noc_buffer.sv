@@ -123,11 +123,22 @@ module peripheral_noc_buffer #(
       wr_addr  <= 'b0;
       rd_addr  <= 'b0;
       rd_count <= 'b0;
-    end else begin
-      if (fifo_write & ~fifo_read) rd_count <= rd_count + 1'b1;
-      else if (fifo_read & ~fifo_write) rd_count <= rd_count - 1'b1;
-      if (write_ram) wr_addr <= wr_addr + 1'b1;
-      if (read_ram) rd_addr <= rd_addr + 1'b1;
+    end
+    else begin
+      if (fifo_write & ~fifo_read) begin
+        rd_count <= rd_count + 1'b1;
+      end
+      else if (fifo_read & ~fifo_write) begin
+        rd_count <= rd_count - 1'b1;
+      end
+
+      if (write_ram) begin
+        wr_addr <= wr_addr + 1'b1;
+      end
+
+      if (read_ram) begin
+        rd_addr <= rd_addr + 1'b1;
+      end
     end
   end
 
@@ -143,7 +154,8 @@ module peripheral_noc_buffer #(
     if (read_ram) begin
       out_flit <= ram[rd_addr][0+:FLIT_WIDTH];
       out_last <= ram[rd_addr][FLIT_WIDTH];
-    end else if (fifo_write & write_through) begin
+    end
+    else if (fifo_write & write_through) begin
       out_flit <= in_flit;
       out_last <= in_last;
     end
@@ -152,8 +164,12 @@ module peripheral_noc_buffer #(
   generate
     if (FULLPACKET != 0) begin
       always @(posedge clk) begin
-        if (rst) data_last_buf <= 0;
-        else if (fifo_write) data_last_buf <= {data_last_buf, in_last};
+        if (rst) begin
+          data_last_buf <= 0;
+        end
+        else if (fifo_write) begin
+          data_last_buf <= {data_last_buf, in_last};
+        end
       end
 
       // Extra logic to get the packet size in a stable manner
@@ -161,7 +177,8 @@ module peripheral_noc_buffer #(
 
       assign out_valid         = (rd_count > 0) & |data_last_shifted;
       assign packet_size       = DEPTH + 1 - find_first_one(data_last_shifted);
-    end else begin
+    end
+    else begin
       assign out_valid   = rd_count > 0;
       assign packet_size = 0;
     end

@@ -124,7 +124,8 @@ module peripheral_noc_router_lookup #(
           nxt_worm = ROUTES[dest*OUTPUTS+:OUTPUTS];
         end
       end
-    end else begin
+    end
+    else begin
       // We are in a worm
       // The valid is set on the currently select output
       valid = worm & {OUTPUTS{in_valid}};
@@ -138,7 +139,8 @@ module peripheral_noc_router_lookup #(
   always @(posedge clk) begin
     if (rst) begin
       worm <= 0;
-    end else begin
+    end
+    else begin
       worm <= nxt_worm;
     end
   end

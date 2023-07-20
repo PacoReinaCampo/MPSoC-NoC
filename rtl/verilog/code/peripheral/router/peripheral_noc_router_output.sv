@@ -140,7 +140,8 @@ module peripheral_noc_router_output #(
         .out_valid(out_valid),
         .out_ready(out_ready)
       );
-    end else begin
+    end
+    else begin
       assign out_flit         = channel_flit[0];
       assign out_last         = channel_last[0];
       assign out_valid        = channel_valid[0];

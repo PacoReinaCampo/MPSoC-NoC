@@ -98,12 +98,16 @@ module peripheral_noc_mux #(
       if (|(in_valid & active) && out_ready) begin
         in_ready  = active;
         out_valid = 1;
-        if (out_last) nxt_activeroute = 0;
-      end else begin
+        if (out_last) begin
+          nxt_activeroute = 0;
+        end
+      end
+      else begin
         out_valid = 1'b0;
         in_ready  = 0;
       end
-    end else begin
+    end
+    else begin
       out_valid = 0;
       if (|in_valid && out_ready) begin
         out_valid       = 1'b1;
@@ -117,7 +121,8 @@ module peripheral_noc_mux #(
     if (rst) begin
       activeroute <= 0;
       active      <= {{CHANNELS - 1{1'b0}}, 1'b1};
-    end else begin
+    end
+    else begin
       activeroute <= nxt_activeroute;
       active      <= select;
     end

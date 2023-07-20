@@ -72,17 +72,25 @@ module peripheral_arbiter_rr #(
       // Initialize mask as 0
       mask[i] = {N{1'b0}};
 
-      if (i > 0)
+      if (i > 0) begin
         // For i=N:1 the next right is i-1
         mask[i][i-1] = ~gnt[i-1];
-      else
+      end
+      else begin
         // For i=0 the next right is N-1
         mask[i][N-1] = ~gnt[N-1];
+      end
 
       for (j = 2; j < N; j = j + 1) begin
-        if (i - j >= 0) mask[i][i-j] = mask[i][i-j+1] & ~gnt[i-j];
-        else if (i - j + 1 >= 0) mask[i][i-j+N] = mask[i][i-j+1] & ~gnt[i-j+N];
-        else mask[i][i-j+N] = mask[i][i-j+N+1] & ~gnt[i-j+N];
+        if (i - j >= 0) begin
+          mask[i][i-j] = mask[i][i-j+1] & ~gnt[i-j];
+        end
+        else if (i - j + 1 >= 0) begin
+          mask[i][i-j+N] = mask[i][i-j+1] & ~gnt[i-j+N];
+        end
+        else begin
+          mask[i][i-j+N] = mask[i][i-j+N+1] & ~gnt[i-j+N];
+        end
       end
     end
   end

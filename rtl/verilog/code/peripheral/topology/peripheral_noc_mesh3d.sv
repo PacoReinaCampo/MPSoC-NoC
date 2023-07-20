@@ -178,22 +178,28 @@ module peripheral_noc_mesh3d #(
           d  = 7'b0000000;
           if ((xd == x) && (yd == y) && (zd == z)) begin
             d = DIR_LOCAL;
-          end else if ((xd == x) && (yd == z)) begin
+          end
+          else if ((xd == x) && (yd == z)) begin
             if (zd < z) begin
               d = DIR_DOWN;
-            end else begin
+            end
+            else begin
               d = DIR_UP;
             end
-          end else if ((xd == x) && (zd == z)) begin
+          end
+          else if ((xd == x) && (zd == z)) begin
             if (yd < y) begin
               d = DIR_SOUTH;
-            end else begin
+            end
+            else begin
               d = DIR_NORTH;
             end
-          end else if ((yd == y) && (zd == z)) begin
+          end
+          else if ((yd == y) && (zd == z)) begin
             if (xd < x) begin
               d = DIR_WEST;
-            end else begin
+            end
+            else begin
               d = DIR_EAST;
             end
           end
@@ -275,7 +281,8 @@ module peripheral_noc_mesh3d #(
               .out_valid(node_out_valid[nodenum(x, y, z)]),
               .out_ready(node_out_ready[nodenum(x, y, z)])
             );
-          end else begin
+          end
+          else begin
             assign out_flit[nodenum(x, y, z)]              = node_out_flit[nodenum(x, y, z)][LOCAL];
             assign out_last[nodenum(x, y, z)]              = node_out_last[nodenum(x, y, z)][LOCAL];
             assign out_valid[nodenum(x, y, z)]             = node_out_valid[nodenum(x, y, z)][LOCAL];
@@ -345,7 +352,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][DOWN]   = node_out_last[southof(x, y, z)][UP];
             assign node_in_valid[nodenum(x, y, z)][DOWN]  = node_out_valid[southof(x, y, z)][UP];
             assign node_out_ready[nodenum(x, y, z)][DOWN] = node_in_ready[southof(x, y, z)][UP];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][DOWN]   = 'x;
             assign node_in_last[nodenum(x, y, z)][DOWN]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][DOWN]  = 0;
@@ -357,7 +365,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][UP]   = node_out_last[northof(x, y, z)][DOWN];
             assign node_in_valid[nodenum(x, y, z)][UP]  = node_out_valid[northof(x, y, z)][DOWN];
             assign node_out_ready[nodenum(x, y, z)][UP] = node_in_ready[northof(x, y, z)][DOWN];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][UP]   = 'x;
             assign node_in_last[nodenum(x, y, z)][UP]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][UP]  = 0;
@@ -369,7 +378,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][SOUTH]   = node_out_last[southof(x, y, z)][NORTH];
             assign node_in_valid[nodenum(x, y, z)][SOUTH]  = node_out_valid[southof(x, y, z)][NORTH];
             assign node_out_ready[nodenum(x, y, z)][SOUTH] = node_in_ready[southof(x, y, z)][NORTH];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][SOUTH]   = 'x;
             assign node_in_last[nodenum(x, y, z)][SOUTH]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][SOUTH]  = 0;
@@ -381,7 +391,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][NORTH]   = node_out_last[northof(x, y, z)][SOUTH];
             assign node_in_valid[nodenum(x, y, z)][NORTH]  = node_out_valid[northof(x, y, z)][SOUTH];
             assign node_out_ready[nodenum(x, y, z)][NORTH] = node_in_ready[northof(x, y, z)][SOUTH];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][NORTH]   = 'x;
             assign node_in_last[nodenum(x, y, z)][NORTH]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][NORTH]  = 0;
@@ -393,7 +404,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][WEST]   = node_out_last[westof(x, y, z)][EAST];
             assign node_in_valid[nodenum(x, y, z)][WEST]  = node_out_valid[westof(x, y, z)][EAST];
             assign node_out_ready[nodenum(x, y, z)][WEST] = node_in_ready[westof(x, y, z)][EAST];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][WEST]   = 'x;
             assign node_in_last[nodenum(x, y, z)][WEST]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][WEST]  = 0;
@@ -405,7 +417,8 @@ module peripheral_noc_mesh3d #(
             assign node_in_last[nodenum(x, y, z)][EAST]   = node_out_last[eastof(x, y, z)][WEST];
             assign node_in_valid[nodenum(x, y, z)][EAST]  = node_out_valid[eastof(x, y, z)][WEST];
             assign node_out_ready[nodenum(x, y, z)][EAST] = node_in_ready[eastof(x, y, z)][WEST];
-          end else begin
+          end
+          else begin
             assign node_in_flit[nodenum(x, y, z)][EAST]   = 'x;
             assign node_in_last[nodenum(x, y, z)][EAST]   = 'x;
             assign node_in_valid[nodenum(x, y, z)][EAST]  = 0;

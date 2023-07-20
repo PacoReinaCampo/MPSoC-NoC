@@ -162,16 +162,20 @@ module peripheral_noc_mesh2d #(
         d  = 5'b00000;
         if ((xd == x) && (yd == y)) begin
           d = DIR_LOCAL;
-        end else if (xd == x) begin
+        end
+        else if (xd == x) begin
           if (yd < y) begin
             d = DIR_SOUTH;
-          end else begin
+          end
+          else begin
             d = DIR_NORTH;
           end
-        end else begin
+        end
+        else begin
           if (xd < x) begin
             d = DIR_WEST;
-          end else begin
+          end
+          else begin
             d = DIR_EAST;
           end
         end  // else: !if(xd==x)
@@ -251,7 +255,8 @@ module peripheral_noc_mesh2d #(
             .out_valid(node_out_valid[nodenum(x, y)]),
             .out_ready(node_out_ready[nodenum(x, y)])
           );
-        end else begin
+        end
+        else begin
           assign out_flit[nodenum(x, y)]              = node_out_flit[nodenum(x, y)][LOCAL];
           assign out_last[nodenum(x, y)]              = node_out_last[nodenum(x, y)][LOCAL];
           assign out_valid[nodenum(x, y)]             = node_out_valid[nodenum(x, y)][LOCAL];
@@ -321,7 +326,8 @@ module peripheral_noc_mesh2d #(
           assign node_in_last[nodenum(x, y)][SOUTH]   = node_out_last[southof(x, y)][NORTH];
           assign node_in_valid[nodenum(x, y)][SOUTH]  = node_out_valid[southof(x, y)][NORTH];
           assign node_out_ready[nodenum(x, y)][SOUTH] = node_in_ready[southof(x, y)][NORTH];
-        end else begin
+        end
+        else begin
           assign node_in_flit[nodenum(x, y)][SOUTH]   = 'x;
           assign node_in_last[nodenum(x, y)][SOUTH]   = 'x;
           assign node_in_valid[nodenum(x, y)][SOUTH]  = 0;
@@ -333,7 +339,8 @@ module peripheral_noc_mesh2d #(
           assign node_in_last[nodenum(x, y)][NORTH]   = node_out_last[northof(x, y)][SOUTH];
           assign node_in_valid[nodenum(x, y)][NORTH]  = node_out_valid[northof(x, y)][SOUTH];
           assign node_out_ready[nodenum(x, y)][NORTH] = node_in_ready[northof(x, y)][SOUTH];
-        end else begin
+        end
+        else begin
           assign node_in_flit[nodenum(x, y)][NORTH]   = 'x;
           assign node_in_last[nodenum(x, y)][NORTH]   = 'x;
           assign node_in_valid[nodenum(x, y)][NORTH]  = 0;
@@ -345,7 +352,8 @@ module peripheral_noc_mesh2d #(
           assign node_in_last[nodenum(x, y)][WEST]   = node_out_last[westof(x, y)][EAST];
           assign node_in_valid[nodenum(x, y)][WEST]  = node_out_valid[westof(x, y)][EAST];
           assign node_out_ready[nodenum(x, y)][WEST] = node_in_ready[westof(x, y)][EAST];
-        end else begin
+        end
+        else begin
           assign node_in_flit[nodenum(x, y)][WEST]   = 'x;
           assign node_in_last[nodenum(x, y)][WEST]   = 'x;
           assign node_in_valid[nodenum(x, y)][WEST]  = 0;
@@ -357,7 +365,8 @@ module peripheral_noc_mesh2d #(
           assign node_in_last[nodenum(x, y)][EAST]   = node_out_last[eastof(x, y)][WEST];
           assign node_in_valid[nodenum(x, y)][EAST]  = node_out_valid[eastof(x, y)][WEST];
           assign node_out_ready[nodenum(x, y)][EAST] = node_in_ready[eastof(x, y)][WEST];
-        end else begin
+        end
+        else begin
           assign node_in_flit[nodenum(x, y)][EAST]   = 'x;
           assign node_in_last[nodenum(x, y)][EAST]   = 'x;
           assign node_in_valid[nodenum(x, y)][EAST]  = 0;
