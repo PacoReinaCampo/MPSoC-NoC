@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
+##              QueenField                                                       ##
 ##              Multi-Processor System on Chip                                   ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2022-2025 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,8 +42,6 @@
 ##                                                                               ##
 ###################################################################################
 
-##############################################################
-# Copyright (c) 1986-2020 Xilinx, Inc.  All rights reserved. #
-##############################################################
+dot -Tsvg management.dot > management.svg
 
-export PATH=$PATH:/opt/Xilinx/Vivado/2022.2/bin/
+dot -Tsvg user-developer.dot > user-developer.svg
