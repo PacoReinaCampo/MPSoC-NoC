@@ -1,0 +1,35 @@
+application
+├── bfm
+│   ├── ahb3
+│   │   ├── peripheral_osvvm_design_pkg.vhd
+│   │   └── peripheral_osvvm_design.vhd
+│   ├── apb4
+│   │   ├── peripheral_osvvm_design_pkg.vhd
+│   │   └── peripheral_osvvm_design.vhd
+│   ├── axi4
+│   │   ├── peripheral_osvvm_design_pkg.vhd
+│   │   └── peripheral_osvvm_design.vhd
+│   ├── bb
+│   │   ├── peripheral_osvvm_design_pkg.vhd
+│   │   └── peripheral_osvvm_design.vhd
+│   └── wb
+│       ├── peripheral_osvvm_design_pkg.vhd
+│       └── peripheral_osvvm_design.vhd
+└── core
+    ├── ahb3
+    │   ├── peripheral_osvvm_design_pkg.vhd
+    │   └── peripheral_osvvm_design.vhd
+    ├── apb4
+    │   ├── peripheral_osvvm_design_pkg.vhd
+    │   └── peripheral_osvvm_design.vhd
+    ├── axi4
+    │   ├── peripheral_osvvm_design_pkg.vhd
+    │   └── peripheral_osvvm_design.vhd
+    ├── bb
+    │   ├── peripheral_osvvm_design_pkg.vhd
+    │   └── peripheral_osvvm_design.vhd
+    └── wb
+        ├── peripheral_osvvm_design_pkg.vhd
+        └── peripheral_osvvm_design.vhd
+
+12 directories, 20 files
