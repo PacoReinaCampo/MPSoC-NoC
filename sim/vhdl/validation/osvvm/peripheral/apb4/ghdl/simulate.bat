@@ -50,6 +50,6 @@ ghdl -a --std=08 ../../../../../../../validation/osvvm/application/core/apb4/per
 ghdl -a --std=08 ../../../../../../../validation/osvvm/library/core/apb4/peripheral_osvvm_model.vhd
 ghdl -a --std=08 ../../../../../../../validation/osvvm/library/core/apb4/peripheral_osvvm_model_pkg.vhd
 ghdl -a --std=08 ../../../../../../../validation/osvvm/library/core/apb4/peripheral_osvvm_testbench.vhd
-ghdl -m --std=08 peripheral_osvvm_testbench
-ghdl -r --std=08 peripheral_osvvm_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > peripheral_osvvm_testbench.tree
+ghdl -e --std=08 peripheral_osvvm_testbench
+ghdl -r --std=08 peripheral_osvvm_testbench --ieee-asserts=disable-at-0 --vcd=peripheral_osvvm_testbench.vcd --wave=system.ghw --stop-time=1ms
 pause

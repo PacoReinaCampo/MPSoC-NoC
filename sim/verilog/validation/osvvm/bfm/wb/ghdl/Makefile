@@ -52,8 +52,8 @@ build:
 	ghdl -a --std=08 ../../../../../../../validation/osvvm/library/bfm/wb/peripheral_osvvm_testbench.vhd
 
 simulate:
-	ghdl -m --std=08 peripheral_osvvm_testbench
-	ghdl -r --std=08 peripheral_osvvm_testbench --ieee-asserts=disable-at-0 --disp-tree=inst > peripheral_osvvm_testbench.tree
+	ghdl -e --std=08 peripheral_osvvm_testbench
+	ghdl -r --std=08 peripheral_osvvm_testbench --ieee-asserts=disable-at-0 --vcd=peripheral_osvvm_testbench.vcd --wave=system.ghw --stop-time=1ms
 
 clean:
-	rm -f *.cf *.tree
+	rm -f *.cf *.vcd *.ghw
