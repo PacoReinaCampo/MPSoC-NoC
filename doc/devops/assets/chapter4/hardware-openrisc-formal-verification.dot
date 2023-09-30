@@ -4,16 +4,16 @@ digraph Project {
   node[shape=record];
 
   // Blocks
-  subgraph "cluster TestBench" { label = "TestBench";
+  subgraph "cluster FormalTestBench" { label = "Formal TestBench";
     Stimulus[shape=box, label="Stimulus"];
-    Model[shape=box, label="Model (OpenRISC)"];
+    Requirements[shape=box, label="Requirements (OpenRISC)"];
     DUT[shape=box, label="DUT (OpenRISC)"];
     Checker[shape=box, label="Checker"];
   }
 
   // Sequence
-  Stimulus -> Model;
+  Stimulus -> Requirements;
   Stimulus -> DUT;
-  Model -> Checker;
+  Requirements -> Checker;
   DUT -> Checker;
 }
