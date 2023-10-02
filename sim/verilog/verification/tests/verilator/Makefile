@@ -42,12 +42,17 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
+all: build
 
 build:
 	verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --cc -f system.vc --top-module peripheral_noc_testbench
 
 simulate:
+	make -C obj_dir -j -f Vperipheral_noc_testbench.mk Vperipheral_noc_testbench
+	obj_dir/Vperipheral_noc_testbench
+
+test:
+	gtkwave peripheral_noc_testbench.vcd
 
 clean:
 	rm -rf obj_dir
