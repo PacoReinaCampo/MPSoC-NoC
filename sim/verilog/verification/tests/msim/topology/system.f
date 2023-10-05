@@ -54,6 +54,8 @@
 ../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
 ../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router.sv
 
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh2d.sv
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh3d.sv
 ../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh4d.sv
 
 ../../../../../../bench/verilog/code/tests/topology/peripheral_noc_testbench.sv

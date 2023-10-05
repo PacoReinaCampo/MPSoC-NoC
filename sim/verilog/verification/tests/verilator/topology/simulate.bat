@@ -43,7 +43,7 @@ noc:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 @echo off
-call ../../../../../../../settings64_verilator.bat
+call ../../../../../../settings64_verilator.bat
 
 verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --cc -f system.vc --top-module peripheral_noc_testbench
 make -C obj_dir -j -f Vperipheral_noc_testbench.mk Vperipheral_noc_testbench

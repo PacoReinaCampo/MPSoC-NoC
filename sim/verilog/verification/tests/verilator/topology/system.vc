@@ -42,18 +42,20 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
-../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
-../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_demux.sv
-../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_mux.sv
-../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_vchannel_mux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_demux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_mux.sv
+../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_vchannel_mux.sv
 
-../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_input.sv
-../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup_slice.sv
-../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup.sv
-../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
-../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_input.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup_slice.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
+../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router.sv
 
-../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh4d.sv
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh2d.sv
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh3d.sv
+../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh4d.sv
 
-../../../../../bench/verilog/code/tests/peripheral_noc_testbench.sv
+../../../../../../bench/verilog/code/tests/topology/peripheral_noc_testbench.sv

@@ -66,18 +66,38 @@ module peripheral_noc_testbench;
   //
   // Variables
   //
-  wire                                           clk;
-  wire                                           rst;
+  reg                                           clk;
+  reg                                           rst;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_in_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_in_ready;
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_2d_in_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_in_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_in_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_in_ready;
 
-  wire [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_out_flit;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_last;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_valid;
-  wire [NODES-1:0][CHANNELS-1:0]                 noc_out_ready;
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_2d_out_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_out_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_out_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_2d_out_ready;
+
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_3d_in_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_in_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_in_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_in_ready;
+
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_3d_out_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_out_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_out_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_3d_out_ready;
+
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_4d_in_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_in_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_in_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_in_ready;
+
+  reg [NODES-1:0][CHANNELS-1:0][FLIT_WIDTH-1:0] noc_4d_out_flit;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_out_last;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_out_valid;
+  reg [NODES-1:0][CHANNELS-1:0]                 noc_4d_out_ready;
 
   //////////////////////////////////////////////////////////////////////////////
   //
@@ -91,10 +111,8 @@ module peripheral_noc_testbench;
 
     .ENABLE_VCHANNELS(ENABLE_VCHANNELS),
 
-    .T(T),
     .X(X),
     .Y(Y),
-    .Z(Z),
 
     .BUFFER_SIZE_IN (BUFFER_SIZE_IN),
     .BUFFER_SIZE_OUT(BUFFER_SIZE_OUT),
@@ -104,15 +122,15 @@ module peripheral_noc_testbench;
     .rst(rst),
     .clk(clk),
 
-    .in_flit (noc_in_flit),
-    .in_last (noc_in_last),
-    .in_valid(noc_in_valid),
-    .in_ready(noc_in_ready),
+    .in_flit (noc_2d_in_flit),
+    .in_last (noc_2d_in_last),
+    .in_valid(noc_2d_in_valid),
+    .in_ready(noc_2d_in_ready),
 
-    .out_flit (noc_out_flit),
-    .out_last (noc_out_last),
-    .out_valid(noc_out_valid),
-    .out_ready(noc_out_ready)
+    .out_flit (noc_2d_out_flit),
+    .out_last (noc_2d_out_last),
+    .out_valid(noc_2d_out_valid),
+    .out_ready(noc_2d_out_ready)
   );
 
   peripheral_noc_mesh3d #(
@@ -121,7 +139,6 @@ module peripheral_noc_testbench;
 
     .ENABLE_VCHANNELS(ENABLE_VCHANNELS),
 
-    .T(T),
     .X(X),
     .Y(Y),
     .Z(Z),
@@ -134,15 +151,15 @@ module peripheral_noc_testbench;
     .rst(rst),
     .clk(clk),
 
-    .in_flit (noc_in_flit),
-    .in_last (noc_in_last),
-    .in_valid(noc_in_valid),
-    .in_ready(noc_in_ready),
+    .in_flit (noc_3d_in_flit),
+    .in_last (noc_3d_in_last),
+    .in_valid(noc_3d_in_valid),
+    .in_ready(noc_3d_in_ready),
 
-    .out_flit (noc_out_flit),
-    .out_last (noc_out_last),
-    .out_valid(noc_out_valid),
-    .out_ready(noc_out_ready)
+    .out_flit (noc_3d_out_flit),
+    .out_last (noc_3d_out_last),
+    .out_valid(noc_3d_out_valid),
+    .out_ready(noc_3d_out_ready)
   );
 
   peripheral_noc_mesh4d #(
@@ -164,14 +181,33 @@ module peripheral_noc_testbench;
     .rst(rst),
     .clk(clk),
 
-    .in_flit (noc_in_flit),
-    .in_last (noc_in_last),
-    .in_valid(noc_in_valid),
-    .in_ready(noc_in_ready),
+    .in_flit (noc_4d_in_flit),
+    .in_last (noc_4d_in_last),
+    .in_valid(noc_4d_in_valid),
+    .in_ready(noc_4d_in_ready),
 
-    .out_flit (noc_out_flit),
-    .out_last (noc_out_last),
-    .out_valid(noc_out_valid),
-    .out_ready(noc_out_ready)
+    .out_flit (noc_4d_out_flit),
+    .out_last (noc_4d_out_last),
+    .out_valid(noc_4d_out_valid),
+    .out_ready(noc_4d_out_ready)
   );
+
+  // STIMULUS
+
+  always #1 clk = ~clk;
+
+  initial begin
+    // Dump waves
+    $dumpfile("system.vcd");
+    $dumpvars(0, peripheral_noc_testbench);
+
+    clk = 0;
+    rst = 0;
+
+    rst = 1;
+    #2;
+
+    $display("End");
+    $finish();
+  end
 endmodule
