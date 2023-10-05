@@ -42,7 +42,6 @@
 ##                                                                               ##
 ###################################################################################
 
-source ../../../../../settings64_msim.sh
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
 
-make clean
-make
+../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.sv

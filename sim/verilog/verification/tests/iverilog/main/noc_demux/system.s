@@ -42,13 +42,6 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
 
-build:
-	iverilog -g2012 -o system.vvp -c system.s -s peripheral_noc_testbench
-
-simulate:
-	vvp system.vvp
-
-clean:
-	rm -rf system.vvp
+../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.sv
