@@ -42,17 +42,7 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
+source ../../../../../../../settings64_msim.sh
 
-build:
-	if [ ! -e work ]; then vlib work; fi
-	vlog -sv -f system.f
-
-simulate:
-	vsim -c -do run.do work.peripheral_arbiter_rr_testbench
-
-test:
-	gtkwave system.vcd
-
-clean:
-	rm -rf work transcript *.vcd
+make clean
+make

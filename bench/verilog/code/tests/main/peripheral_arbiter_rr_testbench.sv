@@ -66,7 +66,7 @@ module peripheral_arbiter_rr_testbench;
   // Module Body
   //
 
-  //DUT
+  // DUT
   peripheral_arbiter_rr #(
     .N(N)
   ) arbiter_rr (
@@ -77,29 +77,40 @@ module peripheral_arbiter_rr_testbench;
     .nxt_gnt(nxt_gnt)
   );
 
+  // STIMULUS
   initial begin
     // Dump waves
     $dumpfile("system.vcd");
     $dumpvars(0, peripheral_arbiter_rr_testbench);
 
-    req = 2'b00;
     en  = 1'b0;
+    req = 2'b00;
     gnt = 2'b00;
 
-    req = 2'b11;
     en  = 1'b1;
+    req = 2'b11;
     gnt = 2'b11;
     #1;
 
-    req = 2'b01;
     en  = 1'b0;
+    req = 2'b01;
     gnt = 2'b01;
     #2;
 
-    req = 2'b10;
     en  = 1'b1;
+    req = 2'b10;
     gnt = 2'b10;
     #3;
+
+    en  = 1'b0;
+    req = 2'b01;
+    gnt = 2'b10;
+    #4;
+
+    en  = 1'b1;
+    req = 2'b10;
+    gnt = 2'b01;
+    #5;
 
     $display("End");
     $finish();

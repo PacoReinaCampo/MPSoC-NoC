@@ -42,17 +42,6 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
 
-build:
-	if [ ! -e work ]; then vlib work; fi
-	vlog -sv -f system.f
-
-simulate:
-	vsim -c -do run.do work.peripheral_arbiter_rr_testbench
-
-test:
-	gtkwave system.vcd
-
-clean:
-	rm -rf work transcript *.vcd
+../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.sv

@@ -84,7 +84,67 @@ module peripheral_noc_testbench;
   // Module Body
   //
 
-  //DUT
+  // DUT
+  peripheral_noc_mesh2d #(
+    .FLIT_WIDTH(FLIT_WIDTH),
+    .CHANNELS  (CHANNELS),
+
+    .ENABLE_VCHANNELS(ENABLE_VCHANNELS),
+
+    .T(T),
+    .X(X),
+    .Y(Y),
+    .Z(Z),
+
+    .BUFFER_SIZE_IN (BUFFER_SIZE_IN),
+    .BUFFER_SIZE_OUT(BUFFER_SIZE_OUT),
+
+    .NODES(NODES)
+  ) noc_mesh2d (
+    .rst(rst),
+    .clk(clk),
+
+    .in_flit (noc_in_flit),
+    .in_last (noc_in_last),
+    .in_valid(noc_in_valid),
+    .in_ready(noc_in_ready),
+
+    .out_flit (noc_out_flit),
+    .out_last (noc_out_last),
+    .out_valid(noc_out_valid),
+    .out_ready(noc_out_ready)
+  );
+
+  peripheral_noc_mesh3d #(
+    .FLIT_WIDTH(FLIT_WIDTH),
+    .CHANNELS  (CHANNELS),
+
+    .ENABLE_VCHANNELS(ENABLE_VCHANNELS),
+
+    .T(T),
+    .X(X),
+    .Y(Y),
+    .Z(Z),
+
+    .BUFFER_SIZE_IN (BUFFER_SIZE_IN),
+    .BUFFER_SIZE_OUT(BUFFER_SIZE_OUT),
+
+    .NODES(NODES)
+  ) noc_mesh3d (
+    .rst(rst),
+    .clk(clk),
+
+    .in_flit (noc_in_flit),
+    .in_last (noc_in_last),
+    .in_valid(noc_in_valid),
+    .in_ready(noc_in_ready),
+
+    .out_flit (noc_out_flit),
+    .out_last (noc_out_last),
+    .out_valid(noc_out_valid),
+    .out_ready(noc_out_ready)
+  );
+
   peripheral_noc_mesh4d #(
     .FLIT_WIDTH(FLIT_WIDTH),
     .CHANNELS  (CHANNELS),
