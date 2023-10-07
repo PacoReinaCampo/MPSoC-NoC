@@ -47,5 +47,5 @@ call ../../../../../../../settings64_msim.bat
 
 vlib work
 vlog -sv -f system.f
-vsim -c -do run.do work.peripheral_arbiter_rr_testbench
+vsim -c -do run.do work.peripheral_noc_router_testbench
 pause

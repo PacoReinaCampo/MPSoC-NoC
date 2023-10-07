@@ -43,9 +43,9 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 @echo off
-call ../../../../settings64_ghdl.bat
-sh system.g
+call ../../../../../../settings64_msim.bat
 
-ghdl -e --std=08 peripheral_noc_testbench
-ghdl -r --std=08 peripheral_noc_testbench --ieee-asserts=disable-at-0 --vcd=peripheral_noc_testbench.vcd --wave=system.ghw --stop-time=1ms
+vlib work
+vcom -2008 -f system.f
+vsim -c -do run.do work.peripheral_noc_mesh4d
 pause

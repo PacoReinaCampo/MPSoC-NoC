@@ -42,20 +42,20 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
+../../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
 
-../../../../../rtl/vhdl/code/peripheral/main/peripheral_arbiter_rr.vhd
-../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_buffer.vhd
-../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_demux.vhd
-../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_mux.vhd
-../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_vchannel_mux.vhd
+../../../../../../rtl/vhdl/code/peripheral/main/peripheral_arbiter_rr.vhd
+../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_buffer.vhd
+../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_demux.vhd
+../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_mux.vhd
+../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_vchannel_mux.vhd
 
-../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_input.vhd
-../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup_slice.vhd
-../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup.vhd
-../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_output.vhd
-../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router.vhd
+../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_input.vhd
+../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup_slice.vhd
+../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup.vhd
+../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_output.vhd
+../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router.vhd
 
-../../../../../rtl/vhdl/code/peripheral/topology/peripheral_noc_mesh4d.vhd
+../../../../../../rtl/vhdl/code/peripheral/topology/peripheral_noc_mesh4d.vhd
 
-../../../../../bench/vhdl/code/tests/peripheral_noc_testbench.vhd
+../../../../../../bench/vhdl/code/tests/topology/peripheral_noc_testbench.vhd

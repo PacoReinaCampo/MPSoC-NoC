@@ -49,7 +49,7 @@ build:
 	vlog -sv -f system.f
 
 simulate:
-	vsim -c -do run.do work.peripheral_arbiter_rr_testbench
+	vsim -c -do run.do work.peripheral_noc_router_output_testbench
 
 test:
 	gtkwave system.vcd

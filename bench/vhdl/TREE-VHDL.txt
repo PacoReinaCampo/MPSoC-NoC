@@ -1,5 +1,18 @@
 code
 └── tests
-    └── peripheral_noc_testbench.vhd
+    ├── main
+    │   ├── peripheral_arbiter_rr_testbench.vhd
+    │   ├── peripheral_noc_buffer_testbench.vhd
+    │   ├── peripheral_noc_demux_testbench.vhd
+    │   ├── peripheral_noc_mux_testbench.vhd
+    │   └── peripheral_noc_vchannel_mux_testbench.vhd
+    ├── router
+    │   ├── peripheral_noc_router_input_testbench.vhd
+    │   ├── peripheral_noc_router_lookup_slice_testbench.vhd
+    │   ├── peripheral_noc_router_lookup_testbench.vhd
+    │   ├── peripheral_noc_router_output_testbench.vhd
+    │   └── peripheral_noc_router_testbench.vhd
+    └── topology
+        └── peripheral_noc_testbench.vhd
 
-1 directory, 1 file
+4 directories, 11 files

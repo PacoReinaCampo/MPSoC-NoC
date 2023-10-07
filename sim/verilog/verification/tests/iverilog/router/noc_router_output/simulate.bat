@@ -45,7 +45,7 @@
 @echo off
 call ../../../../../../../settings64_iverilog.bat
 
-iverilog -g2012 -o system.vvp -c system.s -s peripheral_arbiter_rr_testbench
+iverilog -g2012 -o system.vvp -c system.s -s peripheral_noc_router_output_testbench
 vvp system.vvp
 gtkwave system.vcd
 pause

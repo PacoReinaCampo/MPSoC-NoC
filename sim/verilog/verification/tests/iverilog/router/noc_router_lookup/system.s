@@ -43,5 +43,12 @@
 ###################################################################################
 
 ../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_demux.sv
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_mux.sv
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_vchannel_mux.sv
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.sv
+../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup_slice.sv
+../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup.sv
+
+../../../../../../../bench/verilog/code/tests/main/peripheral_noc_router_lookup_testbench.sv

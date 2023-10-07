@@ -42,20 +42,20 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-vhdl2008 work ../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/pkg/core/vhdl_pkg.vhd
 
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/main/peripheral_arbiter_rr.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_buffer.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_demux.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_mux.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_vchannel_mux.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/main/peripheral_arbiter_rr.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_buffer.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_demux.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_mux.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/main/peripheral_noc_vchannel_mux.vhd
 
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_input.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup_slice.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_output.vhd
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_input.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup_slice.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_lookup.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router_output.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/router/peripheral_noc_router.vhd
 
-vhdl2008 work ../../../../../rtl/vhdl/code/peripheral/topology/peripheral_noc_mesh4d.vhd
+vhdl2008 work ../../../../../../rtl/vhdl/code/peripheral/topology/peripheral_noc_mesh4d.vhd
 
-vhdl2008 work ../../../../../bench/vhdl/code/tests/peripheral_noc_testbench.vhd
+vhdl2008 work ../../../../../../bench/vhdl/code/tests/topology/peripheral_noc_testbench.vhd
