@@ -9,14 +9,14 @@
 ::                  |_|                                                          ::
 ::                                                                               ::
 ::                                                                               ::
-::              Peripheral for MPSoC                                             ::
-::              Multi-Processor System on Chip                                   ::
+::              Peripheral-NTM for MPSoC                                         ::
+::              Neural Turing Machine for MPSoC                                  ::
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                                               ::
-:: Copyright (c) 2015-2016 by the author(s)                                      ::
+:: Copyright (c) 2020-2021 by the author(s)                                      ::
 ::                                                                               ::
 :: Permission is hereby granted, free of charge, to any person obtaining a copy  ::
 :: of this software and associated documentation files (the "Software"), to deal ::
@@ -42,5 +42,8 @@
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-SET PATH=C:\iverilog\bin;%PATH%
-SET PATH=C:\gtkwave\bin;%PATH%
+@echo off
+call ../../../../../../../settings64_verilator.bat
+
+gtkwave peripheral_arbiter_rr_testbench.vcd
+pause

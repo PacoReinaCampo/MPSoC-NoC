@@ -42,5 +42,4 @@
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-SET PATH=C:\iverilog\bin;%PATH%
-SET PATH=C:\gtkwave\bin;%PATH%
+rmdir /s /q obj_dir

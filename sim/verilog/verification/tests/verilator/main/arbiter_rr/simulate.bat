@@ -1,4 +1,4 @@
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+noc:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                            __ _      _     _                  ::
 ::                                           / _(_)    | |   | |                 ::
 ::                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |                 ::
@@ -42,5 +42,11 @@
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-SET PATH=C:\iverilog\bin;%PATH%
-SET PATH=C:\gtkwave\bin;%PATH%
+@echo off
+call ../../../../../../settings64_verilator.bat
+
+verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --trace --cc -f system.vc
+
+make -C obj_dir -j -f Vperipheral_arbiter_rr.mk Vperipheral_arbiter_rr
+obj_dir/Vperipheral_arbiter_rr
+pause
