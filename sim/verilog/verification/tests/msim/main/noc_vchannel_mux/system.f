@@ -43,5 +43,6 @@
 ###################################################################################
 
 ../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
+../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_vchannel_mux.sv
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.sv
+../../../../../../../bench/verilog/code/tests/main/peripheral_noc_vchannel_mux_testbench.sv

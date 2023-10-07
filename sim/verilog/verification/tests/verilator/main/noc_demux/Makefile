@@ -42,6 +42,17 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
+all: build simulate
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_noc_buffer_testbench.sv
+build:
+	verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --trace --cc -f system.vc
+
+simulate:
+	make -C obj_dir -j -f Vperipheral_noc_demux.mk Vperipheral_noc_demux
+	obj_dir/Vperipheral_noc_demux
+
+test:
+	gtkwave peripheral_noc_demux.vcd
+
+clean:
+	rm -rf obj_dir *.vcd

@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
-##              Multi-Processor System on Chip                                   ##
+##              Peripheral-NTM for MPSoC                                         ##
+##              Neural Turing Machine for MPSoC                                  ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2020-2021 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,6 +42,4 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
-
-../../../../../../../bench/verilog/code/tests/main/peripheral_noc_buffer_testbench.sv
+make test

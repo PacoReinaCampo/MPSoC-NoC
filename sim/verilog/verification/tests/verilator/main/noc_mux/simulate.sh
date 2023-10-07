@@ -42,6 +42,5 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
-
-../../../../../../../bench/verilog/code/tests/main/peripheral_noc_buffer_testbench.sv
+make clean
+make
