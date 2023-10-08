@@ -1,27 +1,38 @@
-#include "Vperipheral_noc_buffer.h"
+#include "Vperipheral_noc_router.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
 int main(int argc, char **argv, char **env) {
   int i;
+  int clk;
   Verilated::commandArgs(argc, argv);
 
   // init top verilog instance
-  Vperipheral_noc_buffer* top = new Vperipheral_noc_buffer;
+  Vperipheral_noc_router* top = new Vperipheral_noc_router;
 
   // init trace dump
   Verilated::traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
-  tfp->open ("peripheral_noc_buffer.vcd");
+  tfp->open ("peripheral_noc_router.vcd");
 
   // initialize simulation inputs
-  top->req = 0x55;
-  top->gnt = 0x22;
+  top->clk = 1;
+  top->rst = 1;
+
+  top->in1 = 0x55;
+  top->in2 = 0x22;
 
   // run simulation for 100 clock periods
   for (i=0; i<20; i++) {
-    top->en = (i < 5);
+    top->rst = (i < 2);
+
+    // dump variables into VCD file and toggle clock
+    for (clk=0; clk<2; clk++) {
+      tfp->dump (2*i+clk);
+      top->clk = !top->clk;
+      top->eval ();
+    }
 
     if (Verilated::gotFinish()) exit(0);
   }

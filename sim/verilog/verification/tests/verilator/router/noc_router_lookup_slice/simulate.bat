@@ -1,4 +1,4 @@
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+noc:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                            __ _      _     _                  ::
 ::                                           / _(_)    | |   | |                 ::
 ::                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |                 ::
@@ -43,9 +43,10 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 @echo off
-call ../../../../../../../settings64_msim.bat
+call ../../../../../../settings64_verilator.bat
 
-vlib work
-vlog -sv -f system.f
-vsim -c -do run.do work.peripheral_noc_demux_testbench
+verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --trace --cc -f system.vc
+
+make -C obj_dir -j -f Vperipheral_noc_router_lookup_slice.mk Vperipheral_noc_router_lookup_slice
+obj_dir/Vperipheral_noc_router_lookup_slice
 pause

@@ -42,10 +42,4 @@
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-@echo off
-call ../../../../../../../settings64_msim.bat
-
-vlib work
-vlog -sv -f system.f
-vsim -c -do run.do work.peripheral_noc_demux_testbench
-pause
+rmdir /s /q obj_dir

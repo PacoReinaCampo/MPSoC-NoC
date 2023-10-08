@@ -9,14 +9,14 @@
 ::                  |_|                                                          ::
 ::                                                                               ::
 ::                                                                               ::
-::              Peripheral for MPSoC                                             ::
-::              Multi-Processor System on Chip                                   ::
+::              Peripheral-NTM for MPSoC                                         ::
+::              Neural Turing Machine for MPSoC                                  ::
 ::                                                                               ::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                                               ::
-:: Copyright (c) 2015-2016 by the author(s)                                      ::
+:: Copyright (c) 2020-2021 by the author(s)                                      ::
 ::                                                                               ::
 :: Permission is hereby granted, free of charge, to any person obtaining a copy  ::
 :: of this software and associated documentation files (the "Software"), to deal ::
@@ -43,9 +43,7 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 @echo off
-call ../../../../../../../settings64_msim.bat
+call ../../../../../../../settings64_verilator.bat
 
-vlib work
-vlog -sv -f system.f
-vsim -c -do run.do work.peripheral_noc_demux_testbench
+gtkwave peripheral_arbiter_rr_testbench.vcd
 pause

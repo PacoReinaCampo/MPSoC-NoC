@@ -45,14 +45,14 @@
 all: build simulate
 
 build:
-	if [ ! -e work ]; then vlib work; fi
-	vlog -sv -f system.f
+	verilator -Wno-lint -Wno-UNOPTFLAT -Wno-COMBDLY --trace --cc -f system.vc
 
 simulate:
-	vsim -c -do run.do work.peripheral_noc_mux_testbench
+	make -C obj_dir -j -f Vperipheral_noc_router_input.mk Vperipheral_noc_router_input
+	obj_dir/Vperipheral_noc_router_input
 
 test:
-	gtkwave system.vcd
+	gtkwave peripheral_noc_router_input.vcd
 
 clean:
-	rm -rf work transcript *.vcd
+	rm -rf obj_dir *.vcd

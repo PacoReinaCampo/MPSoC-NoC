@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
-##              Multi-Processor System on Chip                                   ##
+##              Peripheral-NTM for MPSoC                                         ##
+##              Neural Turing Machine for MPSoC                                  ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2020-2021 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,17 +42,4 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
-
-build:
-	if [ ! -e work ]; then vlib work; fi
-	vlog -sv -f system.f
-
-simulate:
-	vsim -c -do run.do work.peripheral_noc_mux_testbench
-
-test:
-	gtkwave system.vcd
-
-clean:
-	rm -rf work transcript *.vcd
+make test
