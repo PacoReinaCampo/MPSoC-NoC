@@ -58,7 +58,7 @@ module peripheral_noc_buffer #(
   input                   in_valid,
   output                  in_ready,
 
-  //FIFO output side
+  // FIFO output side
   output reg [FLIT_WIDTH-1:0] out_flit,
   output reg                  out_last,
   output                      out_valid,
@@ -93,7 +93,11 @@ module peripheral_noc_buffer #(
   //
 
   function logic [AW:0] find_first_one(input logic [DEPTH:0] data);
-    for (int i = DEPTH; i >= 0; i--) if (data[i]) return i;
+    for (int i = DEPTH; i >= 0; i--) begin
+      if (data[i]) begin
+        return i;
+      end
+    end
     return DEPTH + 1;
   endfunction
 
@@ -123,12 +127,10 @@ module peripheral_noc_buffer #(
       wr_addr  <= 'b0;
       rd_addr  <= 'b0;
       rd_count <= 'b0;
-    end
-    else begin
+    end else begin
       if (fifo_write & ~fifo_read) begin
         rd_count <= rd_count + 1'b1;
-      end
-      else if (fifo_read & ~fifo_write) begin
+      end else if (fifo_read & ~fifo_write) begin
         rd_count <= rd_count - 1'b1;
       end
 
@@ -154,8 +156,7 @@ module peripheral_noc_buffer #(
     if (read_ram) begin
       out_flit <= ram[rd_addr][0+:FLIT_WIDTH];
       out_last <= ram[rd_addr][FLIT_WIDTH];
-    end
-    else if (fifo_write & write_through) begin
+    end else if (fifo_write & write_through) begin
       out_flit <= in_flit;
       out_last <= in_last;
     end
@@ -166,8 +167,7 @@ module peripheral_noc_buffer #(
       always @(posedge clk) begin
         if (rst) begin
           data_last_buf <= 0;
-        end
-        else if (fifo_write) begin
+        end else if (fifo_write) begin
           data_last_buf <= {data_last_buf, in_last};
         end
       end
@@ -177,8 +177,7 @@ module peripheral_noc_buffer #(
 
       assign out_valid         = (rd_count > 0) & |data_last_shifted;
       assign packet_size       = DEPTH + 1 - find_first_one(data_last_shifted);
-    end
-    else begin
+    end else begin
       assign out_valid   = rd_count > 0;
       assign packet_size = 0;
     end

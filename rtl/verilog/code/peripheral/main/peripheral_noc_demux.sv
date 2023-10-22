@@ -108,8 +108,7 @@ module peripheral_noc_demux #(
       if (in_valid & ~in_last) begin
         nxt_active = select;
       end
-    end
-    else begin
+    end else begin
       in_ready  = |(active & out_ready);
       out_valid = active & {CHANNELS{in_valid}};
 
@@ -122,8 +121,7 @@ module peripheral_noc_demux #(
   always @(posedge clk) begin
     if (rst) begin
       active <= '0;
-    end
-    else begin
+    end else begin
       active <= nxt_active;
     end
   end
