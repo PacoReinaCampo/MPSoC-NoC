@@ -55,4 +55,4 @@ test:
 	gtkwave system.vcd
 
 clean:
-	rm -rf work transcript *.vcd
+	rm -rf work transcript *.vcd *.vcd

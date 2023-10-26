@@ -52,4 +52,4 @@ simulate:
 	vsim -c -do run.do work.peripheral_osvvm_testbench
 
 clean:
-	rm -rf work transcript
+	rm -rf work transcript *.vcd

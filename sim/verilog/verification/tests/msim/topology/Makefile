@@ -52,4 +52,4 @@ simulate:
 	vsim -c -do run.do work.peripheral_noc_testbench
 
 clean:
-	rm -rf work transcript
+	rm -rf work transcript *.vcd *.vcd

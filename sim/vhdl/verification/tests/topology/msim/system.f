@@ -58,4 +58,4 @@
 
 ../../../../../../rtl/vhdl/code/peripheral/topology/peripheral_noc_mesh4d.vhd
 
-../../../../../../bench/vhdl/code/tests/topology/peripheral_noc_testbench.vhd
+../../../../../../bench/vhdl/code/tests/peripheral/topology/peripheral_noc_testbench.vhd

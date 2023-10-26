@@ -46,4 +46,4 @@
 
 --exe
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_arbiter_rr_testbench.cpp
+../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_arbiter_rr_testbench.cpp

@@ -44,4 +44,4 @@
 
 ../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_demux.sv
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_noc_demux_testbench.sv
+../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_noc_demux_testbench.sv

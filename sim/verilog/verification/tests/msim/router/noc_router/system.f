@@ -54,4 +54,4 @@
 ../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
 ../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router.sv
 
-../../../../../../../bench/verilog/code/tests/main/peripheral_noc_router_testbench.sv
+../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_noc_router_testbench.sv

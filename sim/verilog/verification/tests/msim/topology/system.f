@@ -58,4 +58,4 @@
 ../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh3d.sv
 ../../../../../../rtl/verilog/code/peripheral/topology/peripheral_noc_mesh4d.sv
 
-../../../../../../bench/verilog/code/tests/topology/peripheral_noc_testbench.sv
+../../../../../../bench/verilog/code/tests/peripheral/topology/peripheral_noc_testbench.sv
