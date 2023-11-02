@@ -77,7 +77,7 @@ module peripheral_noc_synthesis #(
   // Module Body
   //
 
-  //DUT WB
+  // DUT WB
   peripheral_wb_noc #(
     .SIM  (SIM),
     .DEBUG(DEBUG)

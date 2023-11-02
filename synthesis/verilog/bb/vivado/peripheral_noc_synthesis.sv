@@ -63,7 +63,7 @@ module peripheral_noc_synthesis (
   // Module Body
   //
 
-  //DUT BB
+  // DUT BB
   bb_noc noc (
     .mclk   (mclk),    // Main system clock
     .puc_rst(puc_rst), // Main system reset

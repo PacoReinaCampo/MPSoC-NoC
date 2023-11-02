@@ -59,7 +59,7 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
       vif.ip1 <= req.ip1;
       vif.ip2 <= req.ip2;
       //@(posedge vif.clk);
-      //req.out <= vif.out;
+      // req.out <= vif.out;
       seq_item_port.item_done();
     end
   endtask
