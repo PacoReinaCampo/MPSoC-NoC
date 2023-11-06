@@ -122,9 +122,8 @@ module peripheral_noc_mesh3d #(
   wire [6:0]                                 phys_out_ready;
 
   //////////////////////////////////////////////////////////////////////////////
-  //
   // Functions
-  //
+  //////////////////////////////////////////////////////////////////////////////
 
   // Get the node number
   function integer nodenum(input integer x, input integer y, input integer z);
