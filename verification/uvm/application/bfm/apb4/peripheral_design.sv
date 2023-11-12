@@ -37,7 +37,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-module peripheral_adder (
+module peripheral_design (
   input clk,
   input rst,
 
@@ -48,8 +48,10 @@ module peripheral_adder (
 );
 
   always @(posedge clk or posedge rst) begin
-    if (rst) out <= 0;
-    else out <= in1 + in2;
+    if (rst) begin
+      out <= 0;
+    end else begin
+      out <= in1 + in2;
+    end
   end
-
 endmodule
