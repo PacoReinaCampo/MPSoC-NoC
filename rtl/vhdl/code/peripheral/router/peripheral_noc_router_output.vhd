@@ -1,6 +1,3 @@
--- Converted from rtl/verilog/router/noc_router_output.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -109,13 +106,13 @@ architecture rtl of peripheral_noc_router_output is
       clk : in std_logic;
       rst : in std_logic;
 
-      --FIFO input side
+      -- FIFO input side
       in_flit  : in  std_logic_vector(FLIT_WIDTH-1 downto 0);
       in_last  : in  std_logic;
       in_valid : in  std_logic;
       in_ready : out std_logic;
 
-      --FIFO output side
+      -- FIFO output side
       out_flit  : out std_logic_vector(FLIT_WIDTH-1 downto 0);
       out_last  : out std_logic;
       out_valid : out std_logic;

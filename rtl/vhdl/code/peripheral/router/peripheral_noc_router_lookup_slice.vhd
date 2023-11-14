@@ -1,6 +1,3 @@
--- Converted from rtl/verilog/router/noc_router_lookup_slice.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --

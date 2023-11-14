@@ -1,6 +1,3 @@
--- Converted from bench/verilog/regression/peripheral_noc_testbench.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -131,7 +128,7 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --DUT
+  -- DUT
   noc_mesh4d : peripheral_noc_mesh4d
     generic map (
       FLIT_WIDTH => FLIT_WIDTH,

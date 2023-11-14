@@ -1,6 +1,3 @@
--- Converted from rtl/verilog/core/peripheral_noc_mux.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --

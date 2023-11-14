@@ -1,6 +1,3 @@
--- Converted from rtl/verilog/topology/noc.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -140,7 +137,7 @@ architecture rtl of peripheral_noc_mesh4d is
   -- Constants
   ------------------------------------------------------------------------------
 
-  --Commons
+  -- Commons
   constant VCHANNELS : integer := 9;
   constant OUTPUTS   : integer := 9;
   constant INPUTS    : integer := 9;

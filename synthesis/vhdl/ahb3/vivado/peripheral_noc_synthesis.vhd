@@ -1,6 +1,3 @@
--- Converted from bench/verilog/regression/peripheral_noc_synthesis.sv
--- by verilog2vhdl - QueenField
-
 --------------------------------------------------------------------------------
 --                                            __ _      _     _               --
 --                                           / _(_)    | |   | |              --
@@ -41,7 +38,6 @@
 --------------------------------------------------------------------------------
 -- Author(s):
 --   Paco Reina Campo <pacoreinacampo@queenfield.tech>
---
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -56,11 +52,11 @@ entity peripheral_noc_synthesis is
     SYNC_DEPTH     : integer := 3
   );
   port (
-	--Common signals
+    -- Common signals
     HRESETn   : in  std_logic;
     HCLK      : in  std_logic;
 
-    --UART AHB3
+    -- UART AHB3
     noc_HSEL      : in  std_logic;
     noc_HADDR     : in  std_logic_vector(HADDR_SIZE-1 downto 0);
     noc_HWDATA    : in  std_logic_vector(HDATA_SIZE-1 downto 0);
@@ -92,7 +88,7 @@ architecture rtl of peripheral_noc_synthesis is
       SYNC_DEPTH : integer := 3
       );
     port (
-      --AHB Slave Interface
+      -- AHB Slave Interface
       HRESETn   : in  std_logic;
       HCLK      : in  std_logic;
       HSEL      : in  std_logic;
@@ -109,7 +105,7 @@ architecture rtl of peripheral_noc_synthesis is
       HREADY    : in  std_logic;
       HRESP     : out std_logic;
 
-      --APB Master Interface
+      -- APB Master Interface
       PRESETn : in  std_logic;
       PCLK    : in  std_logic;
       PSEL    : out std_logic;
@@ -127,8 +123,8 @@ architecture rtl of peripheral_noc_synthesis is
 
   component peripheral_apb4_noc
     generic (
-      APB_ADDR_WIDTH : integer := 12;  --APB slaves are 4KB by default
-      APB_DATA_WIDTH : integer := 32  --APB slaves are 4KB by default
+      APB_ADDR_WIDTH : integer := 12;  -- APB slaves are 4KB by default
+      APB_DATA_WIDTH : integer := 32  -- APB slaves are 4KB by default
       );
     port (
       CLK     : in  std_logic;
@@ -172,7 +168,7 @@ begin
   -- Module Body
   ------------------------------------------------------------------------------
 
-  --DUT AHB3
+  -- DUT AHB3
   bridge_apb2ahb : peripheral_bridge_apb2ahb
     generic map (
       HADDR_SIZE => HADDR_SIZE,
@@ -182,7 +178,7 @@ begin
       SYNC_DEPTH => SYNC_DEPTH
       )
     port map (
-      --AHB Slave Interface
+      -- AHB Slave Interface
       HRESETn => HRESETn,
       HCLK    => HCLK,
 
@@ -200,7 +196,7 @@ begin
       HREADY    => noc_HREADY,
       HRESP     => noc_HRESP,
 
-      --APB Master Interface
+      -- APB Master Interface
       PRESETn => HRESETn,
       PCLK    => HCLK,
 
