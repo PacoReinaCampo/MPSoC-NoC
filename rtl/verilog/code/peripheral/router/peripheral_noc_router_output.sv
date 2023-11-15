@@ -130,7 +130,6 @@ module peripheral_noc_router_output #(
         .in_valid(channel_valid),
         .in_ready(channel_ready),
 
-
         .out_flit (out_flit),
         .out_last (out_last),
         .out_valid(out_valid),
