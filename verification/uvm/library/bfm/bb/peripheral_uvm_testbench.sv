@@ -43,42 +43,84 @@ import uvm_pkg::*;
 `include "peripheral_uvm_interface.sv"
 `include "peripheral_uvm_test.sv"
 
-module peripheral_uvm_testbench;
-  bit clk;
-  bit rst;
+import peripheral_axi4_pkg::*;
 
-  always #2 clk = ~clk;
+module peripheral_uvm_testbench;
+  // Clock and Reset declaration
+  bit aclk;
+
+  // Clock Generation
+  always #1 aclk = ~aclk;
 
   initial begin
-    // clk = 0;
-    rst = 1;
-    #5;
-    rst = 0;
+    aclk = 0;
   end
 
-  peripheral_adder_if vif (
-    clk,
-    rst
-  );
+  // Virtual interface
+  peripheral_design_if vif (aclk);
 
-  peripheral_adder dut (
-    .clk(vif.clk),
-    .rst(vif.rst),
+  // DUT instantiation
+  peripheral_design dut (
+    // Global Signals
+    .aclk   (vif.aclk),
+    .aresetn(vif.aresetn),
 
-    .in1(vif.ip1),
-    .in2(vif.ip2),
+    // Write Address Channel
+    .awid   (vif.awid),
+    .awadr  (vif.awadr),
+    .awlen  (vif.awlen),
+    .awsize (vif.awsize),
+    .awburst(vif.awburst),
+    .awlock (vif.awlock),
+    .awcache(vif.awcache),
+    .awprot (vif.awprot),
+    .awvalid(vif.awvalid),
+    .awready(vif.awready),
 
-    .out(vif.out)
+    // Write Data Channel
+    .wid   (vif.wid),
+    .wrdata(vif.wrdata),
+    .wstrb (vif.wstrb),
+    .wlast (vif.wlast),
+    .wvalid(vif.wvalid),
+    .wready(vif.wready),
+
+    // Write Response Channel
+    .bid   (vif.bid),
+    .bresp (vif.bresp),
+    .bvalid(vif.bvalid),
+    .bready(vif.bready),
+
+    // Read Address Channel
+    .arid   (vif.arid),
+    .araddr (vif.araddr),
+    .arlen  (vif.arlen),
+    .arsize (vif.arsize),
+    .arlock (vif.arlock),
+    .arcache(vif.arcache),
+    .arprot (vif.arprot),
+    .arvalid(vif.arvalid),
+    .arready(vif.arready),
+
+    // Read Data Channel
+    .rid   (vif.rid),
+    .rdata (vif.rdata),
+    .rresp (vif.rresp),
+    .rlast (vif.rlast),
+    .rvalid(vif.rvalid),
+    .rready(vif.rready)
   );
 
   initial begin
-    // set interface in config_db
-    uvm_config_db#(virtual peripheral_adder_if)::set(uvm_root::get(), "*", "vif", vif);
-    // Dump waves
+    // Passing the interface handle to lower heirarchy using set method
+    uvm_config_db#(virtual peripheral_design_if)::set(uvm_root::get(), "*", "vif", vif);
+
+    // Enable wave dump
     $dumpfile("dump.vcd");
     $dumpvars(0);
   end
 
+  // Calling TestCase
   initial begin
     run_test("base_test");
   end
