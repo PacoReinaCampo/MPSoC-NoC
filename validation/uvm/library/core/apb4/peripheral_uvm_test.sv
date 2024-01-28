@@ -37,32 +37,74 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-`include "peripheral_uvm_package.sv"
+`include "peripheral_uvm_sequence_item.sv"
+`include "peripheral_uvm_sequencer.sv"
+`include "peripheral_uvm_sequence.sv"
+`include "peripheral_uvm_driver.sv"
+`include "peripheral_uvm_monitor.sv"
+`include "peripheral_uvm_scoreboard.sv"
+`include "peripheral_uvm_agent.sv"
+`include "peripheral_uvm_environment.sv"
 
 class peripheral_uvm_test extends uvm_test;
+  // Virtual Interface
+  virtual peripheral_design_if vif;
+
+  // Environment method instantiation
   peripheral_uvm_environment environment;
+
+  // Sequence method instantiation
   peripheral_uvm_sequence   base_sequence;
+
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_test)
 
+  // Constructor
   function new(string name = "base_test", uvm_component parent = null);
     super.new(name, parent);
   endfunction
 
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
+    if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
+      `uvm_fatal(get_type_name(), "Not set at top level");
+    end
+
+    // Create environment method
     environment = peripheral_uvm_environment::type_id::create("environment", this);
   endfunction
 
+  // Run phase
   task run_phase(uvm_phase phase);
     phase.raise_objection(this);
+
+    // Create sequence method
     base_sequence = peripheral_uvm_sequence::type_id::create("base_sequence");
 
-    repeat (10) begin
-      #5;
+    apply_reset();
+
+    repeat (5) begin
+      repeat (10) @(posedge vif.PCLK);
+
       base_sequence.start(environment.agent.sequencer);
     end
 
     phase.drop_objection(this);
     `uvm_info(get_type_name, "End of TestCase", UVM_LOW);
+  endtask
+
+  task apply_reset();
+    vif.PRESETn <= 0;  // Active LOW
+
+    vif.PADDR <= 0;
+    vif.PWRITE <= 0;
+    vif.PSEL <= 0;
+    vif.PENABLE <= 0;
+    vif.PWDATA <= 0;
+
+    repeat (5) @(posedge vif.PCLK);
+
+    vif.PRESETn <= 1;  // Inactive HIGH
   endtask
 endclass

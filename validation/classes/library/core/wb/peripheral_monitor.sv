@@ -38,24 +38,81 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_monitor;
+  // Interface instantiation
   virtual add_if vif;
-  mailbox        monitor_to_scoreboard;
 
+  mailbox monitor_to_scoreboard;
+
+  // Constructor
   function new(mailbox monitor_to_scoreboard, virtual add_if vif);
-    this.vif                   = vif;
+    this.vif = vif;
+
     this.monitor_to_scoreboard = monitor_to_scoreboard;
   endfunction
 
   task run;
     forever begin
+      // Transaction method instantiation
       peripheral_transaction monitor_transaction;
-      wait (!vif.rst);
-      @(posedge vif.clk);
-      monitor_transaction     = new();
-      monitor_transaction.ip1 = vif.ip1;
-      monitor_transaction.ip2 = vif.ip2;
-      @(posedge vif.clk);
-      monitor_transaction.out = vif.out;
+
+      // Create transaction method
+      monitor_transaction = new();
+
+      // Operate in a synchronous manner
+      @(posedge vif.aclk);
+
+      // Address Phase
+      monitor_transaction.awid    = vif.awid;
+      monitor_transaction.awadr   = vif.awadr;
+      monitor_transaction.awvalid = vif.awvalid;
+      monitor_transaction.awlen   = vif.awlen;
+      monitor_transaction.awsize  = vif.awsize;
+      monitor_transaction.awburst = vif.awburst;
+      monitor_transaction.awlock  = vif.awlock;
+      monitor_transaction.awcache = vif.awcache;
+      monitor_transaction.awprot  = vif.awprot;
+      @(posedge vif.awready);
+
+      // Data Phase
+      monitor_transaction.awvalid = vif.awvalid;
+      monitor_transaction.awadr   = vif.awadr;
+      monitor_transaction.wid     = vif.wid;
+      monitor_transaction.wvalid  = vif.wvalid;
+      monitor_transaction.wrdata  = vif.wrdata;
+      monitor_transaction.wstrb   = vif.wstrb;
+      monitor_transaction.wlast   = vif.wlast;
+      @(posedge vif.wready);
+
+      // Response Phase
+      monitor_transaction.wid    = vif.wid;
+      monitor_transaction.wvalid = vif.wvalid;
+      monitor_transaction.wrdata = vif.wrdata;
+      monitor_transaction.wstrb  = vif.wstrb;
+      monitor_transaction.wlast  = vif.wlast;
+
+      // Address Phase
+      monitor_transaction.arid    = vif.arid;
+      monitor_transaction.araddr  = vif.awadr;
+      monitor_transaction.arvalid = vif.arvalid;
+      monitor_transaction.arlen   = vif.arlen;
+      monitor_transaction.arsize  = vif.arsize;
+      monitor_transaction.arlock  = vif.arlock;
+      monitor_transaction.arcache = vif.arcache;
+      monitor_transaction.arprot  = vif.arprot;
+      monitor_transaction.rready  = vif.rready;
+      @(posedge vif.arready);
+
+      // Data Phase
+      monitor_transaction.arvalid = vif.arvalid;
+      monitor_transaction.rready  = vif.rready;
+      @(posedge vif.rvalid);
+
+      monitor_transaction.rready = vif.rready;
+      monitor_transaction.rdata  = vif.rdata;
+      @(negedge vif.rvalid);
+
+      monitor_transaction.araddr = vif.araddr;
+
       monitor_to_scoreboard.put(monitor_transaction);
     end
   endtask

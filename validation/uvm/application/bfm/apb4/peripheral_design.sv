@@ -38,20 +38,67 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 module peripheral_design (
-  input clk,
-  input rst,
-
-  input [7:0] in1,
-  input [7:0] in2,
-
-  output reg [8:0] out
+  input             PCLK,
+  input             PRESETn,
+  input      [31:0] PADDR,
+  input             PWRITE,
+  input             PSEL,
+  input             PENABLE,
+  input      [31:0] PWDATA,
+  output reg [31:0] PRDATA,
+  output reg        PREADY,
+  output            PSLVERR
 );
 
-  always @(posedge clk or posedge rst) begin
-    if (rst) begin
-      out <= 0;
+  localparam IDLE     = 2'b00;
+  localparam W_ENABLE = 2'b01;
+  localparam R_ENABLE = 2'b10;
+
+  // Internal Signals
+  reg [31:0] memory [0:128];
+
+  reg [ 1:0] state;
+
+  assign PSLVERR = 1'b0;
+
+  always @(posedge PRESETn or posedge PCLK) begin
+    if (PRESETn == 0) begin
+      state  <= IDLE;
+      PRDATA <= 0;
+      PREADY <= 0;
     end else begin
-      out <= in1 + in2;
+      case (state)
+        IDLE: begin
+          if (PSEL & PENABLE) begin
+            if (PWRITE) begin
+              state <= W_ENABLE;
+            end else begin
+              state <= R_ENABLE;
+            end
+          end
+
+          PRDATA <= 0;
+        end
+        W_ENABLE: begin
+          if (PSEL & PENABLE && PWRITE) begin
+            memory[PADDR] <= PWDATA;
+            PREADY        <= 1;
+          end
+
+          state <= IDLE;
+        end
+        R_ENABLE: begin
+          if (PSEL & PENABLE && !PWRITE) begin
+            PRDATA <= memory[PADDR];
+            PREADY <= 1;
+          end
+
+          state <= IDLE;
+        end
+        default: begin
+          state <= IDLE;
+        end
+      endcase
     end
   end
-endmodule
+endmodule  // peripheral_design

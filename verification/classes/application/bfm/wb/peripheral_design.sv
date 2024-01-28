@@ -92,8 +92,7 @@ module peripheral_design (
 );
 
   // Internal Signals
-  reg     [31:0] memory        [0:128];
-  integer        i;
+  reg     [31:0] memory [0:127];
 
   // Write Address Channel
   reg     [31:0] write_address;

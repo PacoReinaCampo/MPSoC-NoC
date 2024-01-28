@@ -38,22 +38,41 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_sequence_item extends uvm_sequence_item;
-  rand bit [7:0] ip1;
-  rand bit [7:0] ip2;
 
-  bit      [8:0] out;
+  bit             PCLK;
+  bit             PRESETn;
 
+  rand bit [31:0] PADDR;
+  bit             PWRITE;
+  bit             PSEL;
+  bit             PENABLE;
+  rand bit [31:0] PWDATA;
+  bit      [31:0] PRDATA;
+  bit             PREADY;
+  bit             PSLVERR;
+
+  // Constructor
   function new(string name = "peripheral_uvm_sequence_item");
     super.new(name);
   endfunction
 
+  // Utility and Field declarations
   `uvm_object_utils_begin(peripheral_uvm_sequence_item)
-    `uvm_field_int(ip1, UVM_ALL_ON)
-    `uvm_field_int(ip2, UVM_ALL_ON)
+
+  `uvm_field_int(PRESETn, UVM_ALL_ON)
+
+  `uvm_field_int(PADDR, UVM_ALL_ON)
+  `uvm_field_int(PWRITE, UVM_ALL_ON)
+  `uvm_field_int(PSEL, UVM_ALL_ON)
+  `uvm_field_int(PENABLE, UVM_ALL_ON)
+  `uvm_field_int(PWDATA, UVM_ALL_ON)
+  `uvm_field_int(PRDATA, UVM_ALL_ON)
+  `uvm_field_int(PREADY, UVM_ALL_ON)
+  `uvm_field_int(PSLVERR, UVM_ALL_ON)
+
   `uvm_object_utils_end
 
-  constraint ip_c {
-    ip1 < 100;
-    ip2 < 100;
-  }
+  // Constraints
+  constraint PADDR_C {PADDR inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint PWDATA_C {PWDATA inside {[32'h00000000 : 32'hFFFFFFFF]};}
 endclass

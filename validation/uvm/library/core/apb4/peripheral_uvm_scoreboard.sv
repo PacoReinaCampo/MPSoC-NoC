@@ -39,14 +39,20 @@
 
 class peripheral_uvm_scoreboard extends uvm_scoreboard;
   uvm_analysis_imp #(peripheral_uvm_sequence_item, peripheral_uvm_scoreboard) item_collect_export;
-  peripheral_uvm_sequence_item                                                item_q              [$];
+
+  // Sequence Item method instantiation
+  peripheral_uvm_sequence_item item_q [$];
+
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_scoreboard)
 
+  // Constructor
   function new(string name = "scoreboard", uvm_component parent = null);
     super.new(name, parent);
     item_collect_export = new("item_collect_export", this);
   endfunction
 
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
   endfunction
@@ -55,18 +61,21 @@ class peripheral_uvm_scoreboard extends uvm_scoreboard;
     item_q.push_back(req);
   endfunction
 
+  // Run phase
   task run_phase(uvm_phase phase);
+    // Sequence Item method instantiation
     peripheral_uvm_sequence_item scoreboard_item;
+
     forever begin
       wait (item_q.size > 0);
 
       if (item_q.size > 0) begin
         scoreboard_item = item_q.pop_front();
         $display("----------------------------------------------------------------------------------------------------------");
-        if (scoreboard_item.ip1 + scoreboard_item.ip2 == scoreboard_item.out) begin
-          `uvm_info(get_type_name, $sformatf("Matched: ip1 = %0d, ip2 = %0d, out = %0d", scoreboard_item.ip1, scoreboard_item.ip2, scoreboard_item.out), UVM_LOW);
+        if (scoreboard_item.PRDATA !== scoreboard_item.PWDATA) begin
+          `uvm_error(get_name, $sformatf("Dis-Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.PRDATA, scoreboard_item.PWDATA));
         end else begin
-          `uvm_error(get_name, $sformatf("Dis-Matched: ip1 = %0d, ip2 = %0d, out = %0d", scoreboard_item.ip1, scoreboard_item.ip2, scoreboard_item.out));
+          `uvm_info(get_type_name, $sformatf("Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.PRDATA, scoreboard_item.PWDATA), UVM_LOW);
         end
         $display("----------------------------------------------------------------------------------------------------------");
       end

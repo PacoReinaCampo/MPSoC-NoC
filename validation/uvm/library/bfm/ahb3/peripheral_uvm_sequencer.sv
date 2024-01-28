@@ -38,12 +38,15 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_sequencer extends uvm_sequencer #(peripheral_uvm_sequence_item);
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_sequencer)
 
+  // Constructor
   function new(string name = "sequencer", uvm_component parent = null);
     super.new(name, parent);
   endfunction
 
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
   endfunction

@@ -38,31 +38,68 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
-  virtual peripheral_adder_if vif;
+  // Virtual Interface
+  virtual peripheral_design_if vif;
+
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_driver)
 
+  // Constructor
   function new(string name = "peripheral_uvm_driver", uvm_component parent = null);
     super.new(name, parent);
   endfunction
 
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(virtual peripheral_adder_if)::get(this, "", "vif", vif)) begin
+    if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
       `uvm_fatal(get_type_name(), "Not set at top level");
     end
   endfunction
 
+  // Run phase
   task run_phase(uvm_phase phase);
     forever begin
       // Driver to the DUT
-      //@(posedge vif.clk);
       seq_item_port.get_next_item(req);
-      `uvm_info(get_type_name, $sformatf("ip1 = %0d, ip2 = %0d", req.ip1, req.ip2), UVM_LOW);
-      vif.ip1 <= req.ip1;
-      vif.ip2 <= req.ip2;
-      //@(posedge vif.clk);
-      // req.out <= vif.out;
+
+      // Single Write Transaction
+      write_phase_single();
+
+      // Single Read Transaction
+      read_phase_single();
+
       seq_item_port.item_done();
+    end
+  endtask
+
+  // Task: Single Write Transaction
+  task write_phase_single;
+    begin
+      vif.PADDR   <= 4;
+      vif.PWRITE  <= 1;
+      vif.PSEL    <= 1;
+      vif.PENABLE <= 1;
+      vif.PWDATA  <= req.PWDATA;
+
+      @(posedge vif.PCLK);
+      vif.PWRITE  <= 0;
+      vif.PSEL    <= 0;
+      vif.PENABLE <= 0;
+    end
+  endtask
+
+  // Task: Single Read Transaction
+  task read_phase_single;
+    begin
+      vif.PADDR   <= 4;
+      vif.PWRITE  <= 0;
+      vif.PSEL    <= 1;
+      vif.PENABLE <= 1;
+
+      @(posedge vif.PCLK);
+      vif.PSEL    <= 0;
+      vif.PENABLE <= 0;
     end
   endtask
 endclass

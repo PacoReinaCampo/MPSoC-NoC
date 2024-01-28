@@ -40,39 +40,78 @@
 `include "peripheral_interface.sv"
 `include "peripheral_test.sv"
 
+import peripheral_axi4_pkg::*;
+
 module peripheral_testbench;
-  bit clk;
-  bit rst;
+  bit aclk;
 
-  always #2 clk = ~clk;
+  // Clock declaration
+  always #1 aclk = ~aclk;
 
-  add_if vif (
-    clk,
-    rst
+  initial begin
+    aclk = 0;
+  end
+
+  // Interface instantiation
+  add_if vif (aclk);
+
+  // DUT instantiation
+  peripheral_bfm_slave_generic_axi4 dut (
+    // Global Signals
+    .aclk   (vif.aclk),
+    .aresetn(vif.aresetn),
+
+    // Write Address Channel
+    .awid   (vif.awid),
+    .awadr  (vif.awadr),
+    .awlen  (vif.awlen),
+    .awsize (vif.awsize),
+    .awburst(vif.awburst),
+    .awlock (vif.awlock),
+    .awcache(vif.awcache),
+    .awprot (vif.awprot),
+    .awvalid(vif.awvalid),
+    .awready(vif.awready),
+
+    // Write Data Channel
+    .wid   (vif.wid),
+    .wrdata(vif.wrdata),
+    .wstrb (vif.wstrb),
+    .wlast (vif.wlast),
+    .wvalid(vif.wvalid),
+    .wready(vif.wready),
+
+    // Write Response Channel
+    .bid   (vif.bid),
+    .bresp (vif.bresp),
+    .bvalid(vif.bvalid),
+    .bready(vif.bready),
+
+    // Read Address Channel
+    .arid   (vif.arid),
+    .araddr (vif.araddr),
+    .arlen  (vif.arlen),
+    .arsize (vif.arsize),
+    .arlock (vif.arlock),
+    .arcache(vif.arcache),
+    .arprot (vif.arprot),
+    .arvalid(vif.arvalid),
+    .arready(vif.arready),
+
+    // Read Data Channel
+    .rid   (vif.rid),
+    .rdata (vif.rdata),
+    .rresp (vif.rresp),
+    .rlast (vif.rlast),
+    .rvalid(vif.rvalid),
+    .rready(vif.rready)
   );
 
-  adder DUT (
-    .clk(vif.clk),
-    .rst(vif.rst),
-
-    .in1(vif.ip1),
-    .in2(vif.ip2),
-
-    .out(vif.out)
-  );
-
+  // Calling TestCase
   peripheral_test t1 (vif);
 
   initial begin
-    clk = 0;
-    rst = 1;
-    #5;
- 
-    rst = 0;
-  end
-
-  initial begin
-    // Dump waves
+    // Enable wave dump
     $dumpfile("dump.vcd");
     $dumpvars(0);
   end

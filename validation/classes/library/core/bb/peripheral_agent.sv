@@ -38,19 +38,32 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_agent;
+  // Driver method instantiation
   peripheral_driver    driver;
+
+  // Monitor method instantiation
   peripheral_monitor   monitor;
+
+  // Generator method instantiation
   peripheral_generator generator;
 
-  mailbox              generator_to_driver;
-  virtual add_if       vif;
+  mailbox generator_to_driver;
 
+  // Virtual Interface
+  virtual add_if vif;
+
+  // Constructor
   function new(virtual add_if vif, mailbox monitor_to_scoreboard);
     generator_to_driver = new();
 
-    driver              = new(generator_to_driver, vif);
-    monitor             = new(monitor_to_scoreboard, vif);
-    generator           = new(generator_to_driver);
+    // Create driver method
+    driver = new(generator_to_driver, vif);
+
+    // Create monitor method
+    monitor = new(monitor_to_scoreboard, vif);
+
+    // Create generator method
+    generator = new(generator_to_driver);
   endfunction
 
   task run();

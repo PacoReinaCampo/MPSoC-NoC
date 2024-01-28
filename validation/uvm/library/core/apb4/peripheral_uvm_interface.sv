@@ -37,13 +37,17 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-interface peripheral_adder_if (
-  input logic clk,
-  input logic rst
+interface peripheral_design_if (
+  input logic PCLK
 );
 
-  logic [7:0] ip1;
-  logic [7:0] ip2;
-
-  logic [8:0] out;
+  logic        PRESETn;
+  logic [31:0] PADDR;
+  logic        PWRITE;
+  logic        PSEL;
+  logic        PENABLE;
+  logic [31:0] PWDATA;
+  logic [31:0] PRDATA;
+  logic        PREADY;
+  logic        PSLVERR;
 endinterface
