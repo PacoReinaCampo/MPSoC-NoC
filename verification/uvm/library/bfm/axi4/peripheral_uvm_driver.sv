@@ -90,15 +90,15 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   task read_drive();
     begin
       // Address Phase
-      vif.dr_cb.arid    <= 0;
-      vif.dr_cb.araddr  <= req.address;
-      vif.dr_cb.arvalid <= 1;
-      vif.dr_cb.arlen   <= AXI_BURST_LENGTH_1;
-      vif.dr_cb.arsize  <= AXI_BURST_SIZE_WORD;
-      vif.dr_cb.arlock  <= AXI_LOCK_NORMAL;
-      vif.dr_cb.arcache <= 0;
-      vif.dr_cb.arprot  <= AXI_PROTECTION_NORMAL;
-      vif.dr_cb.rready  <= 0;
+      vif.dr_cb.arid      <= 0;
+      vif.dr_cb.araddr    <= req.address;
+      vif.dr_cb.arvalid   <= 1;
+      vif.dr_cb.arlen     <= AXI_BURST_LENGTH_1;
+      vif.dr_cb.arsize    <= AXI_BURST_SIZE_WORD;
+      vif.dr_cb.arlock    <= AXI_LOCK_NORMAL;
+      vif.dr_cb.arcache   <= 0;
+      vif.dr_cb.arprot    <= AXI_PROTECTION_NORMAL;
+      vif.dr_cb.rready    <= 0;
       @(posedge vif.arready);
 
       // Data Phase
@@ -120,40 +120,40 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
     vif.dr_cb.aresetn <= 0;  // Active LOW
 
     // Write Address Channel
-    vif.dr_cb.awid    <= 0;  // Address Write ID
-    vif.dr_cb.awadr   <= 0;  // Write Address
-    vif.dr_cb.awlen   <= 0;  // Burst Length
-    vif.dr_cb.awsize  <= 0;  // Burst Size
+    vif.dr_cb.awid <= 0;     // Address Write ID
+    vif.dr_cb.awadr <= 0;    // Write Address
+    vif.dr_cb.awlen <= 0;    // Burst Length
+    vif.dr_cb.awsize <= 0;   // Burst Size
     vif.dr_cb.awburst <= 0;  // Burst Type
-    vif.dr_cb.awlock  <= 0;  // Lock Type
+    vif.dr_cb.awlock <= 0;   // Lock Type
     vif.dr_cb.awcache <= 0;  // Cache Type
-    vif.dr_cb.awprot  <= 0;  // Protection Type
+    vif.dr_cb.awprot <= 0;   // Protection Type
     vif.dr_cb.awvalid <= 0;  // Write Address Valid
 
     // Write Data Channel
-    vif.dr_cb.wid     <= 0;  // Write ID
-    vif.dr_cb.wrdata  <= 0;  // Write Data
-    vif.dr_cb.wstrb   <= 0;  // Write Strobes
-    vif.dr_cb.wlast   <= 0;  // Write Last
-    vif.dr_cb.wvalid  <= 0;  // Write Valid
+    vif.dr_cb.wid <= 0;     // Write ID
+    vif.dr_cb.wrdata <= 0;  // Write Data
+    vif.dr_cb.wstrb <= 0;   // Write Strobes
+    vif.dr_cb.wlast <= 0;   // Write Last
+    vif.dr_cb.wvalid <= 0;  // Write Valid
 
     // Write Response CHannel
-    vif.dr_cb.bid     <= 0;  // Response ID
-    vif.dr_cb.bresp   <= 0;  // Write Response
-    vif.dr_cb.bvalid  <= 0;  // Write Response Valid   
+    vif.dr_cb.bid <= 0;     // Response ID
+    vif.dr_cb.bresp <= 0;   // Write Response
+    vif.dr_cb.bvalid <= 0;  // Write Response Valid   
 
     // Read Address Channel
-    vif.dr_cb.arid    <= 0;  // Read Address ID
-    vif.dr_cb.araddr  <= 0;  // Read Address
-    vif.dr_cb.arlen   <= 0;  // Burst Length
-    vif.dr_cb.arsize  <= 0;  // Burst Size
-    vif.dr_cb.arlock  <= 0;  // Lock Type
+    vif.dr_cb.arid <= 0;     // Read Address ID
+    vif.dr_cb.araddr <= 0;   // Read Address
+    vif.dr_cb.arlen <= 0;    // Burst Length
+    vif.dr_cb.arsize <= 0;   // Burst Size
+    vif.dr_cb.arlock <= 0;   // Lock Type
     vif.dr_cb.arcache <= 0;  // Cache Type
-    vif.dr_cb.arprot  <= 0;  // Protection Type
+    vif.dr_cb.arprot <= 0;   // Protection Type
     vif.dr_cb.arvalid <= 0;  // Read Address Valid
 
     // Read Data Channel
-    vif.dr_cb.rready  <= 0;  // Read Ready
+    vif.dr_cb.rready <= 0;  // Read Ready
 
     repeat (5) @(posedge vif.aclk);
 

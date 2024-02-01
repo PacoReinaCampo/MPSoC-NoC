@@ -45,7 +45,7 @@ class peripheral_uvm_reference_model extends uvm_component;
     this.exp_transaction = rm_transaction;
     `uvm_info(get_full_name(), $sformatf("EXPECTED TRANSACTION FROM REF MODEL"), UVM_LOW);
     exp_transaction.print();
-    exp_transaction.axi_r_data = exp_transaction.axi_w_data;
+    exp_transaction.rdata = exp_transaction.wrdata;
     rm2scoreboard_port.write(exp_transaction);
   endtask
 endclass
