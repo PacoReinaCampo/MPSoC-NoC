@@ -1,38 +1,38 @@
 interface peripheral_uvm_interface (
-    input logic ram_clk
+    input logic mclk
 );
 
-    logic          ram_rst;  // RAM reset
+    logic          rst;  // RAM reset
 
-    logic [AW-1:0] ram_addr;  // RAM address
-    logic [DW-1:0] ram_dout;  // RAM data output
-    logic [DW-1:0] ram_din;   // RAM data input
-    logic          ram_cen;   // RAM chip enable (low active)
-    logic [   1:0] ram_wen;   // RAM write enable (low active)
+    logic [AW-1:0] addr;  // RAM address
+    logic [DW-1:0] dout;  // RAM data output
+    logic [DW-1:0] din;   // RAM data input
+    logic          cen;   // RAM chip enable (low active)
+    logic [   1:0] wen;   // RAM write enable (low active)
 
   // Clocking block and modport declaration for driver
-  clocking dr_cb @(posedge ram_clk);
-    output ram_rst;   // RAM reset
+  clocking dr_cb @(posedge mclk);
+    output rst;   // RAM reset
  
-    output ram_addr;  // RAM address
-    input  ram_dout;  // RAM data output
-    output ram_din;   // RAM data input
-    output ram_cen;   // RAM chip enable (low active)
-    output ram_wen;   // RAM write enable (low active)
+    output addr;  // RAM address
+    input  dout;  // RAM data output
+    output din;   // RAM data input
+    output cen;   // RAM chip enable (low active)
+    output wen;   // RAM write enable (low active)
   endclocking
 
-  modport DRV(clocking dr_cb, input ram_clk);
+  modport DRV(clocking dr_cb, input mclk);
 
   // Clocking block and modport declaration for monitor
-  clocking rc_cb @(negedge ram_clk);
-    input ram_rst;  // RAM reset
+  clocking rc_cb @(negedge mclk);
+    input rst;  // RAM reset
 
-    input ram_addr;  // RAM address
-    input ram_dout;  // RAM data output
-    input ram_din;   // RAM data input
-    input ram_cen;   // RAM chip enable (low active)
-    input ram_wen;   // RAM write enable (low active)
+    input addr;  // RAM address
+    input dout;  // RAM data output
+    input din;   // RAM data input
+    input cen;   // RAM chip enable (low active)
+    input wen;   // RAM write enable (low active)
   endclocking
 
-  modport RCV(clocking rc_cb, input ram_clk);
+  modport RCV(clocking rc_cb, input mclk);
 endinterface

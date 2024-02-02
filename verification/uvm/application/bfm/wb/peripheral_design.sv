@@ -37,169 +37,156 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-import peripheral_axi4_pkg::*;
+module peripheral_design #(
+  // Memory Size
+  parameter MEMORY_SIZE = 256
+) (
+  input clk,
+  input rst,
 
-module peripheral_design (
+  input [31:0] adr_i,
+  input [31:0] dat_i,
+  input [ 3:0] sel_i,
+  input        we_i,
+  input [ 1:0] bte_i,
+  input [ 2:0] cti_i,
+  input        cyc_i,
+  input        stb_i,
 
-  // Global Signals
-  input wire aclk,
-  input wire aresetn, // Active LOW
+  output reg        ack_o,
+  output reg        err_o,
+  output reg [31:0] dat_o,
 
-  // Write Address Channel
-  input  wire [ 3:0] awid,     // Address Write ID
-  input  wire [31:0] awadr,    // Write Address
-  input  wire [ 3:0] awlen,    // Burst Length
-  input  wire [ 2:0] awsize,   // Burst Size
-  input  wire [ 1:0] awburst,  // Burst Type
-  input  wire [ 1:0] awlock,   // Lock Type
-  input  wire [ 3:0] awcache,  // Cache Type
-  input  wire [ 2:0] awprot,   // Protection Type
-  input  wire        awvalid,  // Write Address Valid
-  output reg         awready,  // Write Address Ready
-
-  // Write Data Channel
-  input  wire [ 3:0] wid,     // Write ID
-  input  wire [31:0] wrdata,  // Write Data
-  input  wire [ 3:0] wstrb,   // Write Strobes
-  input  wire        wlast,   // Write Last
-  input  wire        wvalid,  // Write Valid
-  output reg         wready,  // Write Ready
-
-  // Write Response CHannel
-  output reg  [3:0] bid,     // Response ID
-  output reg  [1:0] bresp,   // Write Response
-  output reg        bvalid,  // Write Response Valid
-  input  wire       bready,  // Response Ready
-
-  // Read Address Channel
-  input  wire [ 3:0] arid,     // Read Address ID
-  input  wire [31:0] araddr,   // Read Address
-  input  wire [ 3:0] arlen,    // Burst Length
-  input  wire [ 2:0] arsize,   // Burst Size
-  input  wire [ 1:0] arlock,   // Lock Type
-  input  wire [ 3:0] arcache,  // Cache Type
-  input  wire [ 2:0] arprot,   // Protection Type
-  input  wire        arvalid,  // Read Address Valid
-  output reg         arready,  // Read Address Ready
-
-  // Read Data Channel
-  output reg  [ 3:0] rid,     // Read ID
-  output reg  [31:0] rdata,   // Read Data
-  output reg  [ 1:0] rresp,   // Read Response
-  output reg         rlast,   // Read Last
-  output reg         rvalid,  // Read Valid
-  input  wire        rready   // Read Ready
+  output sig_read,
+  output sig_write
 );
 
-  // Internal Signals
-  reg     [31:0] memory [0:127];
+  localparam [2:0] CTI_CLASSIC      = 3'b000;
+  localparam [2:0] CTI_CONST_BURST  = 3'b001;
+  localparam [2:0] CTI_INC_BURST    = 3'b010;
+  localparam [2:0] CTI_END_OF_BURST = 3'b111;
 
-  // Write Address Channel
-  reg     [31:0] write_address;
-  reg     [ 2:0] write_size;
+  localparam [1:0] BTE_LINEAR  = 2'd0;
+  localparam [1:0] BTE_WRAP_4  = 2'd1;
+  localparam [1:0] BTE_WRAP_8  = 2'd2;
+  localparam [1:0] BTE_WRAP_16 = 2'd3;
 
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_address <= 0;
-      awready       <= 1;
-      write_size    <= 0;
-    end else begin
-      if (awvalid) begin
-        write_address <= {2'b00, awadr[31:2]};
-        awready       <= 1;
-      end else begin
-        awready <= 0;
-      end
-    end
-
-  // Write Burst Counting
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_size <= 0;
-    end else begin
-      if (awvalid) begin
-        write_size <= awsize;
-      end
-    end
-
-  // Write Data Channel
-  reg [31:0] write_data;
-  reg [ 3:0] write_strobe;
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_data   <= 0;
-      wready       <= 1;
-      write_strobe <= 0;
-    end else begin
-      if (wvalid) begin
-        write_data   <= wrdata;
-        wready       <= 1;
-        write_strobe <= wstrb;
-      end else begin
-        wready <= 0;
-      end
-    end
-
-  // Write Response Channel
-  always @(posedge aclk)
-    if (~aresetn) begin
-      bid    <= 0;
-      bresp  <= AXI_RESPONSE_OKAY;
-      bvalid <= 0;
-    end else begin
-      if (bready & wlast) begin
-        bvalid <= 1;
-      end else begin
-        bvalid <= 0;
-      end
-    end
-
-  // Read Address Channel
-  reg [31:0] read_address;
-  always @(posedge aclk)
-    if (~aresetn) begin
-      read_address <= 0;
-      arready      <= 0;
-    end else begin
-      if (arvalid) begin
-        read_address <= {2'b00, araddr[31:2]};
-        arready      <= 1;
-      end else begin
-        arready <= 0;
-      end
-    end
-
-  // Read Data Channel
-  always @(posedge aclk)
-    if (~aresetn) begin
-      rdata  <= 0;
-      rvalid <= 0;
-      rresp  <= AXI_RESPONSE_OKAY;
-      rlast  <= 0;
-    end else begin
-      if (rready) begin
-        rdata  <= memory[read_address];
-        rvalid <= 1;
-      end else begin
-        rdata  <= 0;
-        rvalid <= 0;
-      end
-    end
-
-  // Memory Operations
-
-  // Memory Write
-  always @(posedge aclk) begin
-    if (wready) begin
-      case (write_strobe)
-        4'b0001: memory[write_address] <= {memory[write_address][31:8], write_data[7:0]};
-        4'b0010: memory[write_address] <= {memory[write_address][31:16], write_data[15:8], memory[write_address][7:0]};
-        4'b0100: memory[write_address] <= {memory[write_address][31:24], write_data[23:16], memory[write_address][15:0]};
-        4'b1000: memory[write_address] <= {write_data[31:24], memory[write_address][23:0]};
-        4'b0011: memory[write_address] <= {write_data[31:16], memory[write_address][15:0]};
-        4'b1100: memory[write_address] <= {memory[write_address][31:16], write_data[15:0]};
-        4'b1111: memory[write_address] <= write_data[31:0];
+  function is_last;
+    input [2:0] cti;
+    begin
+      case (cti)
+        CTI_CLASSIC      : is_last = 1'b1;
+        CTI_CONST_BURST  : is_last = 1'b0;
+        CTI_INC_BURST    : is_last = 1'b0;
+        CTI_END_OF_BURST : is_last = 1'b1;
       endcase
     end
+  endfunction
+
+  function [31:0] wb_next_adr;
+    input [31:0] adr_i;
+    input [ 2:0] cti_i;
+    input [ 2:0] bte_i;
+
+    input integer dw;
+
+    reg [31:0] adr;
+
+    integer shift;
+
+    begin
+      if (dw == 64) begin
+        shift = 3;
+      end else if (dw == 32) begin
+        shift = 2;
+      end else if (dw == 16) begin
+        shift = 1;
+      end else begin
+        shift = 0;
+      end
+      adr = adr_i >> shift;
+      if (cti_i == CTI_INC_BURST) begin
+        case (bte_i)
+          BTE_LINEAR  : adr = adr + 1;
+          BTE_WRAP_4  : adr = {adr[31:2], adr[1:0]+2'd1};
+          BTE_WRAP_8  : adr = {adr[31:3], adr[2:0]+3'd1};
+          BTE_WRAP_16 : adr = {adr[31:4], adr[3:0]+4'd1};
+        endcase
+      end
+      wb_next_adr = adr << shift;
+    end
+  endfunction
+
+  reg  [31:0] adr_r;
+
+  wire [31:0] next_adr;
+
+  wire        valid = cyc_i & stb_i;
+
+  reg         valid_r;
+
+  reg         is_last_r;
+
+  wire new_cycle = (valid & !valid_r) | is_last_r;
+
+  wire [31:0] adr = new_cycle ? adr_i : next_adr;
+
+  wire ram_we = we_i & valid & ack_o;
+
+  reg [31:0] memory[0:MEMORY_SIZE-1];
+
+  assign next_adr = wb_next_adr(adr_r, cti_i, bte_i, 32);
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      is_last_r <= 0;
+    end else begin
+      is_last_r <= is_last(cti_i);
+    end
   end
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      adr_r   <= 32'b0;
+      valid_r <= 1'b0;
+      ack_o   <= 1'b0;
+    end else begin
+      adr_r   <= adr;
+      valid_r <= valid;
+      ack_o   <= valid & (!((cti_i == 3'b000) | (cti_i == 3'b111)) | !ack_o);
+    end
+  end
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) begin
+      err_o <= 1'b0;
+    end else begin
+      if (adr_i > MEMORY_SIZE) begin
+        err_o <= 1'b1;
+      end else begin
+        err_o <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (ram_we & sel_i[0]) begin
+      memory[adr_r[31:2]][7:0] <= dat_i[7:0];
+    end
+
+    if (ram_we & sel_i[1]) begin
+      memory[adr_r[31:2]][15:8] <= dat_i[15:8];
+    end
+
+    if (ram_we & sel_i[2]) begin
+      memory[adr_r[31:2]][23:16] <= dat_i[23:16];
+    end
+
+    if (ram_we & sel_i[3]) begin
+      memory[adr_r[31:2]][31:24] <= dat_i[31:24];
+    end
+
+    dat_o <= memory[adr[31:2]];
+  end
+
 endmodule  // peripheral_design

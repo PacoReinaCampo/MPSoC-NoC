@@ -44,29 +44,29 @@ class peripheral_uvm_monitor extends uvm_monitor;
   // Description : run task for collecting peripheral_adder transactions
   task collect_write_transaction();
     begin
-      @(posedge vif.ram_clk);
+      @(posedge vif.mclk);
 
-      act_transaction.ram_addr <= vif.rc_cb.ram_addr;
-      act_transaction.ram_din  <= vif.rc_cb.ram_din;
-      act_transaction.ram_dout <= vif.rc_cb.ram_dout;
-      act_transaction.ram_cen  <= vif.rc_cb.ram_cen;
-      act_transaction.ram_wen  <= vif.rc_cb.ram_wen;
+      act_transaction.addr <= vif.rc_cb.addr;
+      act_transaction.din  <= vif.rc_cb.din;
+      act_transaction.dout <= vif.rc_cb.dout;
+      act_transaction.cen  <= vif.rc_cb.cen;
+      act_transaction.wen  <= vif.rc_cb.wen;
 
-      @(posedge vif.ram_clk);
-      act_transaction.ram_cen  <= vif.rc_cb.ram_cen;
+      @(posedge vif.mclk);
+      act_transaction.cen  <= vif.rc_cb.cen;
     end
   endtask
 
   task collect_read_transaction();
     begin
-      act_transaction.ram_addr <= vif.rc_cb.ram_addr;
-      act_transaction.ram_din  <= vif.rc_cb.ram_din;
-      act_transaction.ram_dout <= vif.rc_cb.ram_dout;
-      act_transaction.ram_cen  <= vif.rc_cb.ram_cen;
-      act_transaction.ram_wen  <= vif.rc_cb.ram_wen;
+      act_transaction.addr <= vif.rc_cb.addr;
+      act_transaction.din  <= vif.rc_cb.din;
+      act_transaction.dout <= vif.rc_cb.dout;
+      act_transaction.cen  <= vif.rc_cb.cen;
+      act_transaction.wen  <= vif.rc_cb.wen;
 
-      @(posedge vif.ram_clk);
-      act_transaction.ram_cen  <= vif.rc_cb.ram_cen;
+      @(posedge vif.mclk);
+      act_transaction.cen  <= vif.rc_cb.cen;
     end
   endtask
 endclass : peripheral_uvm_monitor
