@@ -10,21 +10,21 @@ class peripheral_uvm_coverage #(type T = peripheral_uvm_transaction) extends uvm
     option.per_instance = 1;
     option.goal = 100;
 
-    peripheral_uvm_aresetn: coverpoint cov_transaction.aresetn {
+    peripheral_uvmrst_ni: coverpoint cov_transaction.rst_ni {
       bins low = {0};
       bins high = {1};
     }
 
-    peripheral_uvm_awadr: coverpoint cov_transaction.awadr {
-      bins awadr_values[] = {[0 : $]};
+    peripheral_uvm_axi_aw_addr: coverpoint cov_transaction.axi_aw_addr {
+      bins axi_aw_addr_values[] = {[0 : $]};
     }
 
-    peripheral_uvm_wrdata: coverpoint cov_transaction.wrdata {
-      bins wrdata_values[] = {[0 : $]};
+    peripheral_uvm_axi_w_data: coverpoint cov_transaction.axi_w_data {
+      bins axi_w_data_values[] = {[0 : $]};
     }
 
-    peripheral_uvm_araddr: coverpoint cov_transaction.araddr {
-      bins araddr_values[] = {[0 : $]};
+    peripheral_uvm_axi_ar_addr: coverpoint cov_transaction.axi_ar_addr {
+      bins axi_ar_addr_values[] = {[0 : $]};
     }
 
     peripheral_uvm_address: coverpoint cov_transaction.address {

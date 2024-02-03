@@ -65,8 +65,8 @@ class peripheral_uvm_scoreboard extends uvm_scoreboard;
       exp_transaction = exp_trans_fifo.pop_front();
       if (act_trans_fifo.size != 0) begin
         act_transaction = act_trans_fifo.pop_front();
-        `uvm_info(get_full_name(), $sformatf("expected AXI4-Lite Memory =%d , actual AXI4-Lite Memory =%d ", exp_transaction.axi_r_data, act_transaction.axi_r_data), UVM_LOW);
-        if (exp_transaction.axi_r_data == exp_transaction.axi_w_data) begin
+        `uvm_info(get_full_name(), $sformatf("expected AXI4-Lite Memory =%d , actual AXI4-Lite Memory =%d ", exp_transaction.pwdata, act_transaction.prdata), UVM_LOW);
+        if (exp_transaction.prdata == exp_transaction.pwdata) begin
           `uvm_info(get_full_name(), $sformatf("SUM MATCHES"), UVM_LOW);
         end else begin
           `uvm_error(get_full_name(), $sformatf("SUM DIS-MATCHES"));

@@ -1,7 +1,5 @@
 `include "peripheral_uvm_transaction.sv"
 
-import peripheral_axi4_pkg::*;
-
 class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Declaration of component utils to register with factory
   peripheral_uvm_transaction       transaction;
@@ -54,62 +52,35 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   task write_drive();
     begin
       // Operate in a synchronous manner
-      @(posedge vif.aclk);
+      @(posedge vif.pclk);
 
-      // Address Phase
-      vif.dr_cb.awid    <= 0;
-      vif.dr_cb.awadr   <= req.address;
-      vif.dr_cb.awvalid <= 1;
-      vif.dr_cb.awlen   <= AXI_BURST_LENGTH_1;
-      vif.dr_cb.awsize  <= AXI_BURST_SIZE_WORD;
-      vif.dr_cb.awburst <= AXI_BURST_TYPE_FIXED;
-      vif.dr_cb.awlock  <= AXI_LOCK_NORMAL;
-      vif.dr_cb.awcache <= 0;
-      vif.dr_cb.awprot  <= AXI_PROTECTION_NORMAL;
-      @(posedge vif.awready);
+      vif.dr_cb.paddr   <= req.address;
+      vif.dr_cb.pstrb   <= 2'b00;
+      vif.dr_cb.pwrite  <= 1;
+      vif.dr_cb.psel    <= 1;
+      vif.dr_cb.pwdata  <= req.pwdata;
+      vif.dr_cb.penable <= 1;
+      @(posedge vif.pready);
 
-      // Data Phase
-      vif.dr_cb.awvalid <= 0;
-      vif.dr_cb.awadr   <= 'bX;
-      vif.dr_cb.wid     <= 0;
-      vif.dr_cb.wvalid  <= 1;
-      vif.dr_cb.wrdata  <= req.wrdata;
-      vif.dr_cb.wstrb   <= 4'hF;
-      vif.dr_cb.wlast   <= 1;
-      @(posedge vif.wready);
-
-      // Response Phase
-      vif.dr_cb.wid    <= 0;
-      vif.dr_cb.wvalid <= 0;
-      vif.dr_cb.wrdata <= 'bX;
-      vif.dr_cb.wstrb  <= 0;
-      vif.dr_cb.wlast  <= 0;
+      vif.dr_cb.psel    <= 0;
+      vif.dr_cb.pwdata  <= 'bX;
+      vif.dr_cb.penable <= 0;
     end
   endtask
 
   task read_drive();
     begin
-      // Address Phase
-      vif.dr_cb.arid    <= 0;
-      vif.dr_cb.araddr  <= req.address;
-      vif.dr_cb.arvalid <= 1;
-      vif.dr_cb.arlen   <= AXI_BURST_LENGTH_1;
-      vif.dr_cb.arsize  <= AXI_BURST_SIZE_WORD;
-      vif.dr_cb.arlock  <= AXI_LOCK_NORMAL;
-      vif.dr_cb.arcache <= 0;
-      vif.dr_cb.arprot  <= AXI_PROTECTION_NORMAL;
-      vif.dr_cb.rready  <= 0;
-      @(posedge vif.arready);
+      vif.dr_cb.paddr   <= req.address;
+      vif.dr_cb.pstrb   <= 2'b00;
+      vif.dr_cb.pwrite  <= 0;
+      vif.dr_cb.psel    <= 1;
+      vif.dr_cb.pwdata  <= req.pwdata;
+      vif.dr_cb.penable <= 1;
+      @(posedge vif.pready);
 
-      // Data Phase
-      vif.dr_cb.arvalid <= 0;
-      vif.dr_cb.rready  <= 1;
-      @(posedge vif.rvalid);
-
-      vif.dr_cb.rready <= 0;
-      @(negedge vif.rvalid);
-
-      vif.dr_cb.araddr <= 'bx;
+      vif.dr_cb.psel    <= 0;
+      vif.dr_cb.pwdata  <= 'bX;
+      vif.dr_cb.penable <= 0;
     end
   endtask
 
@@ -117,46 +88,17 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Description : Driving the dut inputs
   task reset();
     // Global Signals
-    vif.dr_cb.aresetn <= 0;  // Active LOW
+    vif.dr_cb.presetn <= 1;  // Active HIGH
 
-    // Write Address Channel
-    vif.dr_cb.awid    <= 0;  // Address Write ID
-    vif.dr_cb.awadr   <= 0;  // Write Address
-    vif.dr_cb.awlen   <= 0;  // Burst Length
-    vif.dr_cb.awsize  <= 0;  // Burst Size
-    vif.dr_cb.awburst <= 0;  // Burst Type
-    vif.dr_cb.awlock  <= 0;  // Lock Type
-    vif.dr_cb.awcache <= 0;  // Cache Type
-    vif.dr_cb.awprot  <= 0;  // Protection Type
-    vif.dr_cb.awvalid <= 0;  // Write Address Valid
+    vif.dr_cb.paddr   <= 0;
+    vif.dr_cb.pstrb   <= 0;
+    vif.dr_cb.pwrite  <= 0;
+    vif.dr_cb.psel    <= 0;
+    vif.dr_cb.pwdata  <= 0;
+    vif.dr_cb.penable <= 0;
 
-    // Write Data Channel
-    vif.dr_cb.wid     <= 0;  // Write ID
-    vif.dr_cb.wrdata  <= 0;  // Write Data
-    vif.dr_cb.wstrb   <= 0;  // Write Strobes
-    vif.dr_cb.wlast   <= 0;  // Write Last
-    vif.dr_cb.wvalid  <= 0;  // Write Valid
+    repeat (5) @(posedge vif.pclk);
 
-    // Write Response CHannel
-    vif.dr_cb.bid     <= 0;  // Response ID
-    vif.dr_cb.bresp   <= 0;  // Write Response
-    vif.dr_cb.bvalid  <= 0;  // Write Response Valid   
-
-    // Read Address Channel
-    vif.dr_cb.arid    <= 0;  // Read Address ID
-    vif.dr_cb.araddr  <= 0;  // Read Address
-    vif.dr_cb.arlen   <= 0;  // Burst Length
-    vif.dr_cb.arsize  <= 0;  // Burst Size
-    vif.dr_cb.arlock  <= 0;  // Lock Type
-    vif.dr_cb.arcache <= 0;  // Cache Type
-    vif.dr_cb.arprot  <= 0;  // Protection Type
-    vif.dr_cb.arvalid <= 0;  // Read Address Valid
-
-    // Read Data Channel
-    vif.dr_cb.rready  <= 0;  // Read Ready
-
-    repeat (5) @(posedge vif.aclk);
-
-    vif.dr_cb.aresetn <= 1;  // Inactive HIGH
+    vif.dr_cb.presetn <= 0;  // Inactive LOW
   endtask
 endclass : peripheral_uvm_driver

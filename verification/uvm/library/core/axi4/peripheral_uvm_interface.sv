@@ -53,135 +53,114 @@ interface peripheral_uvm_interface (
   logic                        axi_b_valid;
   logic                        axi_b_ready;
 
-  logic                        req_o;
-  logic                        we_o;
-  logic [AXI_ADDR_WIDTH  -1:0] addr_o;
-  logic [AXI_DATA_WIDTH/8-1:0] be_o;
-  logic [AXI_DATA_WIDTH  -1:0] data_o;
-  logic [AXI_DATA_WIDTH  -1:0] data_i;
-
   // Clocking block and modport declaration for driver
   clocking dr_cb @(posedge clk_i);
-    output                        rst_ni; // Asynchronous reset active low
+    output rst_ni;  // Asynchronous reset active low
 
-    output [AXI_ID_WIDTH    -1:0] axi_aw_id;
-    output [AXI_ADDR_WIDTH  -1:0] axi_aw_addr;
-    output [                 7:0] axi_aw_len;
-    output [                 2:0] axi_aw_size;
-    output [                 1:0] axi_aw_burst;
-    output                        axi_aw_lock;
-    output [                 3:0] axi_aw_cache;
-    output [                 2:0] axi_aw_prot;
-    output [                 3:0] axi_aw_qos;
-    output [                 3:0] axi_aw_region;
-    output [AXI_USER_WIDTH  -1:0] axi_aw_user;
-    output                        axi_aw_valid;
-    input                         axi_aw_ready;
+    output axi_aw_id;
+    output axi_aw_addr;
+    output axi_aw_len;
+    output axi_aw_size;
+    output axi_aw_burst;
+    output axi_aw_lock;
+    output axi_aw_cache;
+    output axi_aw_prot;
+    output axi_aw_qos;
+    output axi_aw_region;
+    output axi_aw_user;
+    output axi_aw_valid;
+    input  axi_aw_ready;
 
-    output [AXI_ID_WIDTH    -1:0] axi_ar_id;
-    output [AXI_ADDR_WIDTH  -1:0] axi_ar_addr;
-    output [                 7:0] axi_ar_len;
-    output [                 2:0] axi_ar_size;
-    output [                 1:0] axi_ar_burst;
-    output                        axi_ar_lock;
-    output [                 3:0] axi_ar_cache;
-    output [                 2:0] axi_ar_prot;
-    output [                 3:0] axi_ar_qos;
-    output [                 3:0] axi_ar_region;
-    output [AXI_USER_WIDTH  -1:0] axi_ar_user;
-    output                        axi_ar_valid;
-    input                         axi_ar_ready;
+    output axi_ar_id;
+    output axi_ar_addr;
+    output axi_ar_len;
+    output axi_ar_size;
+    output axi_ar_burst;
+    output axi_ar_lock;
+    output axi_ar_cache;
+    output axi_ar_prot;
+    output axi_ar_qos;
+    output axi_ar_region;
+    output axi_ar_user;
+    output axi_ar_valid;
+    input  axi_ar_ready;
 
-    output [AXI_DATA_WIDTH  -1:0] axi_w_data;
-    output [AXI_STRB_WIDTH  -1:0] axi_w_strb;
-    output                        axi_w_last;
-    output [AXI_USER_WIDTH  -1:0] axi_w_user;
-    output                        axi_w_valid;
-    input                         axi_w_ready;
+    output axi_w_data;
+    output axi_w_strb;
+    output axi_w_last;
+    output axi_w_user;
+    output axi_w_valid;
+    input  axi_w_ready;
 
-    input  [AXI_ID_WIDTH    -1:0] axi_r_id;
-    input  [AXI_DATA_WIDTH  -1:0] axi_r_data;
-    input  [                 1:0] axi_r_resp;
-    input                         axi_r_last;
-    input  [AXI_USER_WIDTH  -1:0] axi_r_user;
-    input                         axi_r_valid;
-    output                        axi_r_ready;
+    input  axi_r_id;
+    input  axi_r_data;
+    input  axi_r_resp;
+    input  axi_r_last;
+    input  axi_r_user;
+    input  axi_r_valid;
+    output axi_r_ready;
 
-    input  [AXI_ID_WIDTH    -1:0] axi_b_id;
-    input  [                 1:0] axi_b_resp;
-    input  [AXI_USER_WIDTH  -1:0] axi_b_user;
-    input                         axi_b_valid;
-    output                        axi_b_ready;
-
-    input                         req_o;
-    input                         we_o;
-    input  [AXI_ADDR_WIDTH  -1:0] addr_o;
-    input  [AXI_DATA_WIDTH/8-1:0] be_o;
-    input  [AXI_DATA_WIDTH  -1:0] data_o;
-    output [AXI_DATA_WIDTH  -1:0] data_i;
+    input  axi_b_id;
+    input  axi_b_resp;
+    input  axi_b_user;
+    input  axi_b_valid;
+    output axi_b_ready;
   endclocking
 
   modport DRV(clocking dr_cb, input clk_i);
 
   // Clocking block and modport declaration for monitor
   clocking rc_cb @(negedge clk_i);
-    input                        rst_ni;  // Asynchronous reset active low
+    input rst_ni;  // Asynchronous reset active low
 
-    input [AXI_ID_WIDTH    -1:0] axi_aw_id;
-    input [AXI_ADDR_WIDTH  -1:0] axi_aw_addr;
-    input [                 7:0] axi_aw_len;
-    input [                 2:0] axi_aw_size;
-    input [                 1:0] axi_aw_burst;
-    input                        axi_aw_lock;
-    input [                 3:0] axi_aw_cache;
-    input [                 2:0] axi_aw_prot;
-    input [                 3:0] axi_aw_qos;
-    input [                 3:0] axi_aw_region;
-    input [AXI_USER_WIDTH  -1:0] axi_aw_user;
-    input                        axi_aw_valid;
-    input                        axi_aw_ready;
+    input axi_aw_id;
+    input axi_aw_addr;
+    input axi_aw_len;
+    input axi_aw_size;
+    input axi_aw_burst;
+    input axi_aw_lock;
+    input axi_aw_cache;
+    input axi_aw_prot;
+    input axi_aw_qos;
+    input axi_aw_region;
+    input axi_aw_user;
+    input axi_aw_valid;
+    input axi_aw_ready;
 
-    input [AXI_ID_WIDTH    -1:0] axi_ar_id;
-    input [AXI_ADDR_WIDTH  -1:0] axi_ar_addr;
-    input [                 7:0] axi_ar_len;
-    input [                 2:0] axi_ar_size;
-    input [                 1:0] axi_ar_burst;
-    input                        axi_ar_lock;
-    input [                 3:0] axi_ar_cache;
-    input [                 2:0] axi_ar_prot;
-    input [                 3:0] axi_ar_qos;
-    input [                 3:0] axi_ar_region;
-    input [AXI_USER_WIDTH  -1:0] axi_ar_user;
-    input                        axi_ar_valid;
-    input                        axi_ar_ready;
+    input axi_ar_id;
+    input axi_ar_addr;
+    input axi_ar_len;
+    input axi_ar_size;
+    input axi_ar_burst;
+    input axi_ar_lock;
+    input axi_ar_cache;
+    input axi_ar_prot;
+    input axi_ar_qos;
+    input axi_ar_region;
+    input axi_ar_user;
+    input axi_ar_valid;
+    input axi_ar_ready;
 
-    input [AXI_DATA_WIDTH  -1:0] axi_w_data;
-    input [AXI_STRB_WIDTH  -1:0] axi_w_strb;
-    input                        axi_w_last;
-    input [AXI_USER_WIDTH  -1:0] axi_w_user;
-    input                        axi_w_valid;
-    input                        axi_w_ready;
+    input axi_w_data;
+    input axi_w_strb;
+    input axi_w_last;
+    input axi_w_user;
+    input axi_w_valid;
+    input axi_w_ready;
 
-    input [AXI_ID_WIDTH    -1:0] axi_r_id;
-    input [AXI_DATA_WIDTH  -1:0] axi_r_data;
-    input [                 1:0] axi_r_resp;
-    input                        axi_r_last;
-    input [AXI_USER_WIDTH  -1:0] axi_r_user;
-    input                        axi_r_valid;
-    input                        axi_r_ready;
+    input axi_r_id;
+    input axi_r_data;
+    input axi_r_resp;
+    input axi_r_last;
+    input axi_r_user;
+    input axi_r_valid;
+    input axi_r_ready;
 
-    input [AXI_ID_WIDTH    -1:0] axi_b_id;
-    input [                 1:0] axi_b_resp;
-    input [AXI_USER_WIDTH  -1:0] axi_b_user;
-    input                        axi_b_valid;
-    input                        axi_b_ready;
-
-    input                        req_o;
-    input                        we_o;
-    input [AXI_ADDR_WIDTH  -1:0] addr_o;
-    input [AXI_DATA_WIDTH/8-1:0] be_o;
-    input [AXI_DATA_WIDTH  -1:0] data_o;
-    input [AXI_DATA_WIDTH  -1:0] data_i;
+    input axi_b_id;
+    input axi_b_resp;
+    input axi_b_user;
+    input axi_b_valid;
+    input axi_b_ready;
   endclocking
 
   modport RCV(clocking rc_cb, input clk_i);

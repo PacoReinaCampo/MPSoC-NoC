@@ -9,6 +9,8 @@ import uvm_pkg::*;
 `include "peripheral_uvm_sequence.sv"
 `include "peripheral_uvm_test.sv"
 
+import peripheral_axi4_pkg::*;
+
 module peripheral_uvm_testbench;
   // Declaration of Local Fields
   bit clk_i;
@@ -81,14 +83,7 @@ module peripheral_uvm_testbench;
     .axi_b_resp (vif.axi_b_resp),
     .axi_b_user (vif.axi_b_user),
     .axi_b_valid(vif.axi_b_valid),
-    .axi_b_ready(vif.axi_b_ready),
-
-    .req_o (vif.req_o),
-    .we_o  (vif.we_o),
-    .addr_o(vif.addr_o),
-    .be_o  (vif.be_o),
-    .data_o(vif.data_o),
-    .data_i(vif.data_i)
+    .axi_b_ready(vif.axi_b_ready)
   );
 
   // Starting the execution uvm phases

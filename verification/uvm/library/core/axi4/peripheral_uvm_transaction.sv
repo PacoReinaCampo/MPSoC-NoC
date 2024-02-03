@@ -1,3 +1,5 @@
+import peripheral_axi4_pkg::*;
+
 class peripheral_uvm_transaction extends uvm_sequence_item;
   // Declaration of peripheral_adder transaction fields
   bit                             rst_ni;  // Asynchronous reset active low
@@ -51,14 +53,7 @@ class peripheral_uvm_transaction extends uvm_sequence_item;
   bit                             axi_b_valid;
   bit                             axi_b_ready;
 
-  bit                             req_o;
-  bit                             we_o;
-  rand bit [AXI_ADDR_WIDTH  -1:0] addr_o;
-  bit      [AXI_DATA_WIDTH/8-1:0] be_o;
-  rand bit [AXI_DATA_WIDTH  -1:0] data_o;
-  rand bit [AXI_DATA_WIDTH  -1:0] data_i;
-
-  rand bit [31:0] address;  // Target Address
+  rand bit [AXI_ADDR_WIDTH-  1:0] address;  // Target Address
 
   // Declaration of Utility and Field macros
   `uvm_object_utils_begin(peripheral_uvm_transaction)
@@ -101,8 +96,6 @@ class peripheral_uvm_transaction extends uvm_sequence_item;
 
   `uvm_field_int(axi_b_ready, UVM_ALL_ON)
 
-  `uvm_field_int(data_i, UVM_ALL_ON)
-
   `uvm_object_utils_end
 
   // Constructor
@@ -111,11 +104,11 @@ class peripheral_uvm_transaction extends uvm_sequence_item;
   endfunction
 
   // Declaration of Constraints
-  constraint axi_aw_addr_c {axi_aw_addr inside {[32'h00000000 : 32'hFFFFFFFF]};}
-  constraint axi_ar_addr_c {axi_ar_addr inside {[32'h00000000 : 32'hFFFFFFFF]};}
-  constraint axi_w_data_c {axi_w_data inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint axi_aw_addr_c {axi_aw_addr inside {[64'h0000000000000000 : 64'hFFFFFFFFFFFFFFFF]};}
+  constraint axi_ar_addr_c {axi_ar_addr inside {[64'h0000000000000000 : 64'hFFFFFFFFFFFFFFFF]};}
+  constraint axi_w_data_c {axi_w_data inside {[64'h0000000000000000 : 64'hFFFFFFFFFFFFFFFF]};}
 
-  constraint address_c {address inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint address_c {address inside {[64'h0000000000000000 : 64'hFFFFFFFFFFFFFFFF]};}
 
   // Method name : post_randomize();
   // Description : To display transaction info after randomization
