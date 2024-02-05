@@ -1,18 +1,20 @@
+import peripheral_apb4_pkg::*;
+
 interface peripheral_uvm_interface (
-    input logic pclk
+  input logic pclk
 );
 
-  logic        presetn;
+  logic                  presetn;
 
-  logic [31:0] paddr;
-  logic [ 1:0] pstrb;
-  logic        pwrite;
-  logic        pready;
-  logic        psel;
-  logic [31:0] pwdata;
-  logic [31:0] prdata;
-  logic        penable;
-  logic        pslverr;
+  logic [PADDR_SIZE-1:0] paddr;
+  logic [           1:0] pstrb;
+  logic                  pwrite;
+  logic                  pready;
+  logic                  psel;
+  logic [PDATA_SIZE-1:0] pwdata;
+  logic [PDATA_SIZE-1:0] prdata;
+  logic                  penable;
+  logic                  pslverr;
 
   // Clocking block and modport declaration for driver
   clocking dr_cb @(posedge pclk);

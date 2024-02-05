@@ -65,45 +65,17 @@ program peripheral_test (
   end
 
   task apply_reset();
-    // Global Signals
-    vif.aresetn <= 0;  // Active LOW
+    vif.presetn <= 1;  // Active HIGH
 
-    // Write Address Channel
-    vif.awid <= 0;     // Address Write ID
-    vif.awadr <= 0;    // Write Address
-    vif.awlen <= 0;    // Burst Length
-    vif.awsize <= 0;   // Burst Size
-    vif.awburst <= 0;  // Burst Type
-    vif.awlock <= 0;   // Lock Type
-    vif.awcache <= 0;  // Cache Type
-    vif.awprot <= 0;   // Protection Type
-    vif.awvalid <= 0;  // Write Address Valid
+    vif.paddr   = 0;
+    vif.pstrb   = 0;
+    vif.pwrite  = 0;
+    vif.psel    = 0;
+    vif.pwdata  = 0;
+    vif.penable = 0;
 
-    // Write Data Channel
-    vif.wid <= 0;     // Write ID
-    vif.wrdata <= 0;  // Write Data
-    vif.wstrb <= 0;   // Write Strobes
-    vif.wlast <= 0;   // Write Last
-    vif.wvalid <= 0;  // Write Valid
+    repeat (5) @(posedge vif.pclk);
 
-    // Write Response CHannel
-    vif.bready <= 0;  // Response Ready
-
-    // Read Address Channel
-    vif.arid <= 0;     // Read Address ID
-    vif.araddr <= 0;   // Read Address
-    vif.arlen <= 0;    // Burst Length
-    vif.arsize <= 0;   // Burst Size
-    vif.arlock <= 0;   // Lock Type
-    vif.arcache <= 0;  // Cache Type
-    vif.arprot <= 0;   // Protection Type
-    vif.arvalid <= 0;  // Read Address Valid
-
-    // Read Data Channel
-    vif.rready <= 0;  // Read Ready
-
-    repeat (5) @(posedge vif.aclk);
-
-    vif.aresetn <= 1;  // Inactive HIGH
+    vif.presetn <= 0;  // Inactive LOW
   endtask
 endprogram

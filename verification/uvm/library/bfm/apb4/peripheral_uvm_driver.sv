@@ -1,5 +1,7 @@
 `include "peripheral_uvm_transaction.sv"
 
+import peripheral_apb4_pkg::*;
+
 class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Declaration of component utils to register with factory
   peripheral_uvm_transaction       transaction;
@@ -51,35 +53,36 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Description : Driving the dut inputs
   task write_drive();
     begin
-      // Operate in a synchronous manner
       @(posedge vif.pclk);
+      vif.dr_cb.paddr  <= req.address;
+      vif.dr_cb.pwrite <= 1;
+      vif.dr_cb.psel   <= 1;
+      vif.dr_cb.pwdata <= req.pwdata;
 
-      vif.dr_cb.paddr   <= req.address;
-      vif.dr_cb.pstrb   <= 2'b00;
-      vif.dr_cb.pwrite  <= 1;
+      @(posedge vif.pclk);
       vif.dr_cb.psel    <= 1;
-      vif.dr_cb.pwdata  <= req.pwdata;
       vif.dr_cb.penable <= 1;
-      @(posedge vif.pready);
 
+      @(posedge vif.pclk);
       vif.dr_cb.psel    <= 0;
-      vif.dr_cb.pwdata  <= 'bX;
       vif.dr_cb.penable <= 0;
     end
   endtask
 
   task read_drive();
     begin
-      vif.dr_cb.paddr   <= req.address;
-      vif.dr_cb.pstrb   <= 2'b00;
+      @(posedge vif.pclk);
       vif.dr_cb.pwrite  <= 0;
       vif.dr_cb.psel    <= 1;
-      vif.dr_cb.pwdata  <= req.pwdata;
-      vif.dr_cb.penable <= 1;
-      @(posedge vif.pready);
+      vif.dr_cb.penable <= 0;
 
+      @(posedge vif.pclk);
+      vif.dr_cb.paddr   <= req.address;
+      vif.dr_cb.psel    <= 1;
+      vif.dr_cb.penable <= 1;
+
+      @(posedge vif.pclk);
       vif.dr_cb.psel    <= 0;
-      vif.dr_cb.pwdata  <= 'bX;
       vif.dr_cb.penable <= 0;
     end
   endtask
@@ -87,7 +90,6 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Method name : reset
   // Description : Driving the dut inputs
   task reset();
-    // Global Signals
     vif.dr_cb.presetn <= 1;  // Active HIGH
 
     vif.dr_cb.paddr   <= 0;

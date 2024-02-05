@@ -37,169 +37,204 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-import peripheral_axi4_pkg::*;
+import peripheral_ahb3_pkg::*;
 
-module peripheral_design (
+module peripheral_design #(
+  parameter MEMORY_SIZE       = 0,    // Memory in Bytes
+  parameter MEMORY_DEPTH      = 256,  // Memory depth
+  parameter HADDR_SIZE        = 8,
+  parameter HDATA_SIZE        = 32,
+  parameter TECHNOLOGY        = "GENERIC",
+  parameter REGISTERED_OUTPUT = "NO"
+) (
+  input hresetn,
+  input hclk,
 
-  // Global Signals
-  input wire aclk,
-  input wire aresetn, // Active LOW
-
-  // Write Address Channel
-  input  wire [ 3:0] awid,     // Address Write ID
-  input  wire [31:0] awadr,    // Write Address
-  input  wire [ 3:0] awlen,    // Burst Length
-  input  wire [ 2:0] awsize,   // Burst Size
-  input  wire [ 1:0] awburst,  // Burst Type
-  input  wire [ 1:0] awlock,   // Lock Type
-  input  wire [ 3:0] awcache,  // Cache Type
-  input  wire [ 2:0] awprot,   // Protection Type
-  input  wire        awvalid,  // Write Address Valid
-  output reg         awready,  // Write Address Ready
-
-  // Write Data Channel
-  input  wire [ 3:0] wid,     // Write ID
-  input  wire [31:0] wrdata,  // Write Data
-  input  wire [ 3:0] wstrb,   // Write Strobes
-  input  wire        wlast,   // Write Last
-  input  wire        wvalid,  // Write Valid
-  output reg         wready,  // Write Ready
-
-  // Write Response CHannel
-  output reg  [3:0] bid,     // Response ID
-  output reg  [1:0] bresp,   // Write Response
-  output reg        bvalid,  // Write Response Valid
-  input  wire       bready,  // Response Ready
-
-  // Read Address Channel
-  input  wire [ 3:0] arid,     // Read Address ID
-  input  wire [31:0] araddr,   // Read Address
-  input  wire [ 3:0] arlen,    // Burst Length
-  input  wire [ 2:0] arsize,   // Burst Size
-  input  wire [ 1:0] arlock,   // Lock Type
-  input  wire [ 3:0] arcache,  // Cache Type
-  input  wire [ 2:0] arprot,   // Protection Type
-  input  wire        arvalid,  // Read Address Valid
-  output reg         arready,  // Read Address Ready
-
-  // Read Data Channel
-  output reg  [ 3:0] rid,     // Read ID
-  output reg  [31:0] rdata,   // Read Data
-  output reg  [ 1:0] rresp,   // Read Response
-  output reg         rlast,   // Read Last
-  output reg         rvalid,  // Read Valid
-  input  wire        rready   // Read Ready
+  // AHB Slave Interfaces (receive data from AHB Masters)
+  // AHB Masters connect to these ports
+  input                       hsel,
+  input      [HADDR_SIZE-1:0] haddr,
+  input      [HDATA_SIZE-1:0] hwdata,
+  output reg [HDATA_SIZE-1:0] hrdata,
+  input                       hwrite,
+  input      [           2:0] hsize,
+  input      [           2:0] hburst,
+  input      [           3:0] hprot,
+  input      [           1:0] htrans,
+  input                       hmastlock,
+  output reg                  hreadyout,
+  input                       hready,
+  output                      hresp
 );
 
-  // Internal Signals
-  reg     [31:0] memory [0:127];
+  //////////////////////////////////////////////////////////////////////////////
+  // Constants
+  //////////////////////////////////////////////////////////////////////////////
 
-  // Write Address Channel
-  reg     [31:0] write_address;
-  reg     [ 2:0] write_size;
+  localparam BE_SIZE = (HADDR_SIZE + 7) / 8;
 
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_address <= 0;
-      awready       <= 1;
-      write_size    <= 0;
+  localparam MEMORY_SIZE_DEPTH = 8 * MEMORY_SIZE / HDATA_SIZE;
+  localparam REAL_MEMORY_DEPTH = MEMORY_DEPTH > MEMORY_SIZE_DEPTH ? MEMORY_DEPTH : MEMORY_SIZE_DEPTH;
+  localparam MEMORY_ABITS = $clog2(REAL_MEMORY_DEPTH);
+  localparam MEMORY_ABITS_LSB = $clog2(BE_SIZE);
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Variables
+  //////////////////////////////////////////////////////////////////////////////
+
+  genvar i;
+
+  logic                  we;
+  logic [BE_SIZE   -1:0] be;
+  logic [HADDR_SIZE-1:0] waddr;
+  logic                  contention;
+  logic                  ready;
+
+  logic [HDATA_SIZE-1:0] dout;
+
+  // memory array
+  logic [HDATA_SIZE-1:0] memory_array[2**MEMORY_ABITS -1:0];
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Functions
+  //////////////////////////////////////////////////////////////////////////////
+
+  function [BE_SIZE-1:0] gen_be;
+    input [2:0] hsize;
+    input [HADDR_SIZE-1:0] haddr;
+
+    logic [127:0] full_be;
+    logic [  6:0] haddr_masked;
+    logic [  6:0] address_offset;
+
+    // get number of active lanes for a 1024bit databus (max width) for this hsize
+    case (hsize)
+      HSIZE_B1024: full_be = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff;
+      HSIZE_B512:  full_be = 128'h0000_0000_0000_0000_ffff_ffff_ffff_ffff;
+      HSIZE_B256:  full_be = 128'h0000_0000_0000_0000_0000_0000_ffff_ffff;
+      HSIZE_B128:  full_be = 128'h0000_0000_0000_0000_0000_0000_0000_ffff;
+      HSIZE_DWORD: full_be = 128'h0000_0000_0000_0000_0000_0000_0000_00ff;
+      HSIZE_WORD:  full_be = 128'h0000_0000_0000_0000_0000_0000_0000_000f;
+      HSIZE_HWORD: full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0003;
+      default:     full_be = 128'h0000_0000_0000_0000_0000_0000_0000_0001;
+    endcase
+
+    // What are the lesser bits in haddr?
+    case (HDATA_SIZE)
+      1024:    address_offset = 7'b111_1111;
+      0512:    address_offset = 7'b011_1111;
+      0256:    address_offset = 7'b001_1111;
+      0128:    address_offset = 7'b000_1111;
+      0064:    address_offset = 7'b000_0111;
+      0032:    address_offset = 7'b000_0011;
+      0016:    address_offset = 7'b000_0001;
+      default: address_offset = 7'b000_0000;
+    endcase
+
+    // generate masked address
+    haddr_masked = haddr & address_offset;
+
+    // create byte-enable
+    gen_be       = full_be[BE_SIZE-1:0] << haddr_masked;
+  endfunction  // gen_be
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Body
+  //////////////////////////////////////////////////////////////////////////////
+
+  // generate internal write signal
+  // This causes read/write contention, which is handled by memory
+  always @(posedge hclk) begin
+    if (hready) begin
+      we <= hsel & hwrite & (htrans != HTRANS_BUSY) & (htrans != HTRANS_IDLE);
     end else begin
-      if (awvalid) begin
-        write_address <= {2'b00, awadr[31:2]};
-        awready       <= 1;
-      end else begin
-        awready <= 0;
-      end
-    end
-
-  // Write Burst Counting
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_size <= 0;
-    end else begin
-      if (awvalid) begin
-        write_size <= awsize;
-      end
-    end
-
-  // Write Data Channel
-  reg [31:0] write_data;
-  reg [ 3:0] write_strobe;
-  always @(posedge aclk)
-    if (~aresetn) begin
-      write_data   <= 0;
-      wready       <= 1;
-      write_strobe <= 0;
-    end else begin
-      if (wvalid) begin
-        write_data   <= wrdata;
-        wready       <= 1;
-        write_strobe <= wstrb;
-      end else begin
-        wready <= 0;
-      end
-    end
-
-  // Write Response Channel
-  always @(posedge aclk)
-    if (~aresetn) begin
-      bid    <= 0;
-      bresp  <= AXI_RESPONSE_OKAY;
-      bvalid <= 0;
-    end else begin
-      if (bready & wlast) begin
-        bvalid <= 1;
-      end else begin
-        bvalid <= 0;
-      end
-    end
-
-  // Read Address Channel
-  reg [31:0] read_address;
-  always @(posedge aclk)
-    if (~aresetn) begin
-      read_address <= 0;
-      arready      <= 0;
-    end else begin
-      if (arvalid) begin
-        read_address <= {2'b00, araddr[31:2]};
-        arready      <= 1;
-      end else begin
-        arready <= 0;
-      end
-    end
-
-  // Read Data Channel
-  always @(posedge aclk)
-    if (~aresetn) begin
-      rdata  <= 0;
-      rvalid <= 0;
-      rresp  <= AXI_RESPONSE_OKAY;
-      rlast  <= 0;
-    end else begin
-      if (rready) begin
-        rdata  <= memory[read_address];
-        rvalid <= 1;
-      end else begin
-        rdata  <= 0;
-        rvalid <= 0;
-      end
-    end
-
-  // Memory Operations
-
-  // Memory Write
-  always @(posedge aclk) begin
-    if (wready) begin
-      case (write_strobe)
-        4'b0001: memory[write_address] <= {memory[write_address][31:8], write_data[7:0]};
-        4'b0010: memory[write_address] <= {memory[write_address][31:16], write_data[15:8], memory[write_address][7:0]};
-        4'b0100: memory[write_address] <= {memory[write_address][31:24], write_data[23:16], memory[write_address][15:0]};
-        4'b1000: memory[write_address] <= {write_data[31:24], memory[write_address][23:0]};
-        4'b0011: memory[write_address] <= {write_data[31:16], memory[write_address][15:0]};
-        4'b1100: memory[write_address] <= {memory[write_address][31:16], write_data[15:0]};
-        4'b1111: memory[write_address] <= write_data[31:0];
-      endcase
+      we <= 1'b0;
     end
   end
-endmodule  // peripheral_design
+
+  // decode Byte-Enables
+  always @(posedge hclk) begin
+    if (hready) begin
+      be <= gen_be(hsize, haddr);
+    end
+  end
+
+  // store write address
+  always @(posedge hclk) begin
+    if (hready) begin
+      waddr <= haddr;
+    end
+  end
+
+  // Is there read/write contention on the memory?
+  assign contention = (waddr[MEMORY_ABITS_LSB +: MEMORY_ABITS] == haddr[MEMORY_ABITS_LSB +: MEMORY_ABITS]) & we & hsel & hready & ~hwrite & (htrans != HTRANS_BUSY) & (htrans != HTRANS_IDLE);
+
+  // if all bytes were written contention is/can be handled by memory
+  // otherwise stall a cycle (forced by N3S)
+  // We could do an exception for N3S here, but this file should be technology agnostic
+  assign ready      = ~(contention & ~&be);
+
+  // Hookup Memory Wrapper
+  // Use two-port memory, due to pipelined AHB bus;
+  //   the actual write to memory is 1 cycle late, causing read/write overlap
+  // This assumes there are input registers on the memory
+
+  // write side
+  generate
+    for (i = 0; i < (HDATA_SIZE + 7) / 8; i = i + 1) begin : write
+      if (i * 8 + 8 > HDATA_SIZE) begin
+        always @(posedge hclk) begin
+          if (we && be[i]) begin
+            memory_array[waddr[MEMORY_ABITS_LSB+:MEMORY_ABITS]][HDATA_SIZE-1:i*8] <= hwdata[HDATA_SIZE-1:i*8];
+          end
+        end
+      end else begin
+        always @(posedge hclk) begin
+          if (we && be[i]) begin
+            memory_array[haddr[MEMORY_ABITS_LSB+:MEMORY_ABITS]][i*8+:8] <= hwdata[i*8+:8];
+          end
+        end
+      end
+    end
+  endgenerate
+
+  // read side
+
+  // per Altera's recommendations. Prevents bypass logic
+  always @(posedge hclk) begin
+    dout <= memory_array[waddr[MEMORY_ABITS_LSB+:MEMORY_ABITS]];
+  end
+
+  // AHB bus response
+  assign hresp = HRESP_OKAY;  // always OK
+
+  generate
+    if (REGISTERED_OUTPUT == "NO") begin
+      always @(posedge hclk, negedge hresetn) begin
+        if (!hresetn) begin
+          hreadyout <= 1'b1;
+        end else begin
+          hreadyout <= ready;
+        end
+      end
+      always @* begin
+        hrdata = dout;
+      end
+    end else begin
+      always @(posedge hclk, negedge hresetn) begin
+        if (!hresetn) begin
+          hreadyout <= 1'b1;
+        end else if (htrans == HTRANS_NONSEQ && !hwrite) begin
+          hreadyout <= 1'b0;
+        end else begin
+          hreadyout <= 1'b1;
+        end
+      end
+      always @(posedge hclk) begin
+        if (hready) begin
+          hrdata <= dout;
+        end
+      end
+    end
+  endgenerate
+endmodule

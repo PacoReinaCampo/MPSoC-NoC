@@ -1,3 +1,5 @@
+import peripheral_apb4_pkg::*;
+
 class peripheral_uvm_monitor extends uvm_monitor;
   // Declaration of Virtual interface
   virtual peripheral_uvm_interface                vif;
@@ -42,36 +44,41 @@ class peripheral_uvm_monitor extends uvm_monitor;
   // Description : run task for collecting peripheral_adder transactions
   task collect_write_transaction();
     begin
-      // Operate in a synchronous manner
       @(posedge vif.pclk);
+      act_transaction.paddr  <= vif.rc_cb.paddr;
+      act_transaction.pwrite <= vif.rc_cb.pwrite;
+      act_transaction.psel   <= vif.rc_cb.psel;
+      act_transaction.pwdata <= vif.rc_cb.pwdata;
 
-      act_transaction.paddr   <= vif.rc_cb.paddr;
-      act_transaction.pstrb   <= vif.rc_cb.pstrb;
-      act_transaction.pwrite  <= vif.rc_cb.pwrite;
+      @(posedge vif.pclk);
       act_transaction.psel    <= vif.rc_cb.psel;
-      act_transaction.pwdata  <= vif.rc_cb.pwdata;
       act_transaction.penable <= vif.rc_cb.penable;
-      @(posedge vif.pready);
 
+      @(posedge vif.pclk);
       act_transaction.psel    <= vif.rc_cb.psel;
-      act_transaction.pwdata  <= vif.rc_cb.pwdata;
       act_transaction.penable <= vif.rc_cb.penable;
+
+      act_transaction.prdata <= vif.rc_cb.prdata;
     end
   endtask
 
   task collect_read_transaction();
     begin
-      act_transaction.paddr   <= vif.rc_cb.paddr;
-      act_transaction.pstrb   <= vif.rc_cb.pstrb;
+      @(posedge vif.pclk);
       act_transaction.pwrite  <= vif.rc_cb.pwrite;
       act_transaction.psel    <= vif.rc_cb.psel;
-      act_transaction.pwdata  <= vif.rc_cb.pwdata;
       act_transaction.penable <= vif.rc_cb.penable;
-      @(posedge vif.pready);
 
+      @(posedge vif.pclk);
+      act_transaction.paddr   <= vif.rc_cb.paddr;
       act_transaction.psel    <= vif.rc_cb.psel;
-      act_transaction.pwdata  <= vif.rc_cb.pwdata;
       act_transaction.penable <= vif.rc_cb.penable;
+
+      @(posedge vif.pclk);
+      act_transaction.psel    <= vif.rc_cb.psel;
+      act_transaction.penable <= vif.rc_cb.penable;
+
+      act_transaction.prdata <= vif.rc_cb.prdata;
     end
   endtask
 endclass : peripheral_uvm_monitor

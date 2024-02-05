@@ -40,7 +40,10 @@
 
 package peripheral_apb4_pkg;
 
-  localparam HADDR_SIZE = 32;
-  localparam HDATA_SIZE = 32;
+  localparam PADDR_SIZE = 32;
+  localparam PDATA_SIZE = 32;
+
+  // Address Test
+  localparam APB_ADDRESS_TEST = 32'h0000000F;
 
 endpackage

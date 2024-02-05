@@ -1,23 +1,26 @@
+import peripheral_apb4_pkg::*;
+
 class peripheral_uvm_transaction extends uvm_sequence_item;
   // Declaration of peripheral_adder transaction fields
-  bit             presetn;
+  bit                       presetn;
 
-  rand bit [31:0] paddr;
-  bit      [ 1:0] pstrb;
-  bit             pwrite;
-  bit             pready;
-  bit             psel;
-  rand bit [31:0] pwdata;
-  bit      [31:0] prdata;
-  bit             penable;
-  bit             pslverr;
+  rand bit [PADDR_SIZE-1:0] paddr;
+  bit      [           1:0] pstrb;
+  bit                       pwrite;
+  bit                       pready;
+  bit                       psel;
+  rand bit [PDATA_SIZE-1:0] pwdata;
+  bit      [PDATA_SIZE-1:0] prdata;
+  bit                       penable;
+  bit                       pslverr;
 
-  rand bit [31:0] address;  // Target Address
+  rand bit [PADDR_SIZE-1:0] address;  // Target Address
 
   // Declaration of Utility and Field macros
   `uvm_object_utils_begin(peripheral_uvm_transaction)
 
-  `uvm_field_int(presetn, UVM_ALL_ON)  // Asynchronous reset active low
+  // Global Signals
+  `uvm_field_int(presetn, UVM_ALL_ON)
 
   `uvm_field_int(paddr, UVM_ALL_ON)
   `uvm_field_int(pstrb, UVM_ALL_ON)
@@ -28,6 +31,8 @@ class peripheral_uvm_transaction extends uvm_sequence_item;
   `uvm_field_int(prdata, UVM_ALL_ON)
   `uvm_field_int(penable, UVM_ALL_ON)
   `uvm_field_int(pslverr, UVM_ALL_ON)
+
+  `uvm_field_int(address, UVM_ALL_ON)  // Target Address
 
   `uvm_object_utils_end
 
