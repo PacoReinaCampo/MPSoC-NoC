@@ -30,10 +30,10 @@ module peripheral_uvm_testbench;
     .AW      (AW),       // Address bus
     .DW      (DW),       // Data bus
 
-    .MEMMORY_SIZE(MEMORY_SIZE)  // Memory Size
+    .MEMORY_SIZE(MEMORY_SIZE)  // Memory Size
   ) dut (
     .mclk (vif.mclk),  // RAM clock
-    .rst (vif.rst),  // Asynchronous Reset - active low
+    .rst (vif.rst),    // Asynchronous Reset - active low
 
     .addr(vif.addr),  // RAM address
     .dout(vif.dout),  // RAM data output

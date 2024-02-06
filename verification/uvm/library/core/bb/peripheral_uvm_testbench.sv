@@ -13,31 +13,33 @@ import peripheral_bb_pkg::*;
 
 module peripheral_uvm_testbench;
   // Declaration of Local Fields
-  bit ram_clk;
+  bit mclk;
 
   // Clock Generation
-  always #1 ram_clk = ~ram_clk;
+  always #1 mclk = ~mclk;
 
   initial begin
-    ram_clk = 0;
+    mclk = 0;
   end
 
   // Creatinng instance of interface, in order to connect DUT and testcase
-  peripheral_uvm_interface vif (ram_clk);
+  peripheral_uvm_interface vif (mclk);
 
   // BlackBone Memory DUT Instantation
-  peripheral_spram_bb #(
+  peripheral_design #(
     .AW      (AW),       // Address bus
     .DW      (DW),       // Data bus
-    .MEM_SIZE(MEM_SIZE)  // Memory size in bytes
-  ) bb_spram (
-    .ram_clk (vif.ram_clk),  // RAM clock
 
-    .ram_addr(vif.ram_addr),  // RAM address
-    .ram_dout(vif.ram_dout),  // RAM data output
-    .ram_din (vif.ram_din),   // RAM data input
-    .ram_cen (vif.ram_cen),   // RAM chip enable (low active)
-    .ram_wen (vif.ram_wen)    // RAM write enable (low active)
+    .MEMORY_SIZE(MEMORY_SIZE)  // Memory Size
+  ) dut (
+    .mclk (vif.mclk),  // RAM clock
+    .rst (vif.rst),    // Asynchronous Reset - active low
+
+    .addr(vif.addr),  // RAM address
+    .dout(vif.dout),  // RAM data output
+    .din (vif.din),   // RAM data input
+    .cen (vif.cen),   // RAM chip enable (low active)
+    .wen (vif.wen)    // RAM write enable (low active)
   );
 
   // Starting the execution uvm phases

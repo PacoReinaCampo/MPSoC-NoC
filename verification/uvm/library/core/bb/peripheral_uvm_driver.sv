@@ -53,25 +53,25 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Description : Driving the dut inputs
   task write_drive();
     begin
-      vif.dr_cb.ram_addr <= req.address;
-      vif.dr_cb.ram_din  <= req.ram_din;
-      vif.dr_cb.ram_cen  <= 0;
-      vif.dr_cb.ram_wen  <= 0;
+      vif.dr_cb.addr <= req.address;
+      vif.dr_cb.din  <= req.din;
+      vif.dr_cb.cen  <= 0;
+      vif.dr_cb.wen  <= 0;
 
-      @(posedge vif.ram_clk);
-      vif.dr_cb.ram_cen  <= 1;
+      @(posedge vif.mclk);
+      vif.dr_cb.cen  <= 1;
     end
   endtask
 
   task read_drive();
     begin
-      vif.dr_cb.ram_addr <= req.address;
-      vif.dr_cb.ram_din  <= req.ram_din;
-      vif.dr_cb.ram_cen  <= 0;
-      vif.dr_cb.ram_wen  <= 1;
+      vif.dr_cb.addr <= req.address;
+      vif.dr_cb.din  <= req.din;
+      vif.dr_cb.cen  <= 0;
+      vif.dr_cb.wen  <= 1;
 
-      @(posedge vif.ram_clk);
-      vif.dr_cb.ram_cen  <= 1;
+      @(posedge vif.mclk);
+      vif.dr_cb.cen  <= 1;
     end
   endtask
 
@@ -79,15 +79,15 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
   // Description : Driving the dut inputs
   task reset();
     // Global Signals
-    vif.dr_cb.ram_rst <= 0;  // Active LOW
+    vif.dr_cb.rst <= 0;  // Active LOW
 
-    vif.dr_cb.ram_addr <= 0;
-    vif.dr_cb.ram_din  <= 0;
-    vif.dr_cb.ram_cen  <= 1;
-    vif.dr_cb.ram_wen  <= 0;
+    vif.dr_cb.addr <= 0;
+    vif.dr_cb.din  <= 0;
+    vif.dr_cb.cen  <= 1;
+    vif.dr_cb.wen  <= 0;
 
-    repeat (5) @(posedge vif.ram_clk);
+    repeat (5) @(posedge vif.mclk);
 
-    vif.dr_cb.ram_rst <= 1;  // Inactive HIGH
+    vif.dr_cb.rst <= 1;  // Inactive HIGH
   endtask
 endclass : peripheral_uvm_driver

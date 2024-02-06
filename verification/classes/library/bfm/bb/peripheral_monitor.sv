@@ -58,60 +58,26 @@ class peripheral_monitor;
       // Create transaction method
       monitor_transaction = new();
 
-      // Operate in a synchronous manner
-      @(posedge vif.aclk);
+      @(posedge vif.mclk);
 
-      // Address Phase
-      monitor_transaction.awid    = vif.awid;
-      monitor_transaction.awadr   = vif.awadr;
-      monitor_transaction.awvalid = vif.awvalid;
-      monitor_transaction.awlen   = vif.awlen;
-      monitor_transaction.awsize  = vif.awsize;
-      monitor_transaction.awburst = vif.awburst;
-      monitor_transaction.awlock  = vif.awlock;
-      monitor_transaction.awcache = vif.awcache;
-      monitor_transaction.awprot  = vif.awprot;
-      @(posedge vif.awready);
+      monitor_transaction.addr = vif.addr;
+      monitor_transaction.din  = vif.din;
+      monitor_transaction.dout = vif.dout;
+      monitor_transaction.cen  = vif.cen;
+      monitor_transaction.wen  = vif.wen;
 
-      // Data Phase
-      monitor_transaction.awvalid = vif.awvalid;
-      monitor_transaction.awadr   = vif.awadr;
-      monitor_transaction.wid     = vif.wid;
-      monitor_transaction.wvalid  = vif.wvalid;
-      monitor_transaction.wrdata  = vif.wrdata;
-      monitor_transaction.wstrb   = vif.wstrb;
-      monitor_transaction.wlast   = vif.wlast;
-      @(posedge vif.wready);
+      @(posedge vif.mclk);
+      monitor_transaction.cen  = vif.cen;
 
-      // Response Phase
-      monitor_transaction.wid    = vif.wid;
-      monitor_transaction.wvalid = vif.wvalid;
-      monitor_transaction.wrdata = vif.wrdata;
-      monitor_transaction.wstrb  = vif.wstrb;
-      monitor_transaction.wlast  = vif.wlast;
+      @(posedge vif.mclk);
+      monitor_transaction.addr = vif.addr;
+      monitor_transaction.din  = vif.din;
+      monitor_transaction.dout = vif.dout;
+      monitor_transaction.cen  = vif.cen;
+      monitor_transaction.wen  = vif.wen;
 
-      // Address Phase
-      monitor_transaction.arid    = vif.arid;
-      monitor_transaction.araddr  = vif.awadr;
-      monitor_transaction.arvalid = vif.arvalid;
-      monitor_transaction.arlen   = vif.arlen;
-      monitor_transaction.arsize  = vif.arsize;
-      monitor_transaction.arlock  = vif.arlock;
-      monitor_transaction.arcache = vif.arcache;
-      monitor_transaction.arprot  = vif.arprot;
-      monitor_transaction.rready  = vif.rready;
-      @(posedge vif.arready);
-
-      // Data Phase
-      monitor_transaction.arvalid = vif.arvalid;
-      monitor_transaction.rready  = vif.rready;
-      @(posedge vif.rvalid);
-
-      monitor_transaction.rready = vif.rready;
-      monitor_transaction.rdata  = vif.rdata;
-      @(negedge vif.rvalid);
-
-      monitor_transaction.araddr = vif.araddr;
+      @(posedge vif.mclk);
+      monitor_transaction.cen  = vif.cen;
 
       monitor_to_scoreboard.put(monitor_transaction);
     end

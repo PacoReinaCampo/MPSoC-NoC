@@ -57,10 +57,10 @@ class peripheral_scoreboard;
 
       monitor_to_scoreboard.get(transaction);
 
-      if (transaction.rdata !== transaction.wrdata) begin
-        $display("Dis-Matched: Read = 0x%04x; Expected = 0x%04x", transaction.rdata, transaction.wrdata);
+      if (transaction.dout !== transaction.din) begin
+        $display("Dis-Matched: Read = 0x%04x; Expected = 0x%04x", transaction.dout, transaction.din);
       end else begin
-        $display("Matched: Read = 0x%04x; Expected = 0x%04x", transaction.rdata, transaction.wrdata);
+        $display("Matched: Read = 0x%04x; Expected = 0x%04x", transaction.dout, transaction.din);
       end
       compare_cnt++;
     end
