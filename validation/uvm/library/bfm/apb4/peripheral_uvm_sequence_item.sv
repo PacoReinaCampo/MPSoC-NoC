@@ -39,17 +39,17 @@
 
 class peripheral_uvm_sequence_item extends uvm_sequence_item;
 
-  bit             PCLK;
-  bit             PRESETn;
+  bit                       presetn;
 
-  rand bit [31:0] PADDR;
-  bit             PWRITE;
-  bit             PSEL;
-  bit             PENABLE;
-  rand bit [31:0] PWDATA;
-  bit      [31:0] PRDATA;
-  bit             PREADY;
-  bit             PSLVERR;
+  rand bit [PADDR_SIZE-1:0] paddr;
+  bit      [           1:0] pstrb;
+  bit                       pwrite;
+  bit                       pready;
+  bit                       psel;
+  rand bit [PDATA_SIZE-1:0] pwdata;
+  bit      [PDATA_SIZE-1:0] prdata;
+  bit                       penable;
+  bit                       pslverr;
 
   // Constructor
   function new(string name = "peripheral_uvm_sequence_item");
@@ -59,20 +59,21 @@ class peripheral_uvm_sequence_item extends uvm_sequence_item;
   // Utility and Field declarations
   `uvm_object_utils_begin(peripheral_uvm_sequence_item)
 
-  `uvm_field_int(PRESETn, UVM_ALL_ON)
+  `uvm_field_int(presetn, UVM_ALL_ON)
 
-  `uvm_field_int(PADDR, UVM_ALL_ON)
-  `uvm_field_int(PWRITE, UVM_ALL_ON)
-  `uvm_field_int(PSEL, UVM_ALL_ON)
-  `uvm_field_int(PENABLE, UVM_ALL_ON)
-  `uvm_field_int(PWDATA, UVM_ALL_ON)
-  `uvm_field_int(PRDATA, UVM_ALL_ON)
-  `uvm_field_int(PREADY, UVM_ALL_ON)
-  `uvm_field_int(PSLVERR, UVM_ALL_ON)
+  `uvm_field_int(paddr, UVM_ALL_ON)
+  `uvm_field_int(pstrb, UVM_ALL_ON)
+  `uvm_field_int(pwrite, UVM_ALL_ON)
+  `uvm_field_int(pready, UVM_ALL_ON)
+  `uvm_field_int(psel, UVM_ALL_ON)
+  `uvm_field_int(pwdata, UVM_ALL_ON)
+  `uvm_field_int(prdata, UVM_ALL_ON)
+  `uvm_field_int(penable, UVM_ALL_ON)
+  `uvm_field_int(pslverr, UVM_ALL_ON)
 
   `uvm_object_utils_end
 
   // Constraints
-  constraint PADDR_C {PADDR inside {[32'h00000000 : 32'hFFFFFFFF]};}
-  constraint PWDATA_C {PWDATA inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint paddr_c {paddr inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint pwdata_c {pwdata inside {[32'h00000000 : 32'hFFFFFFFF]};}
 endclass

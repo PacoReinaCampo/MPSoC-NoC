@@ -37,6 +37,8 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
+import peripheral_apb4_pkg::*;
+
 class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
   // Virtual Interface
   virtual peripheral_design_if vif;
@@ -76,30 +78,38 @@ class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
   // Task: Single Write Transaction
   task write_phase_single;
     begin
-      vif.PADDR   <= 4;
-      vif.PWRITE  <= 1;
-      vif.PSEL    <= 1;
-      vif.PENABLE <= 1;
-      vif.PWDATA  <= req.PWDATA;
+      @(posedge vif.pclk);
+      vif.paddr  = APB_ADDRESS_TEST;
+      vif.pwrite = 1;
+      vif.psel   = 1;
+      vif.pwdata = req.pwdata;
 
-      @(posedge vif.PCLK);
-      vif.PWRITE  <= 0;
-      vif.PSEL    <= 0;
-      vif.PENABLE <= 0;
+      @(posedge vif.pclk);
+      vif.psel    = 1;
+      vif.penable = 1;
+
+      @(posedge vif.pclk);
+      vif.psel    = 0;
+      vif.penable = 0;
     end
   endtask
 
   // Task: Single Read Transaction
   task read_phase_single;
     begin
-      vif.PADDR   <= 4;
-      vif.PWRITE  <= 0;
-      vif.PSEL    <= 1;
-      vif.PENABLE <= 1;
+      @(posedge vif.pclk);
+      vif.pwrite  = 0;
+      vif.psel    = 1;
+      vif.penable = 0;
 
-      @(posedge vif.PCLK);
-      vif.PSEL    <= 0;
-      vif.PENABLE <= 0;
+      @(posedge vif.pclk);
+      vif.paddr   = APB_ADDRESS_TEST;
+      vif.psel    = 1;
+      vif.penable = 1;
+
+      @(posedge vif.pclk);
+      vif.psel    = 0;
+      vif.penable = 0;
     end
   endtask
 endclass

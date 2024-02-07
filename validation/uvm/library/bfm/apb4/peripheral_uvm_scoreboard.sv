@@ -72,10 +72,10 @@ class peripheral_uvm_scoreboard extends uvm_scoreboard;
       if (item_q.size > 0) begin
         scoreboard_item = item_q.pop_front();
         $display("----------------------------------------------------------------------------------------------------------");
-        if (scoreboard_item.PRDATA !== scoreboard_item.PWDATA) begin
-          `uvm_error(get_name, $sformatf("Dis-Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.PRDATA, scoreboard_item.PWDATA));
+        if (scoreboard_item.prdata !== scoreboard_item.pwdata) begin
+          `uvm_error(get_name, $sformatf("Dis-Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.prdata, scoreboard_item.pwdata));
         end else begin
-          `uvm_info(get_type_name, $sformatf("Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.PRDATA, scoreboard_item.PWDATA), UVM_LOW);
+          `uvm_info(get_type_name, $sformatf("Matched: Read = 0x%04x; Expected = 0x%04x", scoreboard_item.prdata, scoreboard_item.pwdata), UVM_LOW);
         end
         $display("----------------------------------------------------------------------------------------------------------");
       end

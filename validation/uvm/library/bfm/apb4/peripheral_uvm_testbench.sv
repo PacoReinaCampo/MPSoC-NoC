@@ -45,32 +45,32 @@ import uvm_pkg::*;
 
 module peripheral_uvm_testbench;
   // Clock and Reset declaration
-  bit PCLK;
+  bit pclk;
 
   // Clock Generation
-  always #1 PCLK = ~PCLK;
+  always #1 pclk = ~pclk;
 
   initial begin
-    PCLK = 0;
+    pclk = 0;
   end
 
   // Virtual interface
-  peripheral_design_if vif (PCLK);
+  peripheral_design_if vif (pclk);
 
   // DUT instantiation
   peripheral_design dut (
-    // Global Signals
-    .PCLK   (vif.PCLK),
-    .PRESETn(vif.PRESETn),
+    .pclk   (vif.pclk),
+    .presetn(vif.presetn),
 
-    .PADDR   (vif.PADDR),
-    .PWRITE  (vif.PWRITE),
-    .PSEL    (vif.PSEL),
-    .PENABLE (vif.PENABLE),
-    .PWDATA  (vif.PWDATA),
-    .PRDATA  (vif.PRDATA),
-    .PREADY  (vif.PREADY),
-    .PSLVERR (vif.PSLVERR)
+    .paddr  (vif.paddr),
+    .pstrb  (vif.pstrb),
+    .pwrite (vif.pwrite),
+    .pready (vif.pready),
+    .psel   (vif.psel),
+    .pwdata (vif.pwdata),
+    .prdata (vif.prdata),
+    .penable(vif.penable),
+    .pslverr(vif.pslverr)
   );
 
   initial begin

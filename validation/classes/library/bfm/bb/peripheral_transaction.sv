@@ -37,57 +37,19 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
+import peripheral_bb_pkg::*;
+
 class peripheral_transaction;
   // Global Signals
-  bit             aresetn;  // Active LOW
+  bit               rst;  // Asynchronous reset active low
 
-  // Write Address Channel
-  bit      [ 3:0] awid;     // Address Write ID
-  rand bit [31:0] awadr;    // Write Address
-  bit      [ 3:0] awlen;    // Burst Length
-  bit      [ 2:0] awsize;   // Burst Size
-  bit      [ 1:0] awburst;  // Burst Type
-  bit      [ 1:0] awlock;   // Lock Type
-  bit      [ 3:0] awcache;  // Cache Type
-  bit      [ 2:0] awprot;   // Protection Type
-  bit             awvalid;  // Write Address Valid
-  bit             awready;  // Write Address Ready
-
-  // Write Data Channel
-  bit      [ 3:0] wid;     // Write ID
-  rand bit [31:0] wrdata;  // Write Data
-  bit      [ 3:0] wstrb;   // Write Strobes
-  bit             wlast;   // Write Last
-  bit             wvalid;  // Write Valid
-  bit             wready;  // Write Ready
-
-  // Write Response CHannel
-  bit       [3:0] bid;     // Response ID
-  bit       [1:0] bresp;   // Write Response
-  bit             bvalid;  // Write Response Valid
-  bit             bready;  // Response Ready
-
-  // Read Address Channel
-  bit      [ 3:0] arid;     // Read Address ID
-  rand bit [31:0] araddr;   // Read Address
-  bit      [ 3:0] arlen;    // Burst Length
-  bit      [ 2:0] arsize;   // Burst Size
-  bit      [ 1:0] arlock;   // Lock Type
-  bit      [ 3:0] arcache;  // Cache Type
-  bit      [ 2:0] arprot;   // Protection Type
-  bit             arvalid;  // Read Address Valid
-  bit             arready;  // Read Address Ready
-
-  // Read Data Channel
-  bit      [ 3:0] rid;     // Read ID
-  bit      [31:0] rdata;   // Read Data
-  bit      [ 1:0] rresp;   // Read Response
-  bit             rlast;   // Read Last
-  bit             rvalid;  // Read Valid
-  bit             rready;  // Read Ready
+  rand bit [AW-1:0] addr;  // RAM address
+  bit      [DW-1:0] dout;  // RAM data input
+  rand bit [DW-1:0] din;   // RAM data output
+  bit               cen;   // RAM chip enable (low active)
+  bit      [   1:0] wen;   // RAM write enable (low active)
 
   // Constraints
-  constraint awadr_c {awadr inside {[32'h00000000 : 32'hFFFFFFFF]};}
-  constraint wrdata_c {wrdata inside {[32'h00000000 : 32'hFFFFFFFF]};}
-  constraint araddr_c {araddr inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint addr_c {addr inside {[32'h00000000 : 32'hFFFFFFFF]};}
+  constraint din_c {din inside {[32'h00000000 : 32'hFFFFFFFF]};}
 endclass

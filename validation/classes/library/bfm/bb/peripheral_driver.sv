@@ -37,7 +37,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-import peripheral_axi4_pkg::*;
+import peripheral_bb_pkg::*;
 
 class peripheral_driver;
   // Interface instantiation
@@ -60,59 +60,23 @@ class peripheral_driver;
       // Driver to the DUT      
       generator_to_driver.get(transaction);
 
-      // Operate in a synchronous manner
-      @(posedge vif.aclk);
+      @(posedge vif.mclk);
+      vif.addr <= 15;
+      vif.din  <= transaction.din;
+      vif.cen  <= 0;
+      vif.wen  <= 0;
 
-      // Address Phase
-      vif.awid    <= 0;
-      vif.awadr   <= AXI_ADDRESS_TEST;
-      vif.awvalid <= 1;
-      vif.awlen   <= AXI_BURST_LENGTH_1;
-      vif.awsize  <= AXI_BURST_SIZE_WORD;
-      vif.awburst <= AXI_BURST_TYPE_FIXED;
-      vif.awlock  <= AXI_LOCK_NORMAL;
-      vif.awcache <= 0;
-      vif.awprot  <= AXI_PROTECTION_NORMAL;
-      @(posedge vif.awready);
+      @(posedge vif.mclk);
+      vif.cen  <= 1;
 
-      // Data Phase
-      vif.awvalid <= 0;
-      vif.awadr   <= 'bX;
-      vif.wid     <= 0;
-      vif.wvalid  <= 1;
-      vif.wrdata  <= transaction.wrdata;
-      vif.wstrb   <= 4'hF;
-      vif.wlast   <= 1;
-      @(posedge vif.wready);
+      @(posedge vif.mclk);
+      vif.addr <= 15;
+      vif.din  <= transaction.din;
+      vif.cen  <= 0;
+      vif.wen  <= 1;
 
-      // Response Phase
-      vif.wid    <= 0;
-      vif.wvalid <= 0;
-      vif.wrdata <= 'bX;
-      vif.wstrb  <= 0;
-      vif.wlast  <= 0;
-
-      // Address Phase
-      vif.arid    <= 0;
-      vif.araddr  <= AXI_ADDRESS_TEST;
-      vif.arvalid <= 1;
-      vif.arlen   <= AXI_BURST_LENGTH_1;
-      vif.arsize  <= AXI_BURST_SIZE_WORD;
-      vif.arlock  <= AXI_LOCK_NORMAL;
-      vif.arcache <= 0;
-      vif.arprot  <= AXI_PROTECTION_NORMAL;
-      vif.rready  <= 0;
-      @(posedge vif.arready);
-
-      // Data Phase
-      vif.arvalid <= 0;
-      vif.rready  <= 1;
-      @(posedge vif.rvalid);
-
-      vif.rready <= 0;
-      @(negedge vif.rvalid);
-
-      vif.araddr <= 'bx;
+      @(posedge vif.mclk);
+      vif.cen  <= 1;
     end
   endtask
 endclass

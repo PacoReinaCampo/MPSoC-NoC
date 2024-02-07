@@ -85,7 +85,7 @@ class peripheral_uvm_test extends uvm_test;
     apply_reset();
 
     repeat (5) begin
-      repeat (10) @(posedge vif.PCLK);
+      repeat (10) @(posedge vif.pclk);
 
       base_sequence.start(environment.agent.sequencer);
     end
@@ -95,16 +95,17 @@ class peripheral_uvm_test extends uvm_test;
   endtask
 
   task apply_reset();
-    vif.PRESETn <= 0;  // Active LOW
+    vif.presetn <= 1;  // Active HIGH
 
-    vif.PADDR <= 0;
-    vif.PWRITE <= 0;
-    vif.PSEL <= 0;
-    vif.PENABLE <= 0;
-    vif.PWDATA <= 0;
+    vif.paddr   = 0;
+    vif.pstrb   = 0;
+    vif.pwrite  = 0;
+    vif.psel    = 0;
+    vif.pwdata  = 0;
+    vif.penable = 0;
 
-    repeat (5) @(posedge vif.PCLK);
+    repeat (5) @(posedge vif.pclk);
 
-    vif.PRESETn <= 1;  // Inactive HIGH
+    vif.presetn <= 0;  // Inactive LOW
   endtask
 endclass

@@ -37,17 +37,21 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
+import peripheral_apb4_pkg::*;
+
 interface peripheral_design_if (
-  input logic PCLK
+  input logic pclk
 );
 
-  logic        PRESETn;
-  logic [31:0] PADDR;
-  logic        PWRITE;
-  logic        PSEL;
-  logic        PENABLE;
-  logic [31:0] PWDATA;
-  logic [31:0] PRDATA;
-  logic        PREADY;
-  logic        PSLVERR;
+  logic                  presetn;
+
+  logic [PADDR_SIZE-1:0] paddr;
+  logic [           1:0] pstrb;
+  logic                  pwrite;
+  logic                  pready;
+  logic                  psel;
+  logic [PDATA_SIZE-1:0] pwdata;
+  logic [PDATA_SIZE-1:0] prdata;
+  logic                  penable;
+  logic                  pslverr;
 endinterface

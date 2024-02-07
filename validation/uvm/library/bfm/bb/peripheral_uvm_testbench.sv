@@ -43,72 +43,37 @@ import uvm_pkg::*;
 `include "peripheral_uvm_interface.sv"
 `include "peripheral_uvm_test.sv"
 
-import peripheral_axi4_pkg::*;
+import peripheral_bb_pkg::*;
 
 module peripheral_uvm_testbench;
   // Clock and Reset declaration
-  bit aclk;
+  bit mclk;
 
   // Clock Generation
-  always #1 aclk = ~aclk;
+  always #1 mclk = ~mclk;
 
   initial begin
-    aclk = 0;
+    mclk = 0;
   end
 
   // Virtual interface
-  peripheral_design_if vif (aclk);
+  peripheral_design_if vif (mclk);
 
   // DUT instantiation
-  peripheral_design dut (
-    // Global Signals
-    .aclk   (vif.aclk),
-    .aresetn(vif.aresetn),
+  peripheral_design #(
+    .AW      (AW),  // Address bus
+    .DW      (DW),  // Data bus
 
-    // Write Address Channel
-    .awid   (vif.awid),
-    .awadr  (vif.awadr),
-    .awlen  (vif.awlen),
-    .awsize (vif.awsize),
-    .awburst(vif.awburst),
-    .awlock (vif.awlock),
-    .awcache(vif.awcache),
-    .awprot (vif.awprot),
-    .awvalid(vif.awvalid),
-    .awready(vif.awready),
+    .MEMORY_SIZE(MEMORY_SIZE)  // Memory Size
+  ) dut (
+    .mclk (vif.mclk),  // RAM clock
+    .rst (vif.rst),    // Asynchronous Reset - active low
 
-    // Write Data Channel
-    .wid   (vif.wid),
-    .wrdata(vif.wrdata),
-    .wstrb (vif.wstrb),
-    .wlast (vif.wlast),
-    .wvalid(vif.wvalid),
-    .wready(vif.wready),
-
-    // Write Response Channel
-    .bid   (vif.bid),
-    .bresp (vif.bresp),
-    .bvalid(vif.bvalid),
-    .bready(vif.bready),
-
-    // Read Address Channel
-    .arid   (vif.arid),
-    .araddr (vif.araddr),
-    .arlen  (vif.arlen),
-    .arsize (vif.arsize),
-    .arlock (vif.arlock),
-    .arcache(vif.arcache),
-    .arprot (vif.arprot),
-    .arvalid(vif.arvalid),
-    .arready(vif.arready),
-
-    // Read Data Channel
-    .rid   (vif.rid),
-    .rdata (vif.rdata),
-    .rresp (vif.rresp),
-    .rlast (vif.rlast),
-    .rvalid(vif.rvalid),
-    .rready(vif.rready)
+    .addr(vif.addr),  // RAM address
+    .dout(vif.dout),  // RAM data output
+    .din (vif.din),   // RAM data input
+    .cen (vif.cen),   // RAM chip enable (low active)
+    .wen (vif.wen)    // RAM write enable (low active)
   );
 
   initial begin

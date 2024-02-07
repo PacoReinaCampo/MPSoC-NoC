@@ -81,33 +81,37 @@ class peripheral_uvm_monitor extends uvm_monitor;
   // Task: Single Write Transaction
   task write_phase_single;
     begin
-      vif.PADDR   <= vif.PADDR;
-      vif.PWRITE  <= vif.PWRITE;
-      vif.PSEL    <= vif.PSEL;
-      vif.PENABLE <= vif.PENABLE;
-      vif.PWDATA  <= vif.PWDATA;
-      vif.PRDATA  <= vif.PRDATA;
+      @(posedge vif.pclk);
+      monitor_item.paddr  = vif.paddr;
+      monitor_item.pwrite = vif.pwrite;
+      monitor_item.psel   = vif.psel;
+      monitor_item.pwdata = vif.pwdata;
 
-      @(posedge vif.PCLK);
-      vif.PWRITE  <= vif.PWRITE;
-      vif.PSEL    <= vif.PSEL;
-      vif.PENABLE <= vif.PENABLE;
+      @(posedge vif.pclk);
+      monitor_item.psel    = vif.psel;
+      monitor_item.penable = vif.penable;
+
+      @(posedge vif.pclk);
+      monitor_item.psel    = vif.psel;
+      monitor_item.penable = vif.penable;
+
+      monitor_item.prdata = vif.prdata;
     end
   endtask
 
   // Task: Single Read Transaction
   task read_phase_single;
     begin
-      vif.PADDR   <= vif.PADDR;
-      vif.PWRITE  <= vif.PWRITE;
-      vif.PSEL    <= vif.PSEL;
-      vif.PENABLE <= vif.PENABLE;
-      vif.PWDATA  <= vif.PWDATA;
-      vif.PRDATA  <= vif.PRDATA;
+      @(posedge vif.pclk);
+      monitor_item.paddr   = vif.paddr;
+      monitor_item.psel    = vif.psel;
+      monitor_item.penable = vif.penable;
 
-      @(posedge vif.PCLK);
-      vif.PSEL    <= vif.PSEL;
-      vif.PENABLE <= vif.PENABLE;
+      @(posedge vif.pclk);
+      monitor_item.psel    = vif.psel;
+      monitor_item.penable = vif.penable;
+
+      monitor_item.prdata = vif.prdata;
     end
   endtask
 endclass
