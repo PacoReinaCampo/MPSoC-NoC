@@ -8,6 +8,8 @@ library
 │   │   └── peripheral_design.psl
 │   ├── bb
 │   │   └── peripheral_design.psl
+│   ├── biu
+│   │   └── peripheral_design.psl
 │   └── wb
 │       └── peripheral_design.psl
 └── core
@@ -19,7 +21,9 @@ library
     │   └── peripheral_design.psl
     ├── bb
     │   └── peripheral_design.psl
+    ├── biu
+    │   └── peripheral_design.psl
     └── wb
         └── peripheral_design.psl
 
-12 directories, 10 files
+14 directories, 12 files

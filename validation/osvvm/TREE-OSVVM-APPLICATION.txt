@@ -12,6 +12,9 @@ application
 │   ├── bb
 │   │   ├── peripheral_osvvm_design_pkg.vhd
 │   │   └── peripheral_osvvm_design.vhd
+│   ├── biu
+│   │   ├── peripheral_osvvm_design_pkg.vhd
+│   │   └── peripheral_osvvm_design.vhd
 │   └── wb
 │       ├── peripheral_osvvm_design_pkg.vhd
 │       └── peripheral_osvvm_design.vhd
@@ -28,8 +31,11 @@ application
     ├── bb
     │   ├── peripheral_osvvm_design_pkg.vhd
     │   └── peripheral_osvvm_design.vhd
+    ├── biu
+    │   ├── peripheral_osvvm_design_pkg.vhd
+    │   └── peripheral_osvvm_design.vhd
     └── wb
         ├── peripheral_osvvm_design_pkg.vhd
         └── peripheral_osvvm_design.vhd
 
-12 directories, 20 files
+14 directories, 24 files

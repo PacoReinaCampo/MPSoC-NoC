@@ -12,6 +12,9 @@ application
 │   ├── bb
 │   │   └── src
 │   │       └── main.rs
+│   ├── biu
+│   │   └── src
+│   │       └── main.rs
 │   └── wb
 │       └── src
 │           └── main.rs
@@ -28,8 +31,11 @@ application
     ├── bb
     │   └── src
     │       └── main.rs
+    ├── biu
+    │   └── src
+    │       └── main.rs
     └── wb
         └── src
             └── main.rs
 
-22 directories, 10 files
+26 directories, 12 files

@@ -1,5 +1,5 @@
 code
-├── peripheral
+├── core
 │   ├── main
 │   │   ├── peripheral_arbiter_rr.vhd
 │   │   ├── peripheral_noc_buffer.vhd

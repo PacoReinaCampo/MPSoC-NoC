@@ -24,6 +24,15 @@ library
 │   │       │   ├── mod.rs
 │   │       │   └── peripheral_design.rs
 │   │       └── lib.rs
+│   ├── biu
+│   │   └── src
+│   │       ├── ahb3
+│   │       │   ├── mod.rs
+│   │       │   └── peripheral_design.rs
+│   │       ├── biu
+│   │       │   ├── mod.rs
+│   │       │   └── peripheral_design.rs
+│   │       └── lib.rs
 │   └── wb
 │       └── src
 │           ├── lib.rs
@@ -55,6 +64,15 @@ library
     │       │   ├── mod.rs
     │       │   └── peripheral_design.rs
     │       └── lib.rs
+    ├── biu
+    │   └── src
+    │       ├── ahb3
+    │       │   ├── mod.rs
+    │       │   └── peripheral_design.rs
+    │       ├── biu
+    │       │   ├── mod.rs
+    │       │   └── peripheral_design.rs
+    │       └── lib.rs
     └── wb
         └── src
             ├── lib.rs
@@ -62,4 +80,4 @@ library
                 ├── mod.rs
                 └── peripheral_design.rs
 
-32 directories, 30 files
+40 directories, 40 files

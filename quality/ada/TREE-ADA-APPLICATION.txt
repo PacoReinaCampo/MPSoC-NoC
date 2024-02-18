@@ -8,6 +8,8 @@ application
 │   │   └── peripheral_test.adb
 │   ├── bb
 │   │   └── peripheral_test.adb
+│   ├── biu
+│   │   └── peripheral_test.adb
 │   └── wb
 │       └── peripheral_test.adb
 └── core
@@ -19,7 +21,9 @@ application
     │   └── peripheral_test.adb
     ├── bb
     │   └── peripheral_test.adb
+    ├── biu
+    │   └── peripheral_test.adb
     └── wb
         └── peripheral_test.adb
 
-12 directories, 10 files
+14 directories, 12 files

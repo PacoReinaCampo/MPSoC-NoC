@@ -12,6 +12,9 @@ library
 │   ├── bb
 │   │   ├── peripheral_design.adb
 │   │   └── peripheral_design.ads
+│   ├── biu
+│   │   ├── peripheral_design.adb
+│   │   └── peripheral_design.ads
 │   └── wb
 │       ├── peripheral_design.adb
 │       └── peripheral_design.ads
@@ -28,8 +31,11 @@ library
     ├── bb
     │   ├── peripheral_design.adb
     │   └── peripheral_design.ads
+    ├── biu
+    │   ├── peripheral_design.adb
+    │   └── peripheral_design.ads
     └── wb
         ├── peripheral_design.adb
         └── peripheral_design.ads
 
-12 directories, 20 files
+14 directories, 24 files

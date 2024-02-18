@@ -32,6 +32,14 @@ application
 │   │   ├── include-arithmetic.txt
 │   │   ├── main.c
 │   │   └── simulate-riscv.sh
+│   ├── biu
+│   │   ├── build-or1k.sh
+│   │   ├── build-riscv.sh
+│   │   ├── build-x86.sh
+│   │   ├── clean.sh
+│   │   ├── include-arithmetic.txt
+│   │   ├── main.c
+│   │   └── simulate-riscv.sh
 │   └── wb
 │       ├── build-or1k.sh
 │       ├── build-riscv.sh
@@ -73,6 +81,14 @@ application
     │   ├── include-arithmetic.txt
     │   ├── main.c
     │   └── simulate-riscv.sh
+    ├── biu
+    │   ├── build-or1k.sh
+    │   ├── build-riscv.sh
+    │   ├── build-x86.sh
+    │   ├── clean.sh
+    │   ├── include-arithmetic.txt
+    │   ├── main.c
+    │   └── simulate-riscv.sh
     └── wb
         ├── build-or1k.sh
         ├── build-riscv.sh
@@ -82,4 +98,4 @@ application
         ├── main.c
         └── simulate-riscv.sh
 
-12 directories, 70 files
+14 directories, 84 files

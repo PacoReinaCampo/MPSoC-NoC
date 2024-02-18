@@ -12,6 +12,9 @@ library
 │   ├── bb
 │   │   ├── peripheral_design.c
 │   │   └── peripheral_design.h
+│   ├── biu
+│   │   ├── peripheral_design.c
+│   │   └── peripheral_design.h
 │   └── wb
 │       ├── peripheral_design.c
 │       └── peripheral_design.h
@@ -28,8 +31,11 @@ library
     ├── bb
     │   ├── peripheral_design.c
     │   └── peripheral_design.h
+    ├── biu
+    │   ├── peripheral_design.c
+    │   └── peripheral_design.h
     └── wb
         ├── peripheral_design.c
         └── peripheral_design.h
 
-12 directories, 20 files
+14 directories, 24 files

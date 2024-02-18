@@ -8,6 +8,8 @@ application
 │   │   └── test_peripheral.go
 │   ├── bb
 │   │   └── test_peripheral.go
+│   ├── biu
+│   │   └── test_peripheral.go
 │   └── wb
 │       └── test_peripheral.go
 └── core
@@ -19,7 +21,9 @@ application
     │   └── test_peripheral.go
     ├── bb
     │   └── test_peripheral.go
+    ├── biu
+    │   └── test_peripheral.go
     └── wb
         └── test_peripheral.go
 
-12 directories, 10 files
+14 directories, 12 files

@@ -1,6 +1,6 @@
 code
 └── tests
-    └── peripheral
+    └── core
         ├── main
         │   ├── peripheral_arbiter_rr_testbench.vhd
         │   ├── peripheral_noc_buffer_testbench.vhd

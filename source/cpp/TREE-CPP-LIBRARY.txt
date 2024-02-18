@@ -12,6 +12,9 @@ library
 │   ├── bb
 │   │   ├── peripheral_design.cpp
 │   │   └── peripheral_design.hpp
+│   ├── biu
+│   │   ├── peripheral_design.cpp
+│   │   └── peripheral_design.hpp
 │   └── wb
 │       ├── peripheral_design.cpp
 │       └── peripheral_design.hpp
@@ -28,8 +31,11 @@ library
     ├── bb
     │   ├── peripheral_design.cpp
     │   └── peripheral_design.hpp
+    ├── biu
+    │   ├── peripheral_design.cpp
+    │   └── peripheral_design.hpp
     └── wb
         ├── peripheral_design.cpp
         └── peripheral_design.hpp
 
-12 directories, 20 files
+14 directories, 24 files

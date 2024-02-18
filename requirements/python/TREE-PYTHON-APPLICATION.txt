@@ -8,6 +8,8 @@ application
 │   │   └── peripheral_test.py
 │   ├── bb
 │   │   └── peripheral_test.py
+│   ├── biu
+│   │   └── peripheral_test.py
 │   └── wb
 │       └── peripheral_test.py
 └── core
@@ -19,7 +21,9 @@ application
     │   └── peripheral_test.py
     ├── bb
     │   └── peripheral_test.py
+    ├── biu
+    │   └── peripheral_test.py
     └── wb
         └── peripheral_test.py
 
-12 directories, 10 files
+14 directories, 12 files

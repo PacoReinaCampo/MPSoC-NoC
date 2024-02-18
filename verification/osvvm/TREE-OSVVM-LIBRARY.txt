@@ -16,6 +16,10 @@ library
 │   │   ├── peripheral_osvvm_model_pkg.vhd
 │   │   ├── peripheral_osvvm_model.vhd
 │   │   └── peripheral_osvvm_testbench.vhd
+│   ├── biu
+│   │   ├── peripheral_osvvm_model_pkg.vhd
+│   │   ├── peripheral_osvvm_model.vhd
+│   │   └── peripheral_osvvm_testbench.vhd
 │   └── wb
 │       ├── peripheral_osvvm_model_pkg.vhd
 │       ├── peripheral_osvvm_model.vhd
@@ -37,9 +41,13 @@ library
     │   ├── peripheral_osvvm_model_pkg.vhd
     │   ├── peripheral_osvvm_model.vhd
     │   └── peripheral_osvvm_testbench.vhd
+    ├── biu
+    │   ├── peripheral_osvvm_model_pkg.vhd
+    │   ├── peripheral_osvvm_model.vhd
+    │   └── peripheral_osvvm_testbench.vhd
     └── wb
         ├── peripheral_osvvm_model_pkg.vhd
         ├── peripheral_osvvm_model.vhd
         └── peripheral_osvvm_testbench.vhd
 
-12 directories, 30 files
+14 directories, 36 files
