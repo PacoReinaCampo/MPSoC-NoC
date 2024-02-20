@@ -52,4 +52,4 @@
 ../../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_lookup.sv
 ../../../../../../../../rtl/verilog/code/peripheral/router/peripheral_noc_router_output.sv
 
-../../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_noc_router_output_testbench.sv
+../../../../../../../../verification/tasks/library/peripheral/main/peripheral_noc_router_output_testbench.sv

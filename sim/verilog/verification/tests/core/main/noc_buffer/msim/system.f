@@ -44,4 +44,4 @@
 
 ../../../../../../../../rtl/verilog/code/peripheral/main/peripheral_noc_buffer.sv
 
-../../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_noc_buffer_testbench.sv
+../../../../../../../../verification/tasks/library/peripheral/main/peripheral_noc_buffer_testbench.sv

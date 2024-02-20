@@ -44,4 +44,4 @@
 
 ../../../../../../../../rtl/verilog/code/peripheral/main/peripheral_arbiter_rr.sv
 
-../../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_arbiter_rr_testbench.sv
+../../../../../../../../verification/tasks/library/peripheral/main/peripheral_arbiter_rr_testbench.sv

@@ -46,4 +46,4 @@
 
 --exe
 
-../../../../../../../../bench/verilog/code/tests/peripheral/main/peripheral_noc_buffer_testbench.cpp
+../../../../../../../../verification/tasks/library/peripheral/main/peripheral_noc_buffer_testbench.cpp
