@@ -44,6 +44,6 @@
 
 +incdir+../../../../../../../verification/uvm/src
 
-../../../../../../../verification/uvm/library/bfm/bb/peripheral_uvm_testbench.sv
+../../../../../../../verification/uvm/library/bfm/biu/peripheral_uvm_testbench.sv
 
-../../../../../../../verification/uvm/application/bfm/bb/peripheral_design.sv
+../../../../../../../verification/uvm/application/bfm/biu/peripheral_design.sv
