@@ -45,7 +45,7 @@
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/pkg/mpsoc_uart_ahb3_pkg.vhd
 
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_bridge_apb2ahb.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_apb4_uart.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_ahb3_uart.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_uart_fifo.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_uart_interrupt.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/ahb3/core/mpsoc_uart_rx.vhd

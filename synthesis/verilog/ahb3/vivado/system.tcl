@@ -43,7 +43,7 @@
 ###################################################################################
 
 read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_bridge_apb2ahb.sv
-read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_apb4_uart.sv
+read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_ahb3_uart.sv
 read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_fifo.sv
 read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_interrupt.sv
 read_verilog -sv ../../../../rtl/verilog/ahb3/core/mpsoc_uart_rx.sv

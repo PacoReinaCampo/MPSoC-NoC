@@ -26,7 +26,9 @@ code
         │   └── peripheral_axi4_pkg.sv
         ├── bb
         │   └── peripheral_bb_pkg.sv
+        ├── biu
+        │   └── peripheral_ahb3_pkg.sv
         └── wb
             └── peripheral_wb_pkg.sv
 
-11 directories, 18 files
+12 directories, 19 files

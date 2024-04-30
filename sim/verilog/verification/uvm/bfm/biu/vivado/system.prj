@@ -42,7 +42,7 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-sv work ../../../../../../../rtl/verilog/code/pkg/peripheral/biu/peripheral_bb_pkg.sv
+sv work ../../../../../../../rtl/verilog/code/pkg/peripheral/biu/peripheral_biu_pkg.sv
 sv work ../../../../../../../verification/uvm/application/bfm/biu/peripheral_design.sv
 
 sv work ../../../../../../../verification/uvm/library/bfm/biu/peripheral_uvm_testbench.sv
