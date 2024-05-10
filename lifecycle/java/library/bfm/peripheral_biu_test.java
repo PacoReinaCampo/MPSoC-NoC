@@ -42,9 +42,9 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-import ahb3.peripheral_design;
+import biu.peripheral_design;
 
-class peripheral_ahb3_test {
+class peripheral_biu_test {
   public static void main(String[] args) {
     double data_a_in = 20.0;
     double data_b_in = 10.0;

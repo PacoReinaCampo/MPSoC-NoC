@@ -42,7 +42,7 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-package ahb3;
+package biu;
 
 public class peripheral_design {
   public static double ntm_scalar_adder(double data_a_in, double data_b_in) {

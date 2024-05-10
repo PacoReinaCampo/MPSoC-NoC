@@ -42,9 +42,5 @@
 ##                                                                               ##
 ###################################################################################
 
-javac ahb3/peripheral_design.java; javac peripheral_ahb3_test.java; java peripheral_ahb3_test
-javac apb4/peripheral_design.java; javac peripheral_apb4_test.java; java peripheral_apb4_test
-javac axi4/peripheral_design.java; javac peripheral_axi4_test.java; java peripheral_axi4_test
-javac bb/peripheral_design.java; javac peripheral_bb_test.java; java peripheral_bb_test
-javac biu/peripheral_design.java; javac peripheral_biu_test.java; java peripheral_biu_test
-javac wb/peripheral_design.java; javac peripheral_wb_test.java; java peripheral_wb_test
+find . -type f -name '*.cpp' -exec clang-format -style='{BasedOnStyle: Google, ColumnLimit: 0}' -i {} \;
+find . -type f -name '*.hpp' -exec clang-format -style='{BasedOnStyle: Google, ColumnLimit: 0}' -i {} \;
