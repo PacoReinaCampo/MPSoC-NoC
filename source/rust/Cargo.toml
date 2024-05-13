@@ -1,6 +1,28 @@
 [workspace]
 members = [
 "library/bfm/ahb3",
+"library/bfm/apb4",
+"library/bfm/axi4",
+"library/bfm/bb",
+"library/bfm/biu",
+"library/bfm/wb",
+"library/peripheral/ahb3",
+"library/peripheral/apb4",
+"library/peripheral/axi4",
+"library/peripheral/bb",
+"library/peripheral/biu",
+"library/peripheral/wb",
 
-"application/bfm/ahb3"
+"application/bfm/ahb3",
+"application/bfm/apb4",
+"application/bfm/axi4",
+"application/bfm/bb",
+"application/bfm/biu",
+"application/bfm/wb",
+"application/peripheral/ahb3",
+"application/peripheral/apb4",
+"application/peripheral/axi4",
+"application/peripheral/bb",
+"application/peripheral/biu",
+"application/peripheral/wb"
 ]
