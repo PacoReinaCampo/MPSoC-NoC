@@ -27,7 +27,7 @@ code
         ├── bb
         │   └── peripheral_bb_pkg.sv
         ├── biu
-        │   └── peripheral_ahb3_pkg.sv
+        │   └── peripheral_biu_pkg.sv
         └── wb
             └── peripheral_wb_pkg.sv
 
