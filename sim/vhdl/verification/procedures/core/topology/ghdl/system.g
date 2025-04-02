@@ -10,4 +10,4 @@ ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/core/router/peripheral_noc_r
 ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/core/router/peripheral_noc_router_output.vhd
 ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/core/router/peripheral_noc_router.vhd
 ghdl -a --std=08 ../../../../../../../rtl/vhdl/code/core/topology/peripheral_noc_mesh4d.vhd
-ghdl -a --std=08 ../../../../../../../bench/vhdl/code/tests/core/topology/peripheral_noc_testbench.vhd
+ghdl -a --std=08 ../../../../../../../verification/procedures/library/core/topology/peripheral_noc_testbench.vhd

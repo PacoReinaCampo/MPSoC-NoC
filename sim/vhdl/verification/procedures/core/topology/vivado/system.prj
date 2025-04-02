@@ -58,4 +58,4 @@ vhdl2008 work ../../../../../../../rtl/vhdl/code/core/router/peripheral_noc_rout
 
 vhdl2008 work ../../../../../../../rtl/vhdl/code/core/topology/peripheral_noc_mesh4d.vhd
 
-vhdl2008 work ../../../../../../../bench/vhdl/code/tests/core/topology/peripheral_noc_testbench.vhd
+vhdl2008 work ../../../../../../../verification/procedures/library/core/topology/peripheral_noc_testbench.vhd
