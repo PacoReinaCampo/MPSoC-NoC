@@ -53,7 +53,7 @@ module peripheral_testbench;
   end
 
   // Interface instantiation
-  add_if vif (aclk);
+  peripheral_design_if vif (aclk);
 
   // DUT instantiation
   peripheral_design #(

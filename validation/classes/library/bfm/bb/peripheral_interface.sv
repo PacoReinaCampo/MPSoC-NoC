@@ -39,7 +39,7 @@
 
 import peripheral_bb_pkg::*;
 
-interface add_if (
+interface peripheral_design_if (
   input logic mclk
 );
 
