@@ -1,93 +1,103 @@
-`include "peripheral_uvm_transaction.sv"
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              Peripheral-NTM for MPSoC                                      //
+//              Neural Turing Machine for MPSoC                               //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2022-2025 by the author(s)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+////////////////////////////////////////////////////////////////////////////////
+// Author(s):
+//   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-import peripheral_bb_pkg::*;
+class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_sequence_item);
+  // Virtual Interface
+  virtual peripheral_design_if vif;
 
-class peripheral_uvm_driver extends uvm_driver #(peripheral_uvm_transaction);
-  // Declaration of component utils to register with factory
-  peripheral_uvm_transaction       transaction;
-
-  // Declaration of Virtual interface
-  virtual peripheral_uvm_interface vif;
-
-  // Declaration of component utils to register with factory
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_driver)
 
-  uvm_analysis_port #(peripheral_uvm_transaction) driver2rm_port;
-
-  // Method name : new
-  // Description : constructor
-  function new(string name, uvm_component parent);
+  // Constructor
+  function new(string name = "peripheral_uvm_driver", uvm_component parent = null);
     super.new(name, parent);
-  endfunction : new
+  endfunction
 
-  // Method name : build_phase
-  // Description : construct the components
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(virtual peripheral_uvm_interface)::get(this, "", "intf", vif)) begin
-      `uvm_fatal("NO_VIF", {"virtual interface must be set for: ", get_full_name(), ".vif"});
+    if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
+      `uvm_fatal(get_type_name(), "Not set at top level");
     end
-    driver2rm_port = new("driver2rm_port", this);
-  endfunction : build_phase
+  endfunction
 
-  // Method name : run_phase
-  // Description : Drive the transaction info to DUT
-  virtual task run_phase(uvm_phase phase);
-    reset();
+  // Run phase
+  task run_phase(uvm_phase phase);
     forever begin
+      // Driver to the DUT
       seq_item_port.get_next_item(req);
-      write_drive();
-      read_drive();
-      `uvm_info(get_full_name(), $sformatf("TRANSACTION FROM DRIVER"), UVM_LOW);
-      req.print();
-      @(vif.dr_cb);
-      $cast(rsp, req.clone());
-      rsp.set_id_info(req);
-      driver2rm_port.write(rsp);
+
+      // Single Write Transaction
+      write_phase_single();
+
+      // Single Read Transaction
+      read_phase_single();
+
       seq_item_port.item_done();
-      seq_item_port.put(rsp);
     end
-  endtask : run_phase
+  endtask
 
-  // Method name : drive
-  // Description : Driving the dut inputs
-  task write_drive();
+  // Task: Single Write Transaction
+  task write_phase_single;
     begin
-      vif.dr_cb.addr <= req.address;
-      vif.dr_cb.din  <= req.din;
-      vif.dr_cb.cen  <= 0;
-      vif.dr_cb.wen  <= 0;
+      @(posedge vif.mclk);
+      vif.addr <= 15;
+      vif.din  <= req.din;
+      vif.cen  <= 0;
+      vif.wen  <= 0;
 
       @(posedge vif.mclk);
-      vif.dr_cb.cen  <= 1;
+      vif.cen  <= 1;
     end
   endtask
 
-  task read_drive();
+  // Task: Single Read Transaction
+  task read_phase_single;
     begin
-      vif.dr_cb.addr <= req.address;
-      vif.dr_cb.din  <= req.din;
-      vif.dr_cb.cen  <= 0;
-      vif.dr_cb.wen  <= 1;
+      @(posedge vif.mclk);
+      vif.addr <= 15;
+      vif.din  <= req.din;
+      vif.cen  <= 0;
+      vif.wen  <= 1;
 
       @(posedge vif.mclk);
-      vif.dr_cb.cen  <= 1;
+      vif.cen  <= 1;
     end
   endtask
-
-  // Method name : reset
-  // Description : Driving the dut inputs
-  task reset();
-    // Global Signals
-    vif.dr_cb.rst <= 0;  // Active LOW
-
-    vif.dr_cb.addr <= 0;
-    vif.dr_cb.din  <= 0;
-    vif.dr_cb.cen  <= 1;
-    vif.dr_cb.wen  <= 0;
-
-    repeat (5) @(posedge vif.mclk);
-
-    vif.dr_cb.rst <= 1;  // Inactive HIGH
-  endtask
-endclass : peripheral_uvm_driver
+endclass

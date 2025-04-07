@@ -1,107 +1,145 @@
-import peripheral_axi4_pkg::*;
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              Peripheral-NTM for MPSoC                                      //
+//              Neural Turing Machine for MPSoC                               //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2022-2025 by the author(s)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+////////////////////////////////////////////////////////////////////////////////
+// Author(s):
+//   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_monitor extends uvm_monitor;
-  // Declaration of Virtual interface
-  virtual peripheral_uvm_interface                vif;
+  // Virtual Interface
+  virtual peripheral_design_if vif;
 
-  // Declaration of Analysis ports and exports
-  uvm_analysis_port #(peripheral_uvm_transaction) monitor2scoreboard_port;
+  // UVM analysis port
+  uvm_analysis_port #(peripheral_uvm_sequence_item) item_collect_port;
 
-  // Declaration of transaction item
-  peripheral_uvm_transaction                      act_transaction;
+  // Sequence Item method instantiation
+  peripheral_uvm_sequence_item monitor_item;
 
-  // Declaration of component utils to register with factory
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_monitor)
 
-  // Method name : new
-  // Description : constructor
-  function new(string name, uvm_component parent);
+  // Constructor
+  function new(string name = "monitor", uvm_component parent = null);
     super.new(name, parent);
-    act_transaction         = new();
-    monitor2scoreboard_port = new("monitor2scoreboard_port", this);
-  endfunction : new
+    item_collect_port = new("item_collect_port", this);
+    monitor_item      = new();
+  endfunction
 
-  // Method name : build_phase
-  // Description : construct the components
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if (!uvm_config_db#(virtual peripheral_uvm_interface)::get(this, "", "intf", vif)) begin
-      `uvm_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".vif"});
+    if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
+      `uvm_fatal(get_type_name(), "Not set at top level");
     end
-  endfunction : build_phase
+  endfunction
 
-  // Method name : run_phase
-  // Description : Extract the info from DUT via interface
-  virtual task run_phase(uvm_phase phase);
+  // Run phase
+  task run_phase(uvm_phase phase);
     forever begin
-      collect_write_transaction();
-      collect_read_transaction();
-      monitor2scoreboard_port.write(act_transaction);
-    end
-  endtask : run_phase
+      // Single Write Transaction
+      write_phase_single();
 
-  // Method name : collect_actual_trans
-  // Description : run task for collecting peripheral_adder transactions
-  task collect_write_transaction();
+      // Single Read Transaction
+      read_phase_single();
+
+      item_collect_port.write(monitor_item);
+    end
+  endtask
+
+  // Task: Single Write Transaction
+  task write_phase_single;
     begin
       // Operate in a synchronous manner
-      @(posedge vif.clk_i);
+      @(posedge vif.aclk);
 
       // Address Phase
-      act_transaction.axi_aw_id    <= vif.rc_cb.axi_aw_id;
-      act_transaction.axi_aw_addr  <= vif.rc_cb.axi_aw_addr;
-      act_transaction.axi_aw_valid <= vif.rc_cb.axi_aw_valid;
-      act_transaction.axi_aw_len   <= vif.rc_cb.axi_aw_len;
-      act_transaction.axi_aw_size  <= vif.rc_cb.axi_aw_size;
-      act_transaction.axi_aw_burst <= vif.rc_cb.axi_aw_burst;
-      act_transaction.axi_aw_lock  <= vif.rc_cb.axi_aw_lock;
-      act_transaction.axi_aw_cache <= vif.rc_cb.axi_aw_cache;
-      act_transaction.axi_aw_prot  <= vif.rc_cb.axi_aw_prot;
-      @(posedge vif.axi_aw_ready);
+      monitor_item.awid    <= vif.awid;
+      monitor_item.awadr   <= vif.awadr;
+      monitor_item.awvalid <= vif.awvalid;
+      monitor_item.awlen   <= vif.awlen;
+      monitor_item.awsize  <= vif.awsize;
+      monitor_item.awburst <= vif.awburst;
+      monitor_item.awlock  <= vif.awlock;
+      monitor_item.awcache <= vif.awcache;
+      monitor_item.awprot  <= vif.awprot;
+      @(posedge vif.awready);
 
       // Data Phase
-      act_transaction.axi_aw_valid <= vif.rc_cb.axi_aw_valid;
-      act_transaction.axi_aw_addr  <= vif.rc_cb.axi_aw_addr;
-      act_transaction.axi_aw_id    <= vif.rc_cb.axi_aw_id;
-      act_transaction.axi_aw_valid <= vif.rc_cb.axi_aw_valid;
-      act_transaction.axi_w_data   <= vif.rc_cb.axi_w_data;
-      act_transaction.axi_w_strb   <= vif.rc_cb.axi_w_strb;
-      act_transaction.axi_w_last   <= vif.rc_cb.axi_w_last;
-      @(posedge vif.axi_aw_ready);
+      monitor_item.awvalid <= vif.awvalid;
+      monitor_item.awadr   <= vif.awadr;
+      monitor_item.wid     <= vif.wid;
+      monitor_item.wvalid  <= vif.wvalid;
+      monitor_item.wrdata  <= vif.wrdata;
+      monitor_item.wstrb   <= vif.wstrb;
+      monitor_item.wlast   <= vif.wlast;
+      @(posedge vif.wready);
 
       // Response Phase
-      act_transaction.axi_aw_id    <= vif.rc_cb.axi_aw_id;
-      act_transaction.axi_aw_valid <= vif.rc_cb.axi_aw_valid;
-      act_transaction.axi_w_data   <= vif.rc_cb.axi_w_data;
-      act_transaction.axi_w_strb   <= vif.rc_cb.axi_w_strb;
-      act_transaction.axi_w_last   <= vif.rc_cb.axi_w_last;
+      monitor_item.wid    <= vif.wid;
+      monitor_item.wvalid <= vif.wvalid;
+      monitor_item.wrdata <= vif.wrdata;
+      monitor_item.wstrb  <= vif.wstrb;
+      monitor_item.wlast  <= vif.wlast;
     end
   endtask
 
-  task collect_read_transaction();
+  // Task: Single Read Transaction
+  task read_phase_single;
     begin
       // Address Phase
-      act_transaction.axi_ar_id    <= vif.rc_cb.axi_ar_id;
-      act_transaction.axi_ar_addr  <= vif.rc_cb.axi_aw_addr;
-      act_transaction.axi_ar_valid <= vif.rc_cb.axi_ar_valid;
-      act_transaction.axi_ar_len   <= vif.rc_cb.axi_ar_len;
-      act_transaction.axi_ar_size  <= vif.rc_cb.axi_ar_size;
-      act_transaction.axi_ar_lock  <= vif.rc_cb.axi_ar_lock;
-      act_transaction.axi_ar_cache <= vif.rc_cb.axi_ar_cache;
-      act_transaction.axi_ar_prot  <= vif.rc_cb.axi_ar_prot;
-      act_transaction.axi_r_ready  <= vif.rc_cb.axi_r_ready;
-      @(posedge vif.axi_ar_ready);
+      monitor_item.arid    <= vif.arid;
+      monitor_item.araddr  <= vif.awadr;
+      monitor_item.arvalid <= vif.arvalid;
+      monitor_item.arlen   <= vif.arlen;
+      monitor_item.arsize  <= vif.arsize;
+      monitor_item.arlock  <= vif.arlock;
+      monitor_item.arcache <= vif.arcache;
+      monitor_item.arprot  <= vif.arprot;
+      monitor_item.rready  <= vif.rready;
+      @(posedge vif.arready);
 
       // Data Phase
-      act_transaction.axi_ar_valid <= vif.rc_cb.axi_ar_valid;
-      act_transaction.axi_r_ready  <= vif.rc_cb.axi_r_ready;
-      @(posedge vif.axi_r_valid);
+      monitor_item.arvalid <= vif.arvalid;
+      monitor_item.rready  <= vif.rready;
+      @(posedge vif.rvalid);
 
-      act_transaction.axi_r_ready <= vif.rc_cb.axi_r_ready;
-      act_transaction.axi_r_data  <= vif.rc_cb.axi_r_data;
-      @(negedge vif.axi_r_valid);
+      monitor_item.rready <= vif.rready;
+      monitor_item.rdata <= vif.rdata;
+      @(negedge vif.rvalid);
 
-      act_transaction.axi_ar_addr <= vif.rc_cb.axi_ar_addr;
+      monitor_item.araddr <= vif.araddr;
     end
   endtask
-endclass : peripheral_uvm_monitor
+endclass

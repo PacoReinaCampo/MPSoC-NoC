@@ -1,30 +1,110 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                            __ _      _     _               //
+//                                           / _(_)    | |   | |              //
+//                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
+//               / _` | | | |/ _ \/ _ \ '_ \|  _| |/ _ \ |/ _` |              //
+//              | (_| | |_| |  __/  __/ | | | | | |  __/ | (_| |              //
+//               \__, |\__,_|\___|\___|_| |_|_| |_|\___|_|\__,_|              //
+//                  | |                                                       //
+//                  |_|                                                       //
+//                                                                            //
+//                                                                            //
+//              Peripheral-NTM for MPSoC                                      //
+//              Neural Turing Machine for MPSoC                               //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2022-2025 by the author(s)
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+////////////////////////////////////////////////////////////////////////////////
+// Author(s):
+//   Paco Reina Campo <pacoreinacampo@queenfield.tech>
+
+`include "peripheral_uvm_sequence_item.sv"
+`include "peripheral_uvm_sequencer.sv"
+`include "peripheral_uvm_sequence.sv"
+`include "peripheral_uvm_driver.sv"
+`include "peripheral_uvm_monitor.sv"
+`include "peripheral_uvm_scoreboard.sv"
+`include "peripheral_uvm_agent.sv"
+`include "peripheral_uvm_environment.sv"
+
 class peripheral_uvm_test extends uvm_test;
-  // Declaration of component utils to register with factory
+  // Virtual Interface
+  virtual peripheral_design_if vif;
+
+  // Environment method instantiation
+  peripheral_uvm_environment environment;
+
+  // Sequence method instantiation
+  peripheral_uvm_sequence   base_sequence;
+
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_test)
 
-  peripheral_uvm_entironment env;
-  peripheral_uvm_sequence    seq;
-
-  // Method name : new
-  // Decription: Constructor 
-  function new(string name = "peripheral_uvm_test", uvm_component parent = null);
+  // Constructor
+  function new(string name = "base_test", uvm_component parent = null);
     super.new(name, parent);
-  endfunction : new
+  endfunction
 
-  // Method name : build_phase 
-  // Decription: Construct the components and objects 
-  virtual function void build_phase(uvm_phase phase);
+  // Build phase
+  function void build_phase(uvm_phase phase);
     super.build_phase(phase);
+    if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
+      `uvm_fatal(get_type_name(), "Not set at top level");
+    end
 
-    env = peripheral_uvm_entironment::type_id::create("env", this);
-    seq = peripheral_uvm_sequence::type_id::create("seq");
-  endfunction : build_phase
+    // Create environment method
+    environment = peripheral_uvm_environment::type_id::create("environment", this);
+  endfunction
 
-  // Method name : run_phase 
-  // Decription: Trigger the sequences to run 
+  // Run phase
   task run_phase(uvm_phase phase);
     phase.raise_objection(this);
-    seq.start(env.agent.sequencer);
+
+    // Create sequence method
+    base_sequence = peripheral_uvm_sequence::type_id::create("base_sequence");
+
+    apply_reset();
+
+    repeat (5) begin
+      repeat (10) @(posedge vif.aclk);
+
+      base_sequence.start(environment.agent.sequencer);
+    end
+
     phase.drop_objection(this);
-  endtask : run_phase
-endclass : peripheral_uvm_test
+    `uvm_info(get_type_name, "End of TestCase", UVM_LOW);
+  endtask
+
+  task apply_reset();
+    // Global Signals
+    vif.rst <= 0;  // Active LOW
+
+    vif.addr <= 0;
+    vif.din  <= 0;
+    vif.cen  <= 1;
+    vif.wen  <= 0;
+
+    repeat (5) @(posedge vif.mclk);
+
+    vif.rst <= 1;  // Inactive HIGH
+  endtask
+endclass

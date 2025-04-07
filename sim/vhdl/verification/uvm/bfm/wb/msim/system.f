@@ -44,6 +44,8 @@
 
 +incdir+../../../../../../../verification/uvm/src
 
+../../../../../../../rtl/verilog/code/pkg/peripheral/wb/peripheral_wb_pkg.sv
+
 ../../../../../../../verification/uvm/library/bfm/wb/peripheral_uvm_testbench.sv
 
 ../../../../../../../verification/uvm/application/bfm/wb/peripheral_design.sv

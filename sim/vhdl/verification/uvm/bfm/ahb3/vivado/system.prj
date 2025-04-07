@@ -42,6 +42,8 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
+sv work ../../../../../../../rtl/verilog/code/pkg/peripheral/ahb3/peripheral_ahb3_pkg.sv
+
 sv work ../../../../../../../verification/uvm/library/bfm/ahb3/peripheral_uvm_testbench.sv
 
 sv work ../../../../../../../verification/uvm/application/bfm/ahb3/peripheral_design.sv
