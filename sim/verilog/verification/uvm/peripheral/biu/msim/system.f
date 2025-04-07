@@ -44,6 +44,8 @@
 
 +incdir+../../../../../../../verification/uvm/src
 
+../../../../../../../rtl/verilog/code/pkg/peripheral/axi4/peripheral_axi4_pkg.sv
+
 ../../../../../../../verification/uvm/library/core/biu/peripheral_uvm_testbench.sv
 
 ../../../../../../../verification/uvm/application/core/biu/peripheral_design.sv
