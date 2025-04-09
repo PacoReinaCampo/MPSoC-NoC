@@ -43,7 +43,7 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 @echo off
-call ../../../../../../settings64_ghdl.bat
+call ../../../../../../../settings64_ghdl.bat
 sh system.g
 
 ghdl -e --std=08 peripheral_noc_testbench
