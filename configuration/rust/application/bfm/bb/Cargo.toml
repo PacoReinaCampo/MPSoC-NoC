@@ -1,8 +1,9 @@
 [package]
-name = "bfm-bb"
+name = "bfm_bb"
 version = "0.0.0"
 authors = []
 edition = "2021"
 
 [dependencies]
-bfm = { path = "../../../library/bfm/bb" }
+rand = "0.9.0"
+bfm_library_bb = { path = "../../../library/bfm/bb" }

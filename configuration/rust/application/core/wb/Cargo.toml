@@ -1,8 +1,9 @@
 [package]
-name = "core-wb"
+name = "core_wb"
 version = "0.0.0"
 authors = []
 edition = "2021"
 
 [dependencies]
-core = { path = "../../../library/core/wb" }
+rand = "0.9.0"
+core_library_wb = { path = "../../../library/core/wb" }
