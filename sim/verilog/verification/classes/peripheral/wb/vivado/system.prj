@@ -44,6 +44,6 @@
 
 sv work ../../../../../../../rtl/verilog/code/pkg/peripheral/axi4/peripheral_axi4_pkg.sv
 
-sv work ../../../../../../../verification/classes/application/core/wb/peripheral_design.sv
+sv work ../../../../../../../verification/classes/application/peripheral/wb/peripheral_design.sv
 
-sv work ../../../../../../../verification/classes/library/core/wb/peripheral_testbench.sv
+sv work ../../../../../../../verification/classes/library/peripheral/wb/peripheral_testbench.sv

@@ -44,6 +44,6 @@
 
 sv work ../../../../../../../rtl/verilog/code/pkg/peripheral/axi4/peripheral_axi4_pkg.sv
 
-sv work ../../../../../../../validation/uvm/library/core/biu/peripheral_uvm_testbench.sv
+sv work ../../../../../../../validation/uvm/library/peripheral/biu/peripheral_uvm_testbench.sv
 
-sv work ../../../../../../../validation/uvm/application/core/biu/peripheral_design.sv
+sv work ../../../../../../../validation/uvm/application/peripheral/biu/peripheral_design.sv

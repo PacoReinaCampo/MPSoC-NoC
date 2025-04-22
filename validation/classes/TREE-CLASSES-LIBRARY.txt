@@ -66,7 +66,7 @@ library
 │       ├── peripheral_testbench.sv
 │       ├── peripheral_test.sv
 │       └── peripheral_transaction.sv
-└── core
+└── peripheral
     ├── ahb3
     │   ├── peripheral_agent.sv
     │   ├── peripheral_driver.sv

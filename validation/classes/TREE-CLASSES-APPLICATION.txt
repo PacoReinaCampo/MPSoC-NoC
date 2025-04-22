@@ -18,7 +18,7 @@ application
 │   └── wb
 │       ├── peripheral_design.sv
 │       └── peripheral_testbench.sv
-└── core
+└── peripheral
     ├── ahb3
     │   ├── peripheral_design.sv
     │   └── peripheral_testbench.sv

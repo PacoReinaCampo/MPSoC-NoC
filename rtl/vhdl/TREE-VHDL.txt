@@ -17,7 +17,20 @@ code
 │       ├── peripheral_noc_mesh3d.vhd
 │       └── peripheral_noc_mesh4d.vhd
 └── pkg
-    └── core
-        └── vhdl_pkg.vhd
+    ├── core
+    │   └── vhdl_pkg.vhd
+    └── peripheral
+        ├── ahb3
+        │   └── peripheral_ahb3_pkg.vhd
+        ├── apb4
+        │   └── peripheral_apb4_pkg.vhd
+        ├── axi4
+        │   └── peripheral_axi4_pkg.vhd
+        ├── bb
+        │   └── peripheral_bb_pkg.vhd
+        ├── biu
+        │   └── peripheral_biu_pkg.vhd
+        └── wb
+            └── peripheral_wb_pkg.vhd
 
-6 directories, 14 files
+13 directories, 20 files

@@ -24,7 +24,7 @@ library
 │       ├── peripheral_osvvm_model_pkg.vhd
 │       ├── peripheral_osvvm_model.vhd
 │       └── peripheral_osvvm_testbench.vhd
-└── core
+└── peripheral
     ├── ahb3
     │   ├── peripheral_osvvm_model_pkg.vhd
     │   ├── peripheral_osvvm_model.vhd

@@ -42,10 +42,10 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../../verification/osvvm/application/core/wb/peripheral_osvvm_design.vhd
-../../../../../../../verification/osvvm/application/core/wb/peripheral_osvvm_design_pkg.vhd
+../../../../../../../verification/osvvm/application/peripheral/wb/peripheral_osvvm_design.vhd
+../../../../../../../verification/osvvm/application/peripheral/wb/peripheral_osvvm_design_pkg.vhd
 
-../../../../../../../verification/osvvm/library/core/wb/peripheral_osvvm_model.vhd
-../../../../../../../verification/osvvm/library/core/wb/peripheral_osvvm_model_pkg.vhd
+../../../../../../../verification/osvvm/library/peripheral/wb/peripheral_osvvm_model.vhd
+../../../../../../../verification/osvvm/library/peripheral/wb/peripheral_osvvm_model_pkg.vhd
 
-../../../../../../../verification/osvvm/library/core/wb/peripheral_osvvm_testbench.vhd
+../../../../../../../verification/osvvm/library/peripheral/wb/peripheral_osvvm_testbench.vhd

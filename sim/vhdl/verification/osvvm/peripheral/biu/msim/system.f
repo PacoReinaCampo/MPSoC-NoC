@@ -42,10 +42,10 @@
 ##                                                                               ##
 ###################################################################################
 
-../../../../../../../verification/osvvm/application/core/biu/peripheral_osvvm_design.vhd
-../../../../../../../verification/osvvm/application/core/biu/peripheral_osvvm_design_pkg.vhd
+../../../../../../../verification/osvvm/application/peripheral/biu/peripheral_osvvm_design.vhd
+../../../../../../../verification/osvvm/application/peripheral/biu/peripheral_osvvm_design_pkg.vhd
 
-../../../../../../../verification/osvvm/library/core/biu/peripheral_osvvm_model.vhd
-../../../../../../../verification/osvvm/library/core/biu/peripheral_osvvm_model_pkg.vhd
+../../../../../../../verification/osvvm/library/peripheral/biu/peripheral_osvvm_model.vhd
+../../../../../../../verification/osvvm/library/peripheral/biu/peripheral_osvvm_model_pkg.vhd
 
-../../../../../../../verification/osvvm/library/core/biu/peripheral_osvvm_testbench.vhd
+../../../../../../../verification/osvvm/library/peripheral/biu/peripheral_osvvm_testbench.vhd

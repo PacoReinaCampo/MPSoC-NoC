@@ -44,6 +44,6 @@
 
 ../../../../../../../rtl/verilog/code/pkg/peripheral/axi4/peripheral_axi4_pkg.sv
 
-../../../../../../../validation/classes/application/core/apb4/peripheral_design.sv
+../../../../../../../validation/classes/application/peripheral/apb4/peripheral_design.sv
 
-../../../../../../../validation/classes/library/core/apb4/peripheral_testbench.sv
+../../../../../../../validation/classes/library/peripheral/apb4/peripheral_testbench.sv
