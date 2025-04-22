@@ -20,8 +20,8 @@ code
     ├── core
     │   └── vhdl_pkg.vhd
     └── peripheral
-        ├── ahb3
-        │   └── peripheral_ahb3_pkg.vhd
+        ├── ahb4
+        │   └── peripheral_ahb4_pkg.vhd
         ├── apb4
         │   └── peripheral_apb4_pkg.vhd
         ├── axi4

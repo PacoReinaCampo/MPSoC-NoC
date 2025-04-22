@@ -1,6 +1,6 @@
 application
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   ├── peripheral_design.sv
 │   │   └── peripheral_testbench.sv
 │   ├── apb4
@@ -19,7 +19,7 @@ application
 │       ├── peripheral_design.sv
 │       └── peripheral_testbench.sv
 └── peripheral
-    ├── ahb3
+    ├── ahb4
     │   ├── peripheral_design.sv
     │   └── peripheral_testbench.sv
     ├── apb4

@@ -1,6 +1,6 @@
 library
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   ├── peripheral_osvvm_model_pkg.vhd
 │   │   ├── peripheral_osvvm_model.vhd
 │   │   └── peripheral_osvvm_testbench.vhd
@@ -25,7 +25,7 @@ library
 │       ├── peripheral_osvvm_model.vhd
 │       └── peripheral_osvvm_testbench.vhd
 └── peripheral
-    ├── ahb3
+    ├── ahb4
     │   ├── peripheral_osvvm_model_pkg.vhd
     │   ├── peripheral_osvvm_model.vhd
     │   └── peripheral_osvvm_testbench.vhd

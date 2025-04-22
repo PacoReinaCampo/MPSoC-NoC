@@ -18,8 +18,8 @@ code
 │       └── peripheral_noc_mesh4d.sv
 └── pkg
     └── peripheral
-        ├── ahb3
-        │   └── peripheral_ahb3_pkg.sv
+        ├── ahb4
+        │   └── peripheral_ahb4_pkg.sv
         ├── apb4
         │   └── peripheral_apb4_pkg.sv
         ├── axi4

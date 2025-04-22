@@ -1,6 +1,6 @@
 application
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   ├── peripheral_osvvm_design_pkg.vhd
 │   │   └── peripheral_osvvm_design.vhd
 │   ├── apb4
@@ -19,7 +19,7 @@ application
 │       ├── peripheral_osvvm_design_pkg.vhd
 │       └── peripheral_osvvm_design.vhd
 └── peripheral
-    ├── ahb3
+    ├── ahb4
     │   ├── peripheral_osvvm_design_pkg.vhd
     │   └── peripheral_osvvm_design.vhd
     ├── apb4
