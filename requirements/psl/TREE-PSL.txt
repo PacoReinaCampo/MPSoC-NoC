@@ -1,6 +1,6 @@
 library
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   └── peripheral_design.psl
 │   ├── apb4
 │   │   └── peripheral_design.psl
@@ -13,7 +13,7 @@ library
 │   └── wb
 │       └── peripheral_design.psl
 └── core
-    ├── ahb3
+    ├── ahb4
     │   └── peripheral_design.psl
     ├── apb4
     │   └── peripheral_design.psl

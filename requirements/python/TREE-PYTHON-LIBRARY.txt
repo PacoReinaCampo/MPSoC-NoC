@@ -1,6 +1,6 @@
 library
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   └── peripheral_design.py
 │   ├── apb4
 │   │   └── peripheral_design.py
@@ -13,7 +13,7 @@ library
 │   └── wb
 │       └── peripheral_design.py
 └── core
-    ├── ahb3
+    ├── ahb4
     │   └── peripheral_design.py
     ├── apb4
     │   └── peripheral_design.py

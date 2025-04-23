@@ -1,6 +1,6 @@
 library
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   └── src
 │   │       ├── code
 │   │       │   ├── mod.rs
@@ -37,7 +37,7 @@ library
 │           │   └── peripheral_design.rs
 │           └── lib.rs
 └── core
-    ├── ahb3
+    ├── ahb4
     │   └── src
     │       ├── code
     │       │   ├── mod.rs

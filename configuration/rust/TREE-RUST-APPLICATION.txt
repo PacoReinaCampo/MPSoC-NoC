@@ -1,6 +1,6 @@
 application
 ├── bfm
-│   ├── ahb3
+│   ├── ahb4
 │   │   └── src
 │   │       └── main.rs
 │   ├── apb4
@@ -19,7 +19,7 @@ application
 │       └── src
 │           └── main.rs
 └── core
-    ├── ahb3
+    ├── ahb4
     │   └── src
     │       └── main.rs
     ├── apb4

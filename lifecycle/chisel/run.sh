@@ -42,13 +42,13 @@
 ##                                                                               ##
 ###################################################################################
 
-java application/bfm/ahb3/peripheral_test.scala
+java application/bfm/ahb4/peripheral_test.scala
 java application/bfm/apb4/peripheral_test.scala
 java application/bfm/axi4/peripheral_test.scala
 java application/bfm/bb/peripheral_test.scala
 java application/bfm/biu/peripheral_test.scala
 java application/bfm/wb/peripheral_test.scala
-java application/core/ahb3/peripheral_test.scala
+java application/core/ahb4/peripheral_test.scala
 java application/core/apb4/peripheral_test.scala
 java application/core/axi4/peripheral_test.scala
 java application/core/bb/peripheral_test.scala
