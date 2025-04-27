@@ -46,11 +46,11 @@ python3 -B library/bfm/ahb4/peripheral_design.py
 python3 -B library/bfm/apb4/peripheral_design.py
 python3 -B library/bfm/axi4/peripheral_design.py
 python3 -B library/bfm/bb/peripheral_design.py
-python3 -B library/bfm/biu/peripheral_design.py
+python3 -B library/bfm/tl/peripheral_design.py
 python3 -B library/bfm/wb/peripheral_design.py
 python3 -B library/core/ahb4/peripheral_design.py
 python3 -B library/core/apb4/peripheral_design.py
 python3 -B library/core/axi4/peripheral_design.py
 python3 -B library/core/bb/peripheral_design.py
-python3 -B library/core/biu/peripheral_design.py
+python3 -B library/core/tl/peripheral_design.py
 python3 -B library/core/wb/peripheral_design.py

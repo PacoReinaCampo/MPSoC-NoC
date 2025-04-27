@@ -12,7 +12,7 @@ application
 │   ├── bb
 │   │   └── src
 │   │       └── main.rs
-│   ├── biu
+│   ├── tl
 │   │   └── src
 │   │       └── main.rs
 │   └── wb
@@ -31,7 +31,7 @@ application
     ├── bb
     │   └── src
     │       └── main.rs
-    ├── biu
+    ├── tl
     │   └── src
     │       └── main.rs
     └── wb
