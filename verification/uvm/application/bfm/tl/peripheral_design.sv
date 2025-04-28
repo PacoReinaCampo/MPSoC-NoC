@@ -37,7 +37,7 @@
 // Author(s):
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
-import peripheral_ahb4_pkg::*;
+import peripheral_tl_pkg::*;
 
 module peripheral_design #(
   parameter MEMORY_SIZE       = 0,    // Memory in Bytes
