@@ -29,7 +29,7 @@ code
         ├── bb
         │   └── peripheral_bb_pkg.vhd
         ├── tl
-        │   └── peripheral_biu_pkg.vhd
+        │   └── peripheral_tl_pkg.vhd
         └── wb
             └── peripheral_wb_pkg.vhd
 
