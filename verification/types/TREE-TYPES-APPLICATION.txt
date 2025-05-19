@@ -1,0 +1,60 @@
+application
+├── bfm
+│   ├── ahb4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── apb4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── axi4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── bb
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── tl
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   └── wb
+│       ├── peripheral_types_design_pkg.vhd
+│       └── peripheral_types_design.vhd
+├── core
+│   ├── ahb4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── apb4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── axi4
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── bb
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   ├── tl
+│   │   ├── peripheral_types_design_pkg.vhd
+│   │   └── peripheral_types_design.vhd
+│   └── wb
+│       ├── peripheral_types_design_pkg.vhd
+│       └── peripheral_types_design.vhd
+└── peripheral
+    ├── ahb4
+    │   ├── peripheral_types_design_pkg.vhd
+    │   └── peripheral_types_design.vhd
+    ├── apb4
+    │   ├── peripheral_types_design_pkg.vhd
+    │   └── peripheral_types_design.vhd
+    ├── axi4
+    │   ├── peripheral_types_design_pkg.vhd
+    │   └── peripheral_types_design.vhd
+    ├── bb
+    │   ├── peripheral_types_design_pkg.vhd
+    │   └── peripheral_types_design.vhd
+    ├── tl
+    │   ├── peripheral_types_design_pkg.vhd
+    │   └── peripheral_types_design.vhd
+    └── wb
+        ├── peripheral_types_design_pkg.vhd
+        └── peripheral_types_design.vhd
+
+21 directories, 36 files
