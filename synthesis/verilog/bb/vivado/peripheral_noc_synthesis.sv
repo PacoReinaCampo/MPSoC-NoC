@@ -11,7 +11,7 @@
 //                                                                            //
 //              MPSoC-RISCV CPU                                               //
 //              Universal Asynchronous Receiver-Transmitter                   //
-//              Blackbone Bus Interface                                       //
+//              BackBone Bus Interface                                       //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2018-2019 by the author(s)
