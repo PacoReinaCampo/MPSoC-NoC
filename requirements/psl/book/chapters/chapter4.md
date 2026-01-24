@@ -59,6 +59,7 @@ The syntax defines the rules for how valid statements and expressions are formed
 ### Conventions
 
 Syntax conventions include the general rules and guidelines for writing code, such as:
+
 - **Code Structure**: How to structure programs, including indentation and line breaks.
 - **Statement Termination**: Rules for ending statements, such as using a semicolon.
 
